@@ -1,0 +1,859 @@
+import { ChevronDown, ChevronRight, ArrowLeftRight, CreditCard, Eye, EyeOff, Copy, SlidersHorizontal, X, Download, ExternalLink, FileText } from 'lucide-react';
+import { useState, useRef } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
+import SvgAgoev from './svg-agoev';
+import PcmaTrue from '../PcmaTrue-1/PcmaTrue';
+
+export default function PrimaryExploration() {
+  const [isCardFlipped, setIsCardFlipped] = useState(false);
+  const [showCardInfo, setShowCardInfo] = useState(false);
+  const [copiedField, setCopiedField] = useState('');
+  const [showBottomSheet, setShowBottomSheet] = useState(false);
+  const [showAccountMenu, setShowAccountMenu] = useState(false);
+  const [selectedAccount, setSelectedAccount] = useState(0);
+  const [showBalanceDetails, setShowBalanceDetails] = useState(false);
+  const [showFilterMenu, setShowFilterMenu] = useState(false);
+  const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
+  const [activeTab, setActiveTab] = useState<'transactions' | 'manage' | 'statements'>('transactions');
+  const [dragY, setDragY] = useState(0);
+  const bottomSheetRef = useRef<HTMLDivElement>(null);
+
+  const filterOptions = [
+    { id: 'pending', label: 'Pending' },
+    { id: 'posted', label: 'Posted' },
+    { id: 'groceries', label: 'Groceries' },
+    { id: 'dining', label: 'Dining' },
+    { id: 'shopping', label: 'Shopping' },
+    { id: 'entertainment', label: 'Entertainment' },
+    { id: 'travel', label: 'Travel' },
+    { id: 'this-month', label: 'This Month' },
+    { id: 'last-month', label: 'Last Month' },
+  ];
+
+  const toggleFilter = (filterId: string) => {
+    setSelectedFilters(prev =>
+      prev.includes(filterId)
+        ? prev.filter(id => id !== filterId)
+        : [...prev, filterId]
+    );
+  };
+
+  const removeFilter = (filterId: string) => {
+    setSelectedFilters(prev => prev.filter(id => id !== filterId));
+  };
+
+  const accounts = [
+    {
+      name: "Sarah's card",
+      type: "PC World Elite Mastercard",
+      color: "from-[#3d3d40] via-[#2a2a2c] to-[#1f1f21]",
+      balance: "$2,981.42",
+      availableBalance: "$1,281.12",
+      statementBalance: "$2,981.42",
+      minimumPayment: "$23.40",
+      creditLimit: "$5,000.00"
+    },
+    {
+      name: "Sarah's banking",
+      type: "PC Money Account",
+      color: "from-[#6b2d7a] via-[#4a1f56] to-[#2d1235]",
+      balance: "$5,432.10",
+      availableBalance: "$5,432.10",
+      statementBalance: "$0.00",
+      minimumPayment: "$0.00",
+      creditLimit: "$10,000.00"
+    }
+  ];
+
+  const copyToClipboard = (text: string, field: string) => {
+    try {
+      // Fallback method for environments where clipboard API is blocked
+      const textarea = document.createElement('textarea');
+      textarea.value = text;
+      textarea.style.position = 'fixed';
+      textarea.style.opacity = '0';
+      document.body.appendChild(textarea);
+      textarea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textarea);
+
+      setCopiedField(field);
+      setTimeout(() => setCopiedField(''), 2000);
+    } catch (err) {
+      console.error('Failed to copy:', err);
+    }
+  };
+
+  const handleDragEnd = (_: any, info: any) => {
+    if (info.offset.y > 100) {
+      setShowBottomSheet(false);
+    }
+    setDragY(0);
+  };
+
+
+  return (
+    <div className="w-full h-full bg-[#f5f5f5] flex flex-col max-w-[390px] mx-auto relative cursor-none overflow-hidden">
+      {/* Copy Toast */}
+      {copiedField && (
+        <div className="absolute top-20 left-1/2 -translate-x-1/2 z-50 backdrop-blur-[40px] bg-[rgba(216,216,216,0.6)] px-3 py-3 rounded-xl shadow-lg flex items-center gap-2 animate-in fade-in slide-in-from-top-2 duration-300">
+          <Copy className="w-4 h-4 text-[#333]" />
+          <span className="text-[14px] font-semibold text-[#333]">Copied to clipboard</span>
+        </div>
+      )}
+
+      {/* Header Section */}
+      <div className="bg-[#f5f5f5]">
+        {/* Status bar */}
+        <div className="flex items-center justify-between px-6 pt-3 pb-2">
+          <span className="text-[15px] font-semibold">9:41</span>
+          <div className="flex items-center gap-1.5">
+            <div className="w-4 h-3">
+              <svg viewBox="0 0 17 12" fill="none">
+                <path fillRule="evenodd" clipRule="evenodd" d="M0 1.5C0 0.671573 0.671573 0 1.5 0H3.5C4.32843 0 5 0.671573 5 1.5V10.5C5 11.3284 4.32843 12 3.5 12H1.5C0.671573 12 0 11.3284 0 10.5V1.5ZM6 3C6 2.17157 6.67157 1.5 7.5 1.5H9.5C10.3284 1.5 11 2.17157 11 3V10.5C11 11.3284 10.3284 12 9.5 12H7.5C6.67157 12 6 11.3284 6 10.5V3ZM13.5 4.5C12.6716 4.5 12 5.17157 12 6V10.5C12 11.3284 12.6716 12 13.5 12H15.5C16.3284 12 17 11.3284 17 10.5V6C17 5.17157 16.3284 4.5 15.5 4.5H13.5Z" fill="#1C1C1E"/>
+              </svg>
+            </div>
+            <div className="w-4 h-3">
+              <svg viewBox="0 0 16 12" fill="none">
+                <path d="M1.5 5C0.671573 5 0 5.67157 0 6.5V11.5C0 12.3284 0.671573 13 1.5 13H14.5C15.3284 13 16 12.3284 16 11.5V6.5C16 5.67157 15.3284 5 14.5 5H1.5Z" fill="#1C1C1E"/>
+              </svg>
+            </div>
+            <div className="w-6 h-3">
+              <svg viewBox="0 0 25 12" fill="none">
+                <rect x="0.5" y="0.5" width="21" height="11" rx="2.5" stroke="#1C1C1E" strokeOpacity="0.35"/>
+                <path d="M23 4V8C24.1046 8 25 7.10457 25 6C25 4.89543 24.1046 4 23 4Z" fill="#1C1C1E"/>
+                <rect x="2" y="2" width="18" height="8" rx="1" fill="#1C1C1E"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        {/* Header - Sticky PCMC Dropdown */}
+        <div
+          className="px-5 pt-2 transition-all duration-300"
+          style={{
+            paddingBottom: scrollStyles.headerPadding
+          }}
+        >
+          <button
+            onClick={() => {
+              if (showAccountMenu) {
+                handleAccountMenuClose();
+              } else {
+                setShowAccountMenu(true);
+              }
+            }}
+            className="flex items-center gap-2 active:opacity-70 transition-opacity"
+          >
+            <span className="text-[17px] font-semibold">PCMC or Nickname</span>
+            <ChevronDown className={`w-5 h-5 transition-transform duration-300 ${showAccountMenu ? 'rotate-180' : ''}`} />
+          </button>
+        </div>
+      </div>
+
+      {/* Gradient Fade Overlay - Where content scrolls under header */}
+      {activeTab === 'transactions' && (
+        <div
+          className="fixed pointer-events-none w-full max-w-[390px] left-1/2 -translate-x-1/2 transition-all duration-300"
+          style={{
+            top: '192px',
+            height: '60px',
+            background: `linear-gradient(to bottom, ${isFullPageView ? '#ffffff' : '#f5f5f5'} 0%, ${isFullPageView ? '#ffffff' : '#f5f5f5'} 20%, transparent 100%)`,
+            opacity: scrollY > 50 ? 1 : 0,
+            zIndex: 19
+          }}
+        />
+      )}
+      {activeTab !== 'transactions' && (
+        <div
+          className="fixed pointer-events-none w-full max-w-[390px] left-1/2 -translate-x-1/2 transition-all duration-300"
+          style={{
+            top: '124px',
+            height: '60px',
+            background: `linear-gradient(to bottom, ${isFullPageView ? '#ffffff' : '#f5f5f5'} 0%, ${isFullPageView ? '#ffffff' : '#f5f5f5'} 20%, transparent 100%)`,
+            opacity: scrollY > 50 ? 1 : 0,
+            zIndex: 19
+          }}
+        />
+      )}
+
+      {/* Scrollable Content Container */}
+      <div
+        ref={scrollContainerRef}
+        className="flex-1 overflow-y-auto overflow-x-hidden scrollbar-hide transition-all duration-500"
+        style={{
+          scrollBehavior: 'smooth',
+          WebkitOverflowScrolling: 'touch',
+          backgroundColor: isFullPageView ? '#ffffff' : '#f5f5f5'
+        }}
+      >
+        {/* Credit Card / Account Switcher */}
+        <div
+          className={`pb-4 transition-all duration-500 overflow-hidden ${showAccountMenu ? '' : 'px-14'}`}
+          style={{
+            opacity: scrollStyles.cardOpacity,
+            transform: `scale(${scrollStyles.cardScale})`,
+            height: scrollStyles.cardContainerHeight,
+            transition: 'opacity 0.3s ease, transform 0.3s ease, height 0.4s ease'
+          }}
+        >
+        {!showAccountMenu ? (
+          /* Single Card View */
+          <div className="relative h-[170px]" style={{ perspective: '1000px' }}>
+            <div
+              className="absolute w-full h-full transition-transform duration-700"
+              style={{
+                transformStyle: 'preserve-3d',
+                transform: isCardFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)'
+              }}
+            >
+              {/* Front of card */}
+              <div
+                className={`absolute w-full h-full bg-gradient-to-br ${accounts[selectedAccount].color} rounded-2xl p-6 transition-all duration-500`}
+                style={{
+                  backfaceVisibility: 'hidden',
+                  boxShadow: '0 8px 32px rgba(0,0,0,0.4), inset 0 2px 8px rgba(255,255,255,0.05), inset 0 -1px 4px rgba(255,255,255,0.08)'
+                }}
+              >
+                <div className="mb-6">
+                  <div className="text-white text-[17px] font-semibold mb-0.5 tracking-tight">{accounts[selectedAccount].name}</div>
+                  <div className="text-[#ffffffb3] text-[13px] tracking-wide">{accounts[selectedAccount].type}</div>
+                </div>
+                <div className="flex items-end justify-between">
+                  <div>
+                    <div className="text-white text-[24px] font-semibold leading-none mb-1.5 tracking-tight">{accounts[selectedAccount].balance}</div>
+                    <div className="text-[#ffffffb3] text-[13px] tracking-wide">Current balance</div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Back of card */}
+              <div
+                className={`absolute w-full h-full bg-gradient-to-br ${accounts[selectedAccount].color} rounded-2xl flex flex-col transition-all duration-500`}
+                style={{
+                  backfaceVisibility: 'hidden',
+                  transform: 'rotateY(180deg)',
+                  boxShadow: '0 8px 32px rgba(0,0,0,0.4), inset 0 2px 8px rgba(255,255,255,0.05), inset 0 -1px 4px rgba(255,255,255,0.08)'
+                }}
+              >
+                {/* Magnetic stripe */}
+                <div className="bg-[#272727] h-[29px] w-full rounded-t-2xl" />
+
+                {/* Card details content */}
+                <div className="flex-1 px-4 py-4 flex flex-col justify-between">
+                  {/* Card Number */}
+                  <div className="relative">
+                    <button
+                      onClick={() => showCardInfo && copyToClipboard('4532123456783214', 'cardNumber')}
+                      disabled={!showCardInfo}
+                      className={`text-white text-[18px] text-left relative leading-7 font-mono ${showCardInfo ? 'cursor-pointer hover:text-[#ffffffcc] transition-all' : ''}`}
+                    >
+                      {showCardInfo ? '4532 1234 5678 3214' : '•••• •••• •••• 3214'}
+                      {copiedField === 'cardNumber' && (
+                        <div className="absolute -inset-y-1 -inset-x-2 bg-[rgba(255,255,255,0.1)] rounded border border-dashed border-[rgba(255,255,255,0.5)] animate-in fade-in duration-200" />
+                      )}
+                    </button>
+                  </div>
+
+                  {/* Bottom row with Exp, CVV and Eye icon */}
+                  <div className="flex items-end justify-between">
+                    <div className="flex gap-6">
+                      {/* Expiration */}
+                      <div className="relative">
+                        <button
+                          onClick={() => showCardInfo && copyToClipboard('05/28', 'expiration')}
+                          disabled={!showCardInfo}
+                          className={`flex flex-col gap-2 text-left relative ${showCardInfo ? 'cursor-pointer hover:opacity-80 transition-all' : ''}`}
+                        >
+                          <div className="text-white text-[16px] leading-7 font-mono">
+                            {showCardInfo ? '05/28' : '••/••'}
+                          </div>
+                          <div className="text-[rgba(255,255,255,0.6)] text-[12px] leading-7 uppercase tracking-wider">
+                            Exp.
+                          </div>
+                          {copiedField === 'expiration' && (
+                            <div className="absolute -inset-y-1 -inset-x-2 bg-[rgba(255,255,255,0.1)] rounded border border-dashed border-[rgba(255,255,255,0.5)] animate-in fade-in duration-200" />
+                          )}
+                        </button>
+                      </div>
+
+                      {/* CVV */}
+                      <div className="relative">
+                        <button
+                          onClick={() => showCardInfo && copyToClipboard('444', 'cvv')}
+                          disabled={!showCardInfo}
+                          className={`flex flex-col gap-2 text-left relative ${showCardInfo ? 'cursor-pointer hover:opacity-80 transition-all' : ''}`}
+                        >
+                          <div className="text-white text-[16px] leading-7 font-mono">
+                            {showCardInfo ? '444' : '•••'}
+                          </div>
+                          <div className="text-[rgba(255,255,255,0.6)] text-[12px] leading-7 uppercase tracking-wider">
+                            CVV
+                          </div>
+                          {copiedField === 'cvv' && (
+                            <div className="absolute -inset-y-1 -inset-x-2 bg-[rgba(255,255,255,0.1)] rounded border border-dashed border-[rgba(255,255,255,0.5)] animate-in fade-in duration-200" />
+                          )}
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Eye icon */}
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setShowCardInfo(!showCardInfo);
+                      }}
+                      className="text-white hover:text-[#ffffffcc] transition-colors pb-1"
+                    >
+                      {showCardInfo ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        ) : (
+          /* Account Switcher Menu */
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="overflow-hidden"
+          >
+            <div className="flex gap-3 overflow-x-auto pb-4 scrollbar-hide snap-x snap-mandatory pl-[60px] pr-5">
+              {accounts.map((account, index) => (
+                <motion.button
+                  key={index}
+                  initial={{ scale: 0.9, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{ delay: index * 0.1, duration: 0.3 }}
+                  onClick={() => {
+                    setSelectedAccount(index);
+                    setShowAccountMenu(false);
+                  }}
+                  whileTap={{ scale: 0.96 }}
+                  className={`flex-shrink-0 w-[240px] snap-start transition-all duration-300 ${
+                    selectedAccount === index ? 'opacity-100' : 'opacity-70'
+                  } ${index === 0 ? '' : ''}`}
+                >
+                  <div
+                    className={`bg-gradient-to-br ${account.color} rounded-2xl p-4 h-[130px] flex flex-col justify-between relative overflow-hidden`}
+                    style={{
+                      boxShadow: '0 8px 32px rgba(0,0,0,0.4), inset 0 2px 8px rgba(255,255,255,0.05), inset 0 -1px 4px rgba(255,255,255,0.08)'
+                    }}
+                  >
+                    {/* PC Financial Logo & World */}
+                    <div className="flex justify-between items-start relative z-10">
+                      <div className="text-white text-[9px] font-bold uppercase tracking-widest">PC financial</div>
+                      <div className="text-white text-[8px] opacity-60 uppercase tracking-wider">world</div>
+                    </div>
+
+                    {/* Card pattern decoration */}
+                    <div className="absolute inset-0 opacity-[0.08] overflow-hidden rounded-2xl pointer-events-none">
+                      <svg className="absolute -right-8 -top-8 w-40 h-40" viewBox="0 0 100 100">
+                        <circle cx="50" cy="50" r="35" fill="none" stroke="white" strokeWidth="1.5" opacity="0.5"/>
+                        <path d="M20,50 Q35,20 50,50 T80,50" fill="none" stroke="white" strokeWidth="1.5" opacity="0.5"/>
+                      </svg>
+                    </div>
+
+                    <div className="relative z-10 flex items-end justify-between">
+                      <div>
+                        <div className="text-white text-[18px] font-semibold mb-0.5 tracking-tight">{account.balance}</div>
+                        <div className="text-[rgba(255,255,255,0.7)] text-[8px] uppercase tracking-widest">Current balance</div>
+                      </div>
+                      <div className="flex -space-x-1.5 mb-1">
+                        <div className="w-5 h-5 rounded-full bg-[#eb001b]"></div>
+                        <div className="w-5 h-5 rounded-full bg-[#ff5f00]"></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="mt-2.5 text-left px-0.5">
+                    <div className="text-[13px] font-semibold text-[#1c1c1e] tracking-tight leading-tight">{account.name}</div>
+                    <div className="text-[11px] text-[#3a3a3c99] tracking-wide leading-tight">{account.type}</div>
+                  </div>
+                </motion.button>
+              ))}
+            </div>
+          </motion.div>
+        )}
+      </div>
+
+
+        {/* Action Buttons */}
+        <div
+          className={`px-5 flex gap-3 transition-all duration-500 ${showAccountMenu ? 'blur-sm opacity-50' : ''} ${scrollStyles.buttonsOpacity < 0.5 ? 'pointer-events-none' : ''}`}
+          style={{
+            paddingBottom: scrollStyles.navBarGap,
+            opacity: scrollStyles.buttonsOpacity,
+            transform: `scale(${scrollStyles.buttonsScale})`,
+            transition: 'opacity 0.3s ease, transform 0.3s ease, padding-bottom 0.3s ease'
+          }}
+        >
+        <button
+          onClick={() => {
+            setIsCardFlipped(!isCardFlipped);
+            if (isCardFlipped) {
+              setShowCardInfo(false);
+            }
+          }}
+          className="flex-1 bg-white rounded-xl py-3.5 px-4 flex items-center justify-center gap-2 shadow-[0_3px_8px_rgba(0,0,0,0.1)] active:shadow-[0_1px_3px_rgba(0,0,0,0.1)] active:translate-y-[2px] active:opacity-90 transition-all duration-100"
+        >
+          <ArrowLeftRight className="w-5 h-5" />
+          <span className="text-[15px] font-medium">See card details</span>
+        </button>
+        <button
+          onClick={() => setShowBottomSheet(true)}
+          className="flex-1 bg-white rounded-xl py-3.5 px-4 flex items-center justify-center gap-2 shadow-sm active:opacity-70 active:scale-95 transition-all duration-100"
+        >
+          <CreditCard className="w-5 h-5" />
+          <span className="text-[15px] font-medium">Pay credit card</span>
+        </button>
+      </div>
+
+        {/* Payment Info */}
+        <div
+          className={`px-5 transition-all duration-500 ${showAccountMenu ? 'blur-sm opacity-50' : ''}`}
+          style={{
+            paddingBottom: scrollStyles.navBarGap
+          }}
+        >
+          <div className="bg-white rounded-2xl p-4 shadow-sm">
+            {/* Payment due notice */}
+            <div
+              className="flex items-start gap-3 mb-5 relative"
+              style={{
+                opacity: scrollStyles.dateOpacity,
+                transform: `translateY(-${scrollStyles.dateTranslate}px)`,
+                transition: 'opacity 0.3s ease, transform 0.3s ease'
+              }}
+            >
+              {/* Gradient mask overlay */}
+              {scrollStyles.dateOpacity < 0.5 && (
+                <div
+                  className="absolute inset-0 pointer-events-none"
+                  style={{
+                    background: `linear-gradient(to bottom, rgba(255,255,255,${1 - scrollStyles.dateOpacity}), rgba(255,255,255,0))`,
+                    zIndex: 1
+                  }}
+                />
+              )}
+            <div className="text-center">
+              <div className="text-[20px] font-semibold leading-none">21</div>
+              <div className="text-[10px] text-[#333] uppercase font-bold tracking-wider leading-tight">Jul</div>
+            </div>
+            <div className="bg-[#059669] w-[2px] h-[34px] rounded-full mx-1"></div>
+            <div className="flex-1 flex flex-col justify-center">
+              <div className="text-[14px] font-semibold text-[#333] mb-0.5">{accounts[selectedAccount].minimumPayment} min payment due July 21</div>
+              <div className="text-[14px] text-[#666]">Last payment made Jun 21</div>
+            </div>
+          </div>
+
+          {/* Progress bar - showing statement balance vs credit limit */}
+          <div className="w-full h-2 bg-[#e5e5ea] rounded-full mb-2 overflow-hidden relative flex">
+            {/* Statement balance portion (darker) */}
+            <div
+              className="h-full bg-[#333]"
+              style={{
+                width: `${(parseFloat(accounts[selectedAccount].statementBalance.replace(/[$,]/g, '')) / parseFloat(accounts[selectedAccount].creditLimit.replace(/[$,]/g, ''))) * 100}%`
+              }}
+            ></div>
+            {/* Other used credit (pending/not on statement) - lighter gray */}
+            <div
+              className="h-full bg-[#979797]"
+              style={{
+                width: `${((parseFloat(accounts[selectedAccount].creditLimit.replace(/[$,]/g, '')) - parseFloat(accounts[selectedAccount].availableBalance.replace(/[$,]/g, '')) - parseFloat(accounts[selectedAccount].statementBalance.replace(/[$,]/g, ''))) / parseFloat(accounts[selectedAccount].creditLimit.replace(/[$,]/g, ''))) * 100}%`
+              }}
+            ></div>
+            {/* Remaining available credit shows as background (light gray) */}
+          </div>
+
+          {/* Available Balance - Clickable */}
+          <button
+            onClick={() => setShowBalanceDetails(!showBalanceDetails)}
+            className="w-full flex items-center justify-between py-2 pl-2 -ml-2 active:bg-gray-100 rounded-lg transition-colors"
+          >
+            <span className="text-[16px] font-semibold text-[#333]">Available balance</span>
+            <div className="flex items-center gap-3">
+              <span className="text-[16px] font-semibold text-[#333]">{accounts[selectedAccount].availableBalance}</span>
+              <ChevronDown className={`w-4 h-4 text-[#666] transition-transform duration-300 ${showBalanceDetails ? 'rotate-180' : ''}`} />
+            </div>
+          </button>
+
+          {/* Expanded Balance Details */}
+          <AnimatePresence>
+            {showBalanceDetails && (
+              <motion.div
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: 'auto', opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                transition={{ duration: 0.3, ease: 'easeInOut' }}
+                className="overflow-hidden"
+              >
+                <div className="space-y-0">
+                  <div className="flex items-center justify-between py-2 px-2">
+                    <span className="text-[16px] font-semibold text-[#545f71]">Statement balance</span>
+                    <span className="text-[16px] font-semibold text-[#545f71]">{accounts[selectedAccount].statementBalance}</span>
+                  </div>
+                  <div className="flex items-center justify-between py-2 px-2">
+                    <span className="text-[16px] font-semibold text-[#545f71]">Credit card limit</span>
+                    <span className="text-[16px] font-semibold text-[#545f71]">{accounts[selectedAccount].creditLimit}</span>
+                  </div>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      </div>
+
+        {/* Tabs - Sticky */}
+        <div
+          className={`sticky z-20 transition-all duration-300 ${showAccountMenu ? 'blur-sm opacity-50' : ''}`}
+          style={{
+            top: '52px',
+            backgroundColor: isFullPageView ? '#ffffff' : '#f5f5f5'
+          }}
+        >
+          <div className="px-5 pt-2 pb-3 flex gap-2">
+            <button
+              onClick={() => setActiveTab('transactions')}
+              className={`px-5 py-2 rounded-full text-[15px] font-medium transition-colors ${
+                activeTab === 'transactions'
+                  ? 'bg-[#1c1c1e] text-white'
+                  : 'bg-[#e5e5e5] text-[#3a3a3c]'
+              }`}
+            >
+              Transactions
+            </button>
+            <button
+              onClick={() => setActiveTab('manage')}
+              className={`px-5 py-2 rounded-full text-[15px] font-medium transition-colors ${
+                activeTab === 'manage'
+                  ? 'bg-[#1c1c1e] text-white'
+                  : 'bg-[#e5e5e5] text-[#3a3a3c]'
+              }`}
+            >
+              Manage
+            </button>
+            <button
+              onClick={() => setActiveTab('statements')}
+              className={`px-5 py-2 rounded-full text-[15px] font-medium transition-colors ${
+                activeTab === 'statements'
+                  ? 'bg-[#1c1c1e] text-white'
+                  : 'bg-[#e5e5e5] text-[#3a3a3c]'
+              }`}
+            >
+              Statements
+            </button>
+          </div>
+        </div>
+
+        {/* Search Bar - Only show for Transactions - Sticky */}
+        {activeTab === 'transactions' && (
+        <div
+          className={`sticky z-20 transition-all duration-300 ${showAccountMenu ? 'blur-sm opacity-50' : ''}`}
+          style={{
+            top: '112px',
+            backgroundColor: isFullPageView ? '#ffffff' : '#f5f5f5'
+          }}
+        >
+        <div className="px-5 pb-4">
+        <div className="flex gap-2">
+          <div className="flex-1 bg-white rounded-xl px-4 py-3 flex items-center gap-2 shadow-sm">
+            <SvgAgoev className="w-5 h-5 text-[#3a3a3c99]" />
+            <input
+              type="text"
+              placeholder="Search by name or date"
+              className="flex-1 bg-transparent outline-none text-[15px] placeholder:text-[#3a3a3c99]"
+            />
+          </div>
+          <button
+            onClick={() => setShowFilterMenu(!showFilterMenu)}
+            className={`w-12 h-12 rounded-full flex items-center justify-center active:opacity-70 transition-all ${
+              showFilterMenu || selectedFilters.length > 0 ? 'bg-[#007aff]' : 'bg-[#3a3a3c]'
+            }`}
+          >
+            <SlidersHorizontal className="w-5 h-5 text-white" />
+          </button>
+        </div>
+
+        {/* Active Filters */}
+        {!showFilterMenu && selectedFilters.length > 0 && (
+          <div className="flex flex-wrap gap-2 mt-3">
+            {selectedFilters.map(filterId => {
+              const filter = filterOptions.find(f => f.id === filterId);
+              return filter ? (
+                <motion.button
+                  key={filterId}
+                  initial={{ scale: 0.8, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  exit={{ scale: 0.8, opacity: 0 }}
+                  transition={{ duration: 0.2 }}
+                  onClick={() => removeFilter(filterId)}
+                  className="px-3 py-1.5 bg-[#007aff] text-white rounded-full text-[13px] font-semibold flex items-center gap-2 active:opacity-70 transition-opacity"
+                >
+                  {filter.label}
+                  <X className="w-3.5 h-3.5" />
+                </motion.button>
+              ) : null;
+            })}
+          </div>
+        )}
+        </div>
+        </div>
+      )}
+
+        {/* Tab Content */}
+        <div className={`px-5 transition-all duration-500 ${showAccountMenu ? 'blur-sm opacity-50' : ''}`} style={{ paddingBottom: isFullPageView ? '40px' : '300px' }}>
+        {activeTab === 'transactions' && (
+          <div>
+        {/* Pending */}
+        <div className="mb-4">
+          <div className="flex items-center justify-between mb-3">
+            <span className="text-[15px] font-semibold text-[#3a3a3c99]">Pending</span>
+            <div className="flex items-center gap-1">
+              <span className="text-[17px] font-semibold">$2,000.00</span>
+              <ChevronDown className="w-5 h-5" />
+            </div>
+          </div>
+        </div>
+
+        {/* Posted */}
+        <div>
+          <div className="text-[15px] font-semibold text-[#3a3a3c99] mb-3">Posted</div>
+
+          {/* Transaction Items */}
+          {allTransactions.map((transaction, index) => (
+            <div key={index} className="bg-white rounded-2xl p-4 mb-3 flex items-center gap-3 shadow-sm">
+              <div className="w-12 h-12 bg-[#e5e5e5] rounded-xl"></div>
+              <div className="flex-1">
+                <div className="text-[17px] font-semibold mb-0.5">{transaction.name}</div>
+                <div className="text-[13px] text-[#3a3a3c99]">{transaction.date} {transaction.time}</div>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-[17px] font-semibold">{transaction.amount}</span>
+                <ChevronRight className="w-5 h-5 text-[#3a3a3c99]" />
+              </div>
+            </div>
+          ))}
+
+          {/* Load More Indicator */}
+          <AnimatePresence>
+            {showLoadMore && (
+              <motion.div
+                ref={contentBottomRef}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 20 }}
+                transition={{ duration: 0.3 }}
+                className="text-center py-8 sticky bottom-0"
+                style={{
+                  backgroundColor: isFullPageView ? '#ffffff' : '#f5f5f5'
+                }}
+              >
+                {isLoadingMore ? (
+                  <div className="flex flex-col items-center gap-3">
+                    <div className="w-6 h-6 border-2 border-[#007aff] border-t-transparent rounded-full animate-spin"></div>
+                    <div className="text-[#3a3a3c99] text-[15px] font-semibold">
+                      Loading more...
+                    </div>
+                  </div>
+                ) : (
+                  <div className="relative">
+                    <motion.div
+                      animate={{
+                        y: maxScrollReached ? [0, -8, 0] : 0
+                      }}
+                      transition={{
+                        duration: 1.5,
+                        repeat: maxScrollReached ? Infinity : 0,
+                        ease: "easeInOut"
+                      }}
+                    >
+                      <button
+                        onClick={loadMoreTransactions}
+                        className={`text-[15px] font-semibold active:opacity-70 transition-all ${
+                          maxScrollReached ? 'text-[#007aff] scale-110' : 'text-[#007aff]'
+                        }`}
+                      >
+                        ↓ Pull down to load more
+                      </button>
+                    </motion.div>
+                    <div className="text-[#3a3a3c99] text-[13px] mt-2">
+                      Showing {allTransactions.length} transactions
+                    </div>
+                    {maxScrollReached && (
+                      <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        className="text-[#ff453a] text-[12px] mt-2 font-semibold"
+                      >
+                        Tap to load more content
+                      </motion.div>
+                    )}
+                  </div>
+                )}
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+          </div>
+        )}
+
+        {activeTab === 'manage' && (
+          <div className="space-y-3">
+            {/* Empty placeholder containers */}
+            {[1, 2, 3, 4, 5].map((item) => (
+              <div key={item} className="bg-white rounded-2xl p-4 h-24 shadow-sm"></div>
+            ))}
+          </div>
+        )}
+
+        {activeTab === 'statements' && (
+          <div className="space-y-3">
+            {[
+              { month: 'May 2026', date: 'May 1 - May 31, 2026' },
+              { month: 'April 2026', date: 'April 1 - April 30, 2026' },
+              { month: 'March 2026', date: 'March 1 - March 31, 2026' },
+              { month: 'February 2026', date: 'February 1 - February 28, 2026' },
+              { month: 'January 2026', date: 'January 1 - January 31, 2026' },
+            ].map((statement, index) => (
+              <div key={index} className="bg-white rounded-2xl p-4 shadow-sm">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3 flex-1">
+                    <div className="w-10 h-10 bg-[#f5f5f5] rounded-lg flex items-center justify-center">
+                      <FileText className="w-5 h-5 text-[#666]" />
+                    </div>
+                    <div className="flex-1">
+                      <div className="text-[16px] font-semibold text-[#333] mb-0.5">{statement.month}</div>
+                      <div className="text-[12px] text-[#666]">{statement.date}</div>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <button className="w-9 h-9 rounded-full bg-[#f5f5f5] flex items-center justify-center active:opacity-70 transition-opacity">
+                      <Eye className="w-4 h-4 text-[#666]" />
+                    </button>
+                    <button className="w-9 h-9 rounded-full bg-[#f5f5f5] flex items-center justify-center active:opacity-70 transition-opacity">
+                      <Download className="w-4 h-4 text-[#666]" />
+                    </button>
+                    <button className="w-9 h-9 rounded-full bg-[#f5f5f5] flex items-center justify-center active:opacity-70 transition-opacity">
+                      <ExternalLink className="w-4 h-4 text-[#666]" />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+        </div>
+      </div>
+
+      {/* Filter Bottom Sheet */}
+      <AnimatePresence>
+        {showFilterMenu && (
+          <>
+            {/* Overlay */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              className="fixed inset-0 bg-black/40 z-40"
+              onClick={() => setShowFilterMenu(false)}
+            />
+
+            {/* Filter Bottom Sheet Content */}
+            <motion.div
+              initial={{ y: '100%' }}
+              animate={{ y: 0 }}
+              exit={{ y: '100%' }}
+              transition={{
+                type: 'spring',
+                damping: 25,
+                stiffness: 300,
+                mass: 0.8
+              }}
+              className="fixed bottom-0 left-0 right-0 z-50 max-w-[390px] mx-auto"
+            >
+              <div className="bg-white rounded-t-[20px] p-6">
+                {/* Grab bar */}
+                <div className="w-full flex justify-center -mt-2 mb-4">
+                  <div className="w-10 h-1 bg-[#ccc] rounded-full" />
+                </div>
+
+                <div className="flex items-center justify-between mb-4">
+                  <span className="text-[20px] font-semibold text-[#333]">Filters</span>
+                  <button
+                    onClick={() => setShowFilterMenu(false)}
+                    className="text-[#666] active:opacity-70 transition-opacity"
+                  >
+                    <X className="w-6 h-6" />
+                  </button>
+                </div>
+
+                <div className="flex flex-wrap gap-2 pb-4">
+                  {filterOptions.map(filter => {
+                    const isSelected = selectedFilters.includes(filter.id);
+                    return (
+                      <button
+                        key={filter.id}
+                        onClick={() => toggleFilter(filter.id)}
+                        className={`px-4 py-2.5 rounded-full text-[15px] font-semibold transition-all flex items-center gap-2 ${
+                          isSelected
+                            ? 'bg-[#007aff] text-white'
+                            : 'bg-[#f5f5f5] text-[#333]'
+                        }`}
+                      >
+                        {filter.label}
+                        {isSelected && <X className="w-4 h-4" />}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+
+      {/* Payment Bottom Sheet */}
+      <AnimatePresence>
+        {showBottomSheet && (
+          <>
+            {/* Overlay */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              className="fixed inset-0 bg-black/40 z-40"
+              onClick={() => setShowBottomSheet(false)}
+            />
+
+            {/* Bottom Sheet Content */}
+            <motion.div
+              ref={bottomSheetRef}
+              initial={{ y: '100%' }}
+              animate={{ y: 0 }}
+              exit={{ y: '100%' }}
+              transition={{
+                type: 'spring',
+                damping: 25,
+                stiffness: 300,
+                mass: 0.8
+              }}
+              drag="y"
+              dragConstraints={{ top: 0, bottom: 0 }}
+              dragElastic={{ top: 0, bottom: 0.5 }}
+              onDragEnd={handleDragEnd}
+              className="fixed bottom-0 left-0 right-0 z-50 max-w-[390px] mx-auto"
+              style={{ y: dragY }}
+            >
+              <PcmaTrue onClose={() => setShowBottomSheet(false)} />
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
