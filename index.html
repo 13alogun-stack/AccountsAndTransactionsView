@@ -2,14 +2,44 @@
 <html lang="en" class="dark">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Ibra OS" />
+    <meta name="theme-color" content="#0a0a0f" />
+    <meta name="description" content="Personal Creative Operating System — projects, opportunities, design language, agents." />
+
     <title>Ibra OS — Personal Creative Operating System</title>
+
+    <!-- PWA icons -->
+    <link rel="apple-touch-icon" href="/icons/icon-192.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192.png" />
+    <link rel="icon" type="image/png" sizes="512x512" href="/icons/icon-512.png" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300..700;1,14..32,300..500&display=swap" rel="stylesheet" />
+
     <style>
-      html, body { height: 100%; margin: 0; background: #0a0a0f; }
+      html, body {
+        height: 100%;
+        margin: 0;
+        background: #0a0a0f;
+        overscroll-behavior: none;
+        -webkit-text-size-adjust: 100%;
+      }
       #root { height: 100%; }
+
+      /* Safe area insets for iPhone notch/home indicator */
+      :root {
+        --safe-top: env(safe-area-inset-top, 0px);
+        --safe-bottom: env(safe-area-inset-bottom, 0px);
+        --safe-left: env(safe-area-inset-left, 0px);
+        --safe-right: env(safe-area-inset-right, 0px);
+      }
     </style>
   </head>
   <body>

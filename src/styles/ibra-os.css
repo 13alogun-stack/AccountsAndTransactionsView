@@ -384,3 +384,208 @@ body {
   border-color: var(--os-border-strong);
   color: var(--os-text-primary);
 }
+
+/* =====================================================
+   RESPONSIVE / MOBILE LAYOUT
+   ===================================================== */
+
+/* Mobile header — hidden on desktop */
+.mobile-header {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 90;
+  height: calc(52px + var(--safe-top));
+  padding: var(--safe-top) 16px 0;
+  background: rgba(10, 10, 15, 0.92);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--os-border);
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Bottom nav — hidden on desktop */
+.os-bottom-nav-placeholder {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  /* Show mobile header, hide desktop sidebar */
+  .mobile-header {
+    display: flex;
+  }
+
+  .os-sidebar {
+    display: none !important;
+  }
+
+  /* Push main content below header and above bottom nav */
+  .os-main {
+    padding-top: calc(52px + var(--safe-top));
+    padding-bottom: calc(64px + var(--safe-bottom));
+  }
+
+  /* Page layout adjustments */
+  .page-header {
+    padding: 20px 16px 16px;
+  }
+
+  .page-content {
+    padding: 16px !important;
+  }
+
+  /* Force single column on mobile grids */
+  .os-main [style*="grid-template-columns: repeat(4"] {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  .os-main [style*="grid-template-columns: 1fr 1fr"] {
+    grid-template-columns: 1fr !important;
+  }
+
+  .os-main [style*="grid-template-columns: 1fr 280px"] {
+    grid-template-columns: 1fr !important;
+  }
+
+  .os-main [style*="grid-template-columns: 1fr 320px"] {
+    grid-template-columns: 1fr !important;
+  }
+
+  .os-main [style*="grid-template-columns: repeat(3"] {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Kanban: horizontal scroll on mobile */
+  .os-main [style*="display: flex; gap: 12px; overflowX"] {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Stat cards: 2 columns on mobile */
+  .stat-card {
+    padding: 14px;
+  }
+
+  .stat-value {
+    font-size: 22px;
+  }
+
+  /* Page headers */
+  .page-header h1 {
+    font-size: 18px !important;
+  }
+
+  /* Command bar modal: full width on mobile */
+  .os-main ~ div[style*="position: fixed"] > div {
+    max-width: 100% !important;
+    margin: 0 8px;
+  }
+
+  /* Cards: less padding on mobile */
+  .os-card {
+    border-radius: 10px;
+  }
+
+  /* Hide non-essential table columns on mobile */
+  table thead th:nth-child(n+5),
+  table tbody td:nth-child(n+5) {
+    display: none;
+  }
+
+  /* Touch target sizes */
+  .btn-gold,
+  .btn-ghost {
+    min-height: 40px;
+    font-size: 13px;
+  }
+
+  .nav-item {
+    min-height: 44px;
+  }
+}
+
+/* Tablet: collapsed sidebar */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .os-sidebar {
+    width: 56px;
+    min-width: 56px;
+    overflow: hidden;
+  }
+
+  .os-sidebar .section-label,
+  .os-sidebar span:not(.nav-item span:first-child) {
+    display: none;
+  }
+
+  .os-sidebar .nav-item {
+    padding: 10px;
+    justify-content: center;
+    gap: 0;
+  }
+
+  .os-sidebar .nav-item span {
+    display: none;
+  }
+
+  .os-sidebar > div:first-child {
+    padding: 14px 8px;
+    justify-content: center;
+  }
+
+  .mobile-header {
+    display: none;
+  }
+}
+
+/* Tauri desktop: remove safe area padding */
+[data-tauri] {
+  --safe-top: 0px;
+  --safe-bottom: 0px;
+}
+
+/* PWA install prompt */
+.pwa-install-banner {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 14px 16px calc(14px + var(--safe-bottom));
+  background: var(--os-surface);
+  border-top: 1px solid var(--os-border-strong);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  z-index: 300;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+/* Smooth page transitions on mobile */
+@media (max-width: 768px) {
+  .os-main > div {
+    animation: fadeIn 0.18s ease-out;
+  }
+}
+
+/* Larger touch targets for interactive elements on mobile */
+@media (pointer: coarse) {
+  button, a {
+    cursor: default;
+  }
+
+  .nav-item {
+    padding: 10px 12px;
+    min-height: 44px;
+  }
+}
+
+/* Remove hover effects on touch devices */
+@media (hover: none) {
+  .os-card:hover {
+    border-color: var(--os-border) !important;
+    transform: none !important;
+  }
+}
