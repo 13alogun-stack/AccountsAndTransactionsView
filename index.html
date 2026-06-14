@@ -12,11 +12,11 @@
 
     <title>Ibra OS — Personal Creative Operating System</title>
 
-    <!-- PWA icons -->
-    <link rel="apple-touch-icon" href="/icons/icon-192.png" />
-    <link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192.png" />
-    <link rel="icon" type="image/png" sizes="512x512" href="/icons/icon-512.png" />
-    <link rel="manifest" href="/manifest.webmanifest" />
+    <!-- PWA icons (%BASE_URL% is replaced at build time; manifest link is
+         injected automatically by vite-plugin-pwa with the correct base) -->
+    <link rel="apple-touch-icon" href="%BASE_URL%icons/icon-192.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="%BASE_URL%icons/icon-192.png" />
+    <link rel="icon" type="image/png" sizes="512x512" href="%BASE_URL%icons/icon-512.png" />
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />

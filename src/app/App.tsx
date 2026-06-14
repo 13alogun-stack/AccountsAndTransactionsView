@@ -11,10 +11,14 @@ import Finance from './pages/Finance';
 import Learning from './pages/Learning';
 import Agents from './pages/Agents';
 
+// Strip trailing slash so React Router gets a clean basename.
+// BASE_URL is "/" for dev/desktop and "/AccountsAndTransactionsView/" on Pages.
+const basename = import.meta.env.BASE_URL.replace(/\/$/, '') || '/';
+
 export default function App() {
   return (
     <AppProvider>
-      <BrowserRouter>
+      <BrowserRouter basename={basename}>
         <Layout>
           <Routes>
             <Route path="/" element={<Home />} />
