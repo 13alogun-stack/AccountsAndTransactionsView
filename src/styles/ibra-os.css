@@ -1,0 +1,386 @@
+/* Ibra OS — Dark Premium Theme */
+
+:root,
+.dark {
+  --background: #0a0a0f;
+  --foreground: #ededf5;
+  --card: #111118;
+  --card-foreground: #ededf5;
+  --popover: #16161f;
+  --popover-foreground: #ededf5;
+  --primary: #c9a844;
+  --primary-foreground: #0a0a0f;
+  --secondary: #1a1a26;
+  --secondary-foreground: #ededf5;
+  --muted: #14141e;
+  --muted-foreground: #7878a0;
+  --accent: #1e1e2e;
+  --accent-foreground: #c9a844;
+  --destructive: #e84545;
+  --destructive-foreground: #ffffff;
+  --border: rgba(255, 255, 255, 0.07);
+  --input: #1a1a26;
+  --input-background: #1a1a26;
+  --ring: #c9a844;
+  --radius: 0.625rem;
+
+  /* Ibra OS custom tokens */
+  --os-bg: #0a0a0f;
+  --os-bg-secondary: #0e0e16;
+  --os-surface: #111118;
+  --os-surface-raised: #16161f;
+  --os-surface-overlay: #1c1c2a;
+  --os-border: rgba(255, 255, 255, 0.07);
+  --os-border-strong: rgba(255, 255, 255, 0.12);
+  --os-text-primary: #ededf5;
+  --os-text-secondary: #9090b0;
+  --os-text-muted: #50506a;
+  --os-text-label: #6868888;
+  --os-gold: #c9a844;
+  --os-gold-muted: rgba(201, 168, 68, 0.12);
+  --os-gold-bright: #e0be6a;
+  --os-green: #2dce89;
+  --os-green-muted: rgba(45, 206, 137, 0.12);
+  --os-yellow: #f4b942;
+  --os-yellow-muted: rgba(244, 185, 66, 0.12);
+  --os-red: #e84545;
+  --os-red-muted: rgba(232, 69, 69, 0.12);
+  --os-blue: #6366f1;
+  --os-blue-muted: rgba(99, 102, 241, 0.12);
+  --os-purple: #a855f7;
+  --os-purple-muted: rgba(168, 85, 247, 0.12);
+  --os-teal: #14b8a6;
+  --os-teal-muted: rgba(20, 184, 166, 0.12);
+  --os-sidebar-width: 232px;
+}
+
+/* Force dark on all shadcn components */
+.dark {
+  color-scheme: dark;
+}
+
+/* Font override */
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.14);
+}
+
+/* OS Layout */
+.os-layout {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  background: var(--os-bg);
+  color: var(--os-text-primary);
+}
+
+.os-sidebar {
+  width: var(--os-sidebar-width);
+  min-width: var(--os-sidebar-width);
+  height: 100vh;
+  background: var(--os-surface);
+  border-right: 1px solid var(--os-border);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.os-main {
+  flex: 1;
+  overflow-y: auto;
+  background: var(--os-bg);
+}
+
+/* Cards */
+.os-card {
+  background: var(--os-surface);
+  border: 1px solid var(--os-border);
+  border-radius: 12px;
+}
+
+.os-card-elevated {
+  background: var(--os-surface-raised);
+  border: 1px solid var(--os-border);
+  border-radius: 12px;
+}
+
+/* Status colors */
+.status-active { color: var(--os-green); }
+.status-paused { color: var(--os-yellow); }
+.status-completed { color: var(--os-text-secondary); }
+.status-planned { color: var(--os-blue); }
+.status-archived { color: var(--os-text-muted); }
+
+/* Fit score */
+.fit-high { color: var(--os-green); }
+.fit-mid { color: var(--os-yellow); }
+.fit-low { color: var(--os-red); }
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-in {
+  animation: fadeIn 0.2s ease-out forwards;
+}
+
+/* Sidebar nav item */
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 450;
+  color: var(--os-text-secondary);
+  cursor: pointer;
+  transition: all 0.1s ease;
+  text-decoration: none;
+  letter-spacing: -0.01em;
+}
+
+.nav-item:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--os-text-primary);
+}
+
+.nav-item.active {
+  background: var(--os-gold-muted);
+  color: var(--os-gold);
+}
+
+.nav-item.active svg {
+  color: var(--os-gold);
+}
+
+/* Command bar */
+.command-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  background: var(--os-surface-raised);
+  border: 1px solid var(--os-border-strong);
+  border-radius: 10px;
+  font-size: 13px;
+  color: var(--os-text-muted);
+  cursor: text;
+  transition: all 0.15s ease;
+}
+
+.command-bar:hover {
+  border-color: rgba(255, 255, 255, 0.15);
+  color: var(--os-text-secondary);
+}
+
+/* Page header */
+.page-header {
+  padding: 32px 32px 0;
+  border-bottom: 1px solid var(--os-border);
+  padding-bottom: 24px;
+  margin-bottom: 0;
+}
+
+.page-content {
+  padding: 28px 32px;
+}
+
+/* Stat card */
+.stat-card {
+  background: var(--os-surface);
+  border: 1px solid var(--os-border);
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.stat-label {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--os-text-muted);
+}
+
+.stat-value {
+  font-size: 28px;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  color: var(--os-text-primary);
+  line-height: 1;
+}
+
+.stat-sub {
+  font-size: 12px;
+  color: var(--os-text-secondary);
+}
+
+/* Tag/badge */
+.os-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--os-text-secondary);
+  border: 1px solid var(--os-border);
+}
+
+/* Progress bar */
+.os-progress {
+  height: 3px;
+  background: rgba(255, 255, 255, 0.07);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.os-progress-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: var(--os-gold);
+  transition: width 0.3s ease;
+}
+
+/* Priority indicator */
+.priority-high { color: var(--os-red); }
+.priority-medium { color: var(--os-yellow); }
+.priority-low { color: var(--os-text-muted); }
+
+/* Section label */
+.section-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--os-text-muted);
+  padding: 0 12px;
+  margin-bottom: 2px;
+  margin-top: 20px;
+}
+
+/* Divider */
+.os-divider {
+  height: 1px;
+  background: var(--os-border);
+  margin: 0;
+}
+
+/* Color dots for project cards */
+.color-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* Agent task card */
+.agent-card {
+  background: var(--os-surface);
+  border: 1px solid var(--os-border);
+  border-radius: 10px;
+  padding: 16px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.agent-card:hover {
+  border-color: var(--os-border-strong);
+  background: var(--os-surface-raised);
+}
+
+/* Empty state */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 60px 24px;
+  color: var(--os-text-muted);
+  text-align: center;
+}
+
+/* Kanban column */
+.kanban-column {
+  min-width: 260px;
+  max-width: 260px;
+  background: var(--os-surface);
+  border: 1px solid var(--os-border);
+  border-radius: 12px;
+  padding: 16px;
+  flex-shrink: 0;
+}
+
+/* Hover utility */
+.hover-surface:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+/* Gold accent button */
+.btn-gold {
+  background: var(--os-gold-muted);
+  color: var(--os-gold);
+  border: 1px solid rgba(201, 168, 68, 0.2);
+  padding: 6px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-gold:hover {
+  background: rgba(201, 168, 68, 0.2);
+  border-color: rgba(201, 168, 68, 0.35);
+}
+
+/* Ghost button */
+.btn-ghost {
+  background: transparent;
+  color: var(--os-text-secondary);
+  border: 1px solid var(--os-border);
+  padding: 6px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 450;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-ghost:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: var(--os-border-strong);
+  color: var(--os-text-primary);
+}
