@@ -172,6 +172,7 @@ export default function Projects() {
                     overflow: 'hidden',
                     cursor: 'pointer',
                     transition: 'border-color 0.15s, transform 0.15s',
+                    background: 'linear-gradient(135deg, #111118 0%, #1a1a24 100%)',
                   }}
                   onMouseEnter={e => {
                     (e.currentTarget as HTMLDivElement).style.borderColor = 'rgba(255,255,255,0.14)';
@@ -180,11 +181,11 @@ export default function Projects() {
                     (e.currentTarget as HTMLDivElement).style.borderColor = 'var(--os-border)';
                   }}
                 >
-                  {/* Color bar */}
+                  {/* Status color top border */}
                   <div
                     style={{
-                      height: 4,
-                      background: `linear-gradient(90deg, ${proj.color} 0%, ${proj.color}66 100%)`,
+                      height: 2,
+                      background: STATUS_COLORS[proj.status],
                     }}
                   />
                   <div style={{ padding: '16px' }}>
@@ -203,20 +204,36 @@ export default function Projects() {
                         </p>
                         <p style={{ fontSize: 11.5, color: 'var(--os-text-muted)' }}>{proj.client} · {proj.year}</p>
                       </div>
-                      <span
-                        style={{
-                          fontSize: 10,
-                          fontWeight: 600,
-                          padding: '2px 7px',
-                          borderRadius: 5,
-                          background: `${STATUS_COLORS[proj.status]}18`,
-                          color: STATUS_COLORS[proj.status],
-                          flexShrink: 0,
-                          letterSpacing: '0.02em',
-                        }}
-                      >
-                        {STATUS_LABELS[proj.status]}
-                      </span>
+                      <div className="flex flex-col items-end gap-1.5">
+                        <span
+                          style={{
+                            fontSize: 10,
+                            fontWeight: 600,
+                            padding: '2px 7px',
+                            borderRadius: 5,
+                            background: `${STATUS_COLORS[proj.status]}18`,
+                            color: STATUS_COLORS[proj.status],
+                            flexShrink: 0,
+                            letterSpacing: '0.02em',
+                          }}
+                        >
+                          {STATUS_LABELS[proj.status]}
+                        </span>
+                        <span
+                          style={{
+                            fontSize: 10,
+                            fontWeight: 600,
+                            padding: '2px 7px',
+                            borderRadius: 5,
+                            background: 'rgba(255,255,255,0.05)',
+                            color: 'var(--os-text-muted)',
+                            flexShrink: 0,
+                            letterSpacing: '0.02em',
+                          }}
+                        >
+                          {CATEGORY_LABELS[proj.category]}
+                        </span>
+                      </div>
                     </div>
 
                     <p
@@ -240,15 +257,23 @@ export default function Projects() {
                       ))}
                     </div>
 
+                    {(proj as any).budget && (
+                      <p style={{ fontSize: 15, fontWeight: 700, color: 'var(--os-gold)', letterSpacing: '-0.02em', marginBottom: 10 }}>
+                        {(proj as any).budget}
+                      </p>
+                    )}
+
                     <div className="flex items-center justify-between">
                       <div style={{ flex: 1 }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                          <div className="os-progress" style={{ flex: 1 }}>
+                          <div className="os-progress" style={{ flex: 1, height: 8, borderRadius: 4 }}>
                             <div
                               className="os-progress-fill"
                               style={{
                                 width: `${proj.portfolioReadiness}%`,
                                 background: proj.portfolioReadiness >= 80 ? 'var(--os-green)' : 'var(--os-gold)',
+                                height: '100%',
+                                borderRadius: 4,
                               }}
                             />
                           </div>

@@ -1,6 +1,16 @@
 import { DollarSign, TrendingUp, AlertCircle, Clock, CheckCircle2, Plus } from 'lucide-react';
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { useApp } from '../store/AppContext';
 import { MONTHLY_TARGET, RATE_FLOOR, RATE_TARGET } from '../data/sample';
+
+const monthlyData = [
+  { month: 'Jan', confirmed: 8200, pending: 2000 },
+  { month: 'Feb', confirmed: 11400, pending: 1500 },
+  { month: 'Mar', confirmed: 9800, pending: 3200 },
+  { month: 'Apr', confirmed: 13200, pending: 800 },
+  { month: 'May', confirmed: 10600, pending: 4100 },
+  { month: 'Jun', confirmed: 12400, pending: 2900 },
+];
 
 const statusColors: Record<string, string> = {
   paid: 'var(--os-green)',
@@ -78,6 +88,48 @@ export default function Finance() {
             <p className="stat-label">Net Expected</p>
             <p className="stat-value">${netExpected.toLocaleString()}</p>
             <p className="stat-sub">After expenses</p>
+          </div>
+        </div>
+
+        {/* Income Overview Chart */}
+        <div className="os-card" style={{ padding: 20 }}>
+          <h3 style={{ fontSize: 13, fontWeight: 600, color: 'var(--os-text-primary)', letterSpacing: '-0.01em', marginBottom: 16 }}>
+            Income Overview
+          </h3>
+          <ResponsiveContainer width="100%" height={220}>
+            <AreaChart data={monthlyData} margin={{ top: 4, right: 4, left: -10, bottom: 0 }}>
+              <defs>
+                <linearGradient id="gradConfirmed" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#c9a844" stopOpacity={0.3} />
+                  <stop offset="95%" stopColor="#c9a844" stopOpacity={0} />
+                </linearGradient>
+                <linearGradient id="gradPending" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#6b6b8a" stopOpacity={0.3} />
+                  <stop offset="95%" stopColor="#6b6b8a" stopOpacity={0} />
+                </linearGradient>
+              </defs>
+              <CartesianGrid strokeDasharray="3 3" stroke="#2a2a3a" vertical={false} />
+              <XAxis dataKey="month" tick={{ fill: '#6b6b8a', fontSize: 11 }} axisLine={false} tickLine={false} />
+              <YAxis tick={{ fill: '#6b6b8a', fontSize: 10 }} axisLine={false} tickLine={false} tickFormatter={v => `$${(v / 1000).toFixed(0)}k`} />
+              <Tooltip
+                contentStyle={{ background: '#111118', border: '1px solid #2a2a3a', borderRadius: 8, fontSize: 12 }}
+                labelStyle={{ color: '#e8e8f0', fontWeight: 600, marginBottom: 4 }}
+                itemStyle={{ color: '#e8e8f0' }}
+                formatter={(value: number) => [`$${value.toLocaleString()}`, undefined]}
+              />
+              <Area type="monotone" dataKey="confirmed" name="Confirmed" stroke="#c9a844" strokeWidth={2} fill="url(#gradConfirmed)" />
+              <Area type="monotone" dataKey="pending" name="Pending" stroke="#6b6b8a" strokeWidth={2} fill="url(#gradPending)" />
+            </AreaChart>
+          </ResponsiveContainer>
+          <div className="flex items-center gap-5 mt-2">
+            <div className="flex items-center gap-2">
+              <div style={{ width: 10, height: 2, background: '#c9a844', borderRadius: 1 }} />
+              <span style={{ fontSize: 11, color: 'var(--os-text-muted)' }}>Confirmed</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div style={{ width: 10, height: 2, background: '#6b6b8a', borderRadius: 1 }} />
+              <span style={{ fontSize: 11, color: 'var(--os-text-muted)' }}>Pending</span>
+            </div>
           </div>
         </div>
 
