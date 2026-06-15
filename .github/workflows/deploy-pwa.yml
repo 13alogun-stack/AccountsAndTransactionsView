@@ -1,0 +1,68 @@
+name: Deploy PWA to GitHub Pages
+
+# Builds the web app as a PWA and publishes it to GitHub Pages.
+# The published URL is installable on iPhone/Android via "Add to Home Screen".
+
+on:
+  push:
+    branches:
+      - main
+      - claude/ibra-os-prd-qhj2k7
+  workflow_dispatch:
+
+# Permissions required to deploy to GitHub Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Allow only one concurrent deployment
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build PWA
+        run: pnpm build
+        env:
+          # GitHub Pages serves this repo from a sub-path
+          VITE_BASE: /${{ github.event.repository.name }}/
+
+      - name: Add SPA fallback (404 -> index)
+        run: cp dist/index.html dist/404.html
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
