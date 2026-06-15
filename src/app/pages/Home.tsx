@@ -83,42 +83,91 @@ export default function Home() {
         {/* Stat Row */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 12 }}>
           <Link to="/projects" style={{ textDecoration: 'none' }}>
-            <div className="stat-card" style={{ cursor: 'pointer', transition: 'border-color 0.15s' }}>
+            <div
+              className="stat-card"
+              style={{
+                cursor: 'pointer',
+                transition: 'border-color 0.15s',
+                borderLeft: '2px solid #6366f1',
+                paddingLeft: 16,
+              }}
+            >
               <p className="stat-label">Active Projects</p>
-              <p className="stat-value">{activeProjects}</p>
-              <p className="stat-sub">2 need next action</p>
+              <p className="stat-value" style={{ fontSize: 40, lineHeight: 1.1 }}>{activeProjects}</p>
+              <div className="flex items-center justify-between mt-2">
+                <p className="stat-sub" style={{ margin: 0 }}>+1 vs last month</p>
+                <svg viewBox="0 0 60 20" style={{ width: 64, height: 20, opacity: 0.4, color: '#6366f1' }}>
+                  <polyline points="0,18 10,14 20,16 30,8 40,10 50,4 60,6" fill="none" stroke="currentColor" strokeWidth="1.5" />
+                </svg>
+              </div>
             </div>
           </Link>
           <Link to="/opportunities" style={{ textDecoration: 'none' }}>
-            <div className="stat-card" style={{ cursor: 'pointer' }}>
+            <div
+              className="stat-card"
+              style={{
+                cursor: 'pointer',
+                borderLeft: '2px solid var(--os-green)',
+                paddingLeft: 16,
+              }}
+            >
               <p className="stat-label">Opportunities</p>
-              <p className="stat-value">{activeOpps}</p>
-              <p className="stat-sub">1 interview pending</p>
+              <p className="stat-value" style={{ fontSize: 40, lineHeight: 1.1 }}>{activeOpps}</p>
+              <div className="flex items-center justify-between mt-2">
+                <p className="stat-sub" style={{ margin: 0 }}>+3 vs last month</p>
+                <svg viewBox="0 0 60 20" style={{ width: 64, height: 20, opacity: 0.4, color: 'var(--os-green)' }}>
+                  <polyline points="0,18 10,15 20,12 30,10 40,7 50,5 60,3" fill="none" stroke="currentColor" strokeWidth="1.5" />
+                </svg>
+              </div>
             </div>
           </Link>
           <Link to="/finance" style={{ textDecoration: 'none' }}>
-            <div className="stat-card" style={{ cursor: 'pointer' }}>
+            <div
+              className="stat-card"
+              style={{
+                cursor: 'pointer',
+                borderLeft: '2px solid var(--os-gold)',
+                paddingLeft: 16,
+              }}
+            >
               <p className="stat-label">June Income</p>
-              <p className="stat-value" style={{ color: 'var(--os-green)' }}>
+              <p className="stat-value" style={{ color: 'var(--os-green)', fontSize: 40, lineHeight: 1.1 }}>
                 ${paidThisMonth.toLocaleString()}
               </p>
-              <div style={{ marginTop: 4 }}>
+              <div style={{ marginTop: 6 }}>
                 <div className="os-progress">
                   <div className="os-progress-fill" style={{ width: `${progressPct}%` }} />
                 </div>
-                <p className="stat-sub" style={{ marginTop: 4 }}>
-                  ${pendingIncome.toLocaleString()} pending · ${MONTHLY_TARGET.toLocaleString()} target
-                </p>
+                <div className="flex items-center justify-between mt-2">
+                  <p className="stat-sub" style={{ margin: 0 }}>
+                    {progressPct}% of ${MONTHLY_TARGET.toLocaleString()} target
+                  </p>
+                  <svg viewBox="0 0 60 20" style={{ width: 64, height: 20, opacity: 0.4, color: 'var(--os-gold)' }}>
+                    <polyline points="0,18 10,14 20,16 30,8 40,10 50,4 60,6" fill="none" stroke="currentColor" strokeWidth="1.5" />
+                  </svg>
+                </div>
               </div>
             </div>
           </Link>
           <Link to="/agents" style={{ textDecoration: 'none' }}>
-            <div className="stat-card" style={{ cursor: 'pointer' }}>
+            <div
+              className="stat-card"
+              style={{
+                cursor: 'pointer',
+                borderLeft: '2px solid #a855f7',
+                paddingLeft: 16,
+              }}
+            >
               <p className="stat-label">Agent Queue</p>
-              <p className="stat-value" style={{ color: pendingAgentTasks > 0 ? 'var(--os-gold)' : undefined }}>
+              <p className="stat-value" style={{ color: pendingAgentTasks > 0 ? 'var(--os-gold)' : undefined, fontSize: 40, lineHeight: 1.1 }}>
                 {pendingAgentTasks}
               </p>
-              <p className="stat-sub">{pendingAgentTasks > 0 ? 'tasks need review' : 'all clear'}</p>
+              <div className="flex items-center justify-between mt-2">
+                <p className="stat-sub" style={{ margin: 0 }}>{pendingAgentTasks > 0 ? 'tasks need review' : 'all clear'}</p>
+                <svg viewBox="0 0 60 20" style={{ width: 64, height: 20, opacity: 0.4, color: '#a855f7' }}>
+                  <polyline points="0,12 10,10 20,14 30,8 40,6 50,9 60,5" fill="none" stroke="currentColor" strokeWidth="1.5" />
+                </svg>
+              </div>
             </div>
           </Link>
         </div>
