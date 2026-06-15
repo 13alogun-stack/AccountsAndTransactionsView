@@ -45,6 +45,22 @@ function FitBadge({ score }: { score: number }) {
   );
 }
 
+const FitRing = ({ score }: { score: number }) => {
+  const r = 14, circ = 2 * Math.PI * r;
+  const filled = (score / 100) * circ;
+  return (
+    <svg width="36" height="36" viewBox="0 0 36 36">
+      <circle cx="18" cy="18" r={r} fill="none" stroke="#2a2a3a" strokeWidth="3" />
+      <circle
+        cx="18" cy="18" r={r} fill="none" stroke="#c9a844" strokeWidth="3"
+        strokeDasharray={`${filled} ${circ}`} strokeLinecap="round"
+        transform="rotate(-90 18 18)"
+      />
+      <text x="18" y="22" textAnchor="middle" fill="#e8e8f0" fontSize="9" fontWeight="bold">{score}</text>
+    </svg>
+  );
+};
+
 export default function Opportunities() {
   const { opportunities } = useApp();
   const [view, setView] = useState<'board' | 'list'>('board');
@@ -173,14 +189,16 @@ export default function Opportunities() {
                         onClick={() => setSelected(selected === opp.id ? null : opp.id)}
                         style={{
                           padding: '12px',
-                          background: selected === opp.id ? 'var(--os-surface-overlay)' : 'var(--os-surface-raised)',
+                          background: selected === opp.id
+                            ? 'linear-gradient(135deg, #1a1a24 0%, #20202e 100%)'
+                            : 'linear-gradient(135deg, #111118 0%, #1a1a24 100%)',
                           border: `1px solid ${selected === opp.id ? 'rgba(201,168,68,0.3)' : 'var(--os-border)'}`,
                           borderRadius: 10,
                           cursor: 'pointer',
                           transition: 'all 0.15s',
                         }}
                       >
-                        <div className="flex items-start justify-between gap-2 mb-1.5">
+                        <div className="flex items-start justify-between gap-2 mb-2">
                           <div
                             style={{
                               width: 28,
@@ -199,12 +217,12 @@ export default function Opportunities() {
                           >
                             {opp.company.slice(0, 2).toUpperCase()}
                           </div>
-                          <FitBadge score={opp.fitScore} />
+                          <FitRing score={Math.round(opp.fitScore * 10)} />
                         </div>
-                        <p style={{ fontSize: 12.5, fontWeight: 500, color: 'var(--os-text-primary)', lineHeight: 1.3, marginBottom: 2 }}>
+                        <p style={{ fontSize: 12.5, fontWeight: 500, color: 'var(--os-text-primary)', lineHeight: 1.3, marginBottom: 3 }}>
                           {opp.title}
                         </p>
-                        <p style={{ fontSize: 11, color: 'var(--os-text-muted)', marginBottom: 6 }}>{opp.company}</p>
+                        <p style={{ fontSize: 12, fontWeight: 600, color: 'var(--os-text-secondary)', marginBottom: 6 }}>{opp.company}</p>
                         <div className="flex items-center gap-2">
                           <span
                             style={{
