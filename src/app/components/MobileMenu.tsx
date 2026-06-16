@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router';
-import { Palette, Image, DollarSign, BookOpen, X, Search } from 'lucide-react';
+import { Palette, Image, DollarSign, BookOpen, Search, FileText, Zap, Brain } from 'lucide-react';
 import { useApp } from '../store/AppContext';
 
 const MORE_NAV = [
@@ -7,6 +7,9 @@ const MORE_NAV = [
   { path: '/moodboards', label: 'Moodboards', icon: Image, description: 'References & inspiration' },
   { path: '/finance', label: 'Finance', icon: DollarSign, description: 'Income, rates & invoices' },
   { path: '/learning', label: 'Learning', icon: BookOpen, description: 'Skills & goals' },
+  { path: '/documents', label: 'Documents', icon: FileText, description: 'Case studies, briefs, proposals' },
+  { path: '/prompts', label: 'Prompts', icon: Zap, description: 'Reusable AI prompt library' },
+  { path: '/memories', label: 'Memory', icon: Brain, description: 'Lessons, decisions & context' },
 ];
 
 interface Props {
