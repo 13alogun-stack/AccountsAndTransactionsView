@@ -173,7 +173,7 @@ export default function Finance() {
               Finance + Pricing
             </h1>
             <p style={{ fontSize: 12.5, color: 'var(--os-text-secondary)', marginTop: 3 }}>
-              {new Date().toLocaleString('en-US', { month: 'long', year: 'numeric' })} &nbsp;·&nbsp; Target: ${MONTHLY_TARGET.toLocaleString()}
+              {new Date().toLocaleString('en-CA', { month: 'long', year: 'numeric' })} &nbsp;·&nbsp; Target: ${MONTHLY_TARGET.toLocaleString()} CAD
             </p>
           </div>
           <button className="btn-gold">
@@ -424,6 +424,52 @@ export default function Finance() {
               </div>
             ))}
           </div>
+        </div>
+
+        {/* Spending Watch */}
+        <div className="os-card" style={{ padding: 20 }}>
+          <div className="flex items-center justify-between mb-4">
+            <h3 style={{ fontSize: 13, fontWeight: 600, color: 'var(--os-text-primary)', letterSpacing: '-0.01em' }}>
+              Spending Watch — May 2026
+            </h3>
+            <span style={{ fontSize: 11, color: 'var(--os-text-muted)' }}>From KOHO data</span>
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+            {[
+              { cat: 'Eating & Drinking', amount: 487, budget: 300, color: '#c9a844' },
+              { cat: 'Cannabis', amount: 203, budget: 100, color: '#14b8a6' },
+              { cat: 'Groceries', amount: 312, budget: 400, color: '#6366f1' },
+              { cat: 'Transport', amount: 156, budget: 200, color: '#60a5fa' },
+              { cat: 'Subscriptions', amount: 154, budget: 200, color: '#a855f7' },
+            ].map(({ cat, amount, budget, color }) => {
+              const pct = Math.min(100, Math.round((amount / budget) * 100));
+              const over = amount > budget;
+              return (
+                <div key={cat}>
+                  <div className="flex items-center justify-between mb-1.5">
+                    <span style={{ fontSize: 12.5, color: 'var(--os-text-primary)' }}>{cat}</span>
+                    <div className="flex items-center gap-2">
+                      {over && <span style={{ fontSize: 10, fontWeight: 600, color: 'var(--os-red)', letterSpacing: '0.04em' }}>OVER</span>}
+                      <span style={{ fontSize: 12.5, fontWeight: 600, color: over ? 'var(--os-red)' : 'var(--os-text-secondary)' }}>
+                        ${amount} <span style={{ fontWeight: 400, color: 'var(--os-text-muted)' }}>/ ${budget}</span>
+                      </span>
+                    </div>
+                  </div>
+                  <div style={{ height: 4, background: 'rgba(255,255,255,0.06)', borderRadius: 2 }}>
+                    <div style={{
+                      height: 4, borderRadius: 2,
+                      width: `${pct}%`,
+                      background: over ? 'var(--os-red)' : color,
+                      transition: 'width 0.4s ease',
+                    }} />
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+          <p style={{ fontSize: 11, color: 'var(--os-text-muted)', marginTop: 14 }}>
+            Import a more recent KOHO CSV below to update these figures automatically.
+          </p>
         </div>
 
         {/* KOHO Transactions */}
