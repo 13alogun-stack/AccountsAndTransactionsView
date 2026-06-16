@@ -1,5 +1,5 @@
 import { Link } from 'react-router';
-import { Zap, ChevronRight, ArrowUpRight } from 'lucide-react';
+import { Zap, ChevronRight, ArrowUpRight, Plus } from 'lucide-react';
 import { useApp } from '../store/AppContext';
 import { MONTHLY_TARGET } from '../data/sample';
 
@@ -49,7 +49,7 @@ export default function Home() {
     .sort((a, b) => b.fitScore - a.fitScore)
     .slice(0, 3);
 
-  const adobeOpp = opportunities.find(o => o.id === 'o1');
+  const activeInterview = opportunities.find(o => o.status === 'interviewing');
 
   return (
     <div style={{ minHeight: '100vh' }}>
@@ -73,8 +73,8 @@ export default function Home() {
 
       <div className="page-content" style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
 
-        {/* Adobe Express Interview Hero */}
-        {adobeOpp && (
+        {/* Active Interview Hero — only shown when there's an active process */}
+        {activeInterview ? (
           <Link to="/opportunities" style={{ textDecoration: 'none' }}>
             <div className="interview-hero">
               <div className="flex items-start justify-between">
@@ -91,20 +91,36 @@ export default function Home() {
                       fontSize: 10, fontWeight: 600, color: '#fff', background: 'rgba(255,255,255,0.1)',
                       padding: '3px 8px', borderRadius: 4, letterSpacing: '0.04em',
                     }}>
-                      Fit Score 10/10
+                      Fit {activeInterview.fitScore}/10
                     </span>
                   </div>
                   <p style={{ fontSize: 22, fontWeight: 700, letterSpacing: '-0.03em', color: '#fff', marginBottom: 4, lineHeight: 1.2 }}>
-                    Designer — Adobe Express
+                    {activeInterview.title}
                   </p>
                   <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.5)', marginBottom: 10 }}>
-                    Adobe · Remote / San Jose · 2026
+                    {activeInterview.company} · {activeInterview.location}
                   </p>
                   <p style={{ fontSize: 12.5, color: 'rgba(255,255,255,0.65)', lineHeight: 1.5 }}>
-                    {adobeOpp.nextAction}
+                    {activeInterview.nextAction}
                   </p>
                 </div>
                 <ArrowUpRight size={18} style={{ color: 'var(--os-orange)', flexShrink: 0, marginTop: 2 }} />
+              </div>
+            </div>
+          </Link>
+        ) : (
+          <Link to="/opportunities" style={{ textDecoration: 'none' }}>
+            <div style={{
+              background: 'var(--os-surface)', border: '1px dashed var(--os-border-strong)',
+              borderRadius: 14, padding: '16px 20px',
+              display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+            }}>
+              <div>
+                <p style={{ fontSize: 13, fontWeight: 500, color: 'var(--os-text-secondary)' }}>No active interviews right now.</p>
+                <p style={{ fontSize: 12, color: 'var(--os-text-muted)', marginTop: 2 }}>Add an opportunity to track your next move.</p>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, color: 'var(--os-text-muted)' }}>
+                <Plus size={13} /> Add opportunity
               </div>
             </div>
           </Link>
@@ -124,7 +140,7 @@ export default function Home() {
             <div className="stat-card-orange" style={{ cursor: 'pointer' }}>
               <p className="stat-label" style={{ color: 'var(--os-orange)' }}>Opportunities</p>
               <p className="stat-value" style={{ fontSize: 48, color: 'var(--os-orange-bright)' }}>{activeOpps}</p>
-              <p className="stat-sub" style={{ color: 'rgba(255,255,255,0.4)' }}>1 active interview</p>
+              <p className="stat-sub" style={{ color: 'rgba(255,255,255,0.4)' }}>{activeOpps > 0 ? `${activeOpps} in play` : 'add your next move'}</p>
             </div>
           </Link>
 
