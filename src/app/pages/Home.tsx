@@ -4,11 +4,11 @@ import { useApp } from '../store/AppContext';
 import { MONTHLY_TARGET } from '../data/sample';
 
 const TODAY_PRIORITIES = [
-  { label: 'Adobe Express interview — finalize case studies and motion work', urgency: 'high', project: 'Opportunity' },
-  { label: 'Adobe Motion System — write case study draft', urgency: 'high', project: 'Portfolio' },
-  { label: 'PC Masterbrand — capture final deliverables', urgency: 'medium', project: 'Portfolio' },
-  { label: 'AI-First workflow — document and make it presentable', urgency: 'medium', project: 'Interview Prep' },
-  { label: 'Case study writing — first complete draft by Jul 1', urgency: 'high', project: 'Portfolio' },
+  { label: 'Start a case study — one project, one page, just get it written', urgency: 'high', project: 'Portfolio' },
+  { label: 'Figure out the financial plan — what\'s the monthly savings target?', urgency: 'high', project: 'Finance' },
+  { label: 'Document SHN work in progress — capture decisions and screens now', urgency: 'medium', project: 'SHN · Loblaw' },
+  { label: 'AI workflow — write down how you actually use it, even rough notes', urgency: 'medium', project: 'Learning' },
+  { label: 'Career direction — IC, lead, or freelance? Need a real answer by Q3', urgency: 'high', project: 'Career' },
 ];
 
 function getGreeting() {
