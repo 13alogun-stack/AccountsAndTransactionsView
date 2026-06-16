@@ -13,11 +13,11 @@ import { useApp } from '../store/AppContext';
 import { MONTHLY_TARGET } from '../data/sample';
 
 const TODAY_PRIORITIES = [
-  { label: 'Send Northstar Capital proposal', urgency: 'high', project: 'Freelance' },
-  { label: 'Follow up with Vercel — schedule screening call', urgency: 'high', project: 'Opportunity' },
-  { label: 'Continue Carbon Fight case study', urgency: 'medium', project: 'Portfolio' },
-  { label: 'Prepare TechFlow portfolio presentation', urgency: 'high', project: 'Opportunity' },
-  { label: 'DX Studio homepage hero — start concepting', urgency: 'medium', project: 'Studio' },
+  { label: 'Adobe Express interview — finalize case studies and motion work', urgency: 'high', project: 'Opportunity' },
+  { label: 'Adobe Motion System — write case study draft', urgency: 'high', project: 'Portfolio' },
+  { label: 'PC Masterbrand — capture final deliverables for case study', urgency: 'medium', project: 'Portfolio' },
+  { label: 'AI-First workflow documentation — make it presentable', urgency: 'medium', project: 'Interview Prep' },
+  { label: 'Portfolio case study writing — first complete draft by Jul 1', urgency: 'high', project: 'Portfolio' },
 ];
 
 const urgencyColor: Record<string, string> = {
@@ -26,8 +26,28 @@ const urgencyColor: Record<string, string> = {
   low: 'var(--os-text-muted)',
 };
 
+function getGreeting() {
+  const h = new Date().getHours();
+  if (h >= 5 && h < 12) return 'Good morning';
+  if (h >= 12 && h < 17) return 'Good afternoon';
+  if (h >= 17 && h < 21) return 'Good evening';
+  return 'Still up';
+}
+
+function getLiveDate() {
+  return new Date().toLocaleDateString('en-CA', {
+    weekday: 'long',
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  });
+}
+
 export default function Home() {
   const { projects, opportunities, agentTasks, financeItems } = useApp();
+
+  const now = new Date();
+  const currentYearMonth = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
 
   const activeProjects = projects.filter(p => p.status === 'active').length;
   const activeOpps = opportunities.filter(o =>
@@ -36,13 +56,15 @@ export default function Home() {
   const pendingAgentTasks = agentTasks.filter(t => t.status === 'review').length;
 
   const paidThisMonth = financeItems
-    .filter(f => f.status === 'paid' && f.date.startsWith('2025-06'))
+    .filter(f => f.status === 'paid' && f.date.startsWith(currentYearMonth))
     .reduce((sum, f) => sum + f.amount, 0);
   const pendingIncome = financeItems
     .filter(f => f.status === 'pending')
     .reduce((sum, f) => sum + f.amount, 0);
 
   const progressPct = Math.min(100, Math.round((paidThisMonth / MONTHLY_TARGET) * 100));
+
+  const attentionCount = TODAY_PRIORITIES.filter(p => p.urgency === 'high').length;
 
   const recentAgentTasks = agentTasks.filter(t => t.status !== 'archived').slice(0, 3);
 
@@ -66,10 +88,10 @@ export default function Home() {
                 marginBottom: 4,
               }}
             >
-              Good morning, Ibra.
+              {getGreeting()}, Ibra.
             </h1>
             <p style={{ fontSize: 13, color: 'var(--os-text-secondary)' }}>
-              Saturday, 14 June 2025 &nbsp;·&nbsp; 3 things need your attention today
+              {getLiveDate()} &nbsp;·&nbsp; {attentionCount} things need your attention today
             </p>
           </div>
           <button className="btn-gold" style={{ marginTop: 4 }}>
@@ -130,7 +152,7 @@ export default function Home() {
                 paddingLeft: 16,
               }}
             >
-              <p className="stat-label">June Income</p>
+              <p className="stat-label">{now.toLocaleDateString('en-CA', { month: 'long' })} Income</p>
               <p className="stat-value" style={{ color: 'var(--os-green)', fontSize: 40, lineHeight: 1.1 }}>
                 ${paidThisMonth.toLocaleString()}
               </p>
