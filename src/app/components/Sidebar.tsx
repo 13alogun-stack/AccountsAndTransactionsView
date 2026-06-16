@@ -10,6 +10,9 @@ import {
   Bot,
   Search,
   ChevronRight,
+  FileText,
+  Zap,
+  Brain,
 } from 'lucide-react';
 import { useApp } from '../store/AppContext';
 
@@ -21,18 +24,23 @@ const NAV_ITEMS = [
   { path: '/moodboards', label: 'Moodboards', icon: Image },
   { path: '/finance', label: 'Finance', icon: DollarSign },
   { path: '/learning', label: 'Learning', icon: BookOpen },
+  { path: '/documents', label: 'Documents', icon: FileText },
+  { path: '/prompts', label: 'Prompts', icon: Zap },
+  { path: '/memories', label: 'Memory', icon: Brain },
   { path: '/agents', label: 'Agents', icon: Bot },
 ];
 
 export default function Sidebar() {
   const location = useLocation();
-  const { opportunities, agentTasks, setCommandBarOpen } = useApp();
+  const { opportunities, agentTasks, documents, setCommandBarOpen } = useApp();
 
   const activeOpps = opportunities.filter(o =>
     ['applied', 'replied', 'interviewing', 'follow_up', 'proposal'].includes(o.status)
   ).length;
 
   const pendingTasks = agentTasks.filter(t => ['queued', 'in_progress', 'review'].includes(t.status)).length;
+
+  const draftDocs = documents.filter(d => d.status === 'in_progress').length;
 
   return (
     <aside className="os-sidebar">
@@ -55,6 +63,21 @@ export default function Sidebar() {
           >
             Ibra OS
           </span>
+          <span
+            style={{
+              marginLeft: 'auto',
+              fontSize: 9,
+              fontWeight: 700,
+              letterSpacing: '0.06em',
+              textTransform: 'uppercase',
+              padding: '2px 5px',
+              borderRadius: 4,
+              background: 'rgba(232,80,4,0.15)',
+              color: 'var(--os-orange)',
+            }}
+          >
+            V2
+          </span>
         </div>
         <p style={{ fontSize: 10.5, color: 'var(--os-text-muted)', letterSpacing: '0.01em', paddingLeft: 32 }}>
           Personal Creative OS
@@ -69,7 +92,7 @@ export default function Sidebar() {
           style={{ textAlign: 'left' }}
         >
           <Search size={13} strokeWidth={2} />
-          <span style={{ flex: 1 }}>Search or ask...</span>
+          <span style={{ flex: 1 }}>Ask Ibra OS...</span>
           <span
             style={{
               fontSize: 10,
@@ -98,6 +121,8 @@ export default function Sidebar() {
               ? activeOpps > 0 ? activeOpps : undefined
               : path === '/agents'
               ? pendingTasks > 0 ? pendingTasks : undefined
+              : path === '/documents'
+              ? draftDocs > 0 ? draftDocs : undefined
               : undefined;
 
           return (
@@ -143,7 +168,7 @@ export default function Sidebar() {
             <p style={{ fontSize: 12, fontWeight: 500, color: 'var(--os-text-primary)', letterSpacing: '-0.01em' }}>
               Ibra Balogun
             </p>
-            <p style={{ fontSize: 10.5, color: 'var(--os-text-muted)', marginTop: 1 }}>Creative Director</p>
+            <p style={{ fontSize: 10.5, color: 'var(--os-text-muted)', marginTop: 1 }}>Creative Director · RGD</p>
           </div>
           <ChevronRight size={12} style={{ color: 'var(--os-text-muted)', flexShrink: 0 }} />
         </div>

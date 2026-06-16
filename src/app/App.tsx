@@ -10,9 +10,10 @@ import Moodboards from './pages/Moodboards';
 import Finance from './pages/Finance';
 import Learning from './pages/Learning';
 import Agents from './pages/Agents';
+import Documents from './pages/Documents';
+import Prompts from './pages/Prompts';
+import Memories from './pages/Memories';
 
-// Strip trailing slash so React Router gets a clean basename.
-// BASE_URL is "/" for dev/desktop and "/AccountsAndTransactionsView/" on Pages.
 const basename = import.meta.env.BASE_URL.replace(/\/$/, '') || '/';
 
 export default function App() {
@@ -30,6 +31,9 @@ export default function App() {
             <Route path="/finance" element={<Finance />} />
             <Route path="/learning" element={<Learning />} />
             <Route path="/agents" element={<Agents />} />
+            <Route path="/documents" element={<Documents />} />
+            <Route path="/prompts" element={<Prompts />} />
+            <Route path="/memories" element={<Memories />} />
           </Routes>
         </Layout>
       </BrowserRouter>

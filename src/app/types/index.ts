@@ -1,5 +1,27 @@
-export type ProjectStatus = 'active' | 'completed' | 'paused' | 'planned' | 'archived';
-export type ProjectCategory = 'brand' | 'product' | 'web' | 'motion' | 'campaign' | 'system' | 'concept' | 'poster';
+// ─── Projects ────────────────────────────────────────────────────────────────
+
+export type ProjectStatus =
+  | 'idea'
+  | 'active'
+  | 'paused'
+  | 'needs_assets'
+  | 'needs_writing'
+  | 'portfolio_ready'
+  | 'published'
+  | 'completed'
+  | 'archived';
+
+export type ProjectCategory =
+  | 'brand'
+  | 'product'
+  | 'web'
+  | 'motion'
+  | 'campaign'
+  | 'system'
+  | 'concept'
+  | 'poster'
+  | 'editorial'
+  | '3d';
 
 export interface Project {
   id: string;
@@ -11,6 +33,9 @@ export interface Project {
   category: ProjectCategory;
   industry: string;
   description: string;
+  problem?: string;
+  solution?: string;
+  outcome?: string;
   tools: string[];
   tags: string[];
   thumbnail?: string;
@@ -20,10 +45,18 @@ export interface Project {
   portfolioReadiness: number;
   nextAction?: string;
   figmaLink?: string;
+  webflowLink?: string;
+  screenshots?: string[];
+  relatedReferences?: string[];
+  relatedDocuments?: string[];
+  relatedOpportunities?: string[];
   metrics?: string;
   teamSize?: number;
   featured?: boolean;
+  missingAssets?: string[];
 }
+
+// ─── Opportunities ────────────────────────────────────────────────────────────
 
 export type OpportunityStatus =
   | 'found'
@@ -35,6 +68,7 @@ export type OpportunityStatus =
   | 'proposal'
   | 'won'
   | 'lost'
+  | 'closed'
   | 'archived';
 
 export interface Opportunity {
@@ -49,15 +83,24 @@ export interface Opportunity {
   source: string;
   status: OpportunityStatus;
   fitScore: number;
+  excitementScore?: number;
+  riskScore?: number;
   rateOrSalary?: string;
+  minRate?: number;
+  targetRate?: number;
   notes?: string;
   outreachDraft?: string;
   followUpDate?: string;
   relatedProjects?: string[];
+  suggestedPortfolioPieces?: string[];
+  interviewNotes?: string;
+  proposalStatus?: string;
   nextAction?: string;
   createdAt: string;
   tags?: string[];
 }
+
+// ─── References / Moodboards ─────────────────────────────────────────────────
 
 export interface Reference {
   id: string;
@@ -67,14 +110,34 @@ export interface Reference {
   url?: string;
   tags: string[];
   mood: string[];
-  category: 'web' | 'brand' | 'poster' | 'product' | 'type' | 'motion' | 'editorial' | 'campaign' | 'system';
+  category:
+    | 'web'
+    | 'brand'
+    | 'poster'
+    | 'product'
+    | 'type'
+    | 'motion'
+    | 'editorial'
+    | 'campaign'
+    | 'system'
+    | 'photography'
+    | '3d'
+    | 'illustration'
+    | 'deck'
+    | 'app_ui';
   whyItWorks: string;
   relatedProjects?: string[];
   colorLanguage?: string;
   typographyNotes?: string;
+  layoutNotes?: string;
+  motionNotes?: string;
+  usableFor?: string[];
   savedAt: string;
   color: string;
+  approval?: 'approved' | 'almost' | 'rejected' | 'reference' | 'wild' | 'baseline';
 }
+
+// ─── Design Language ──────────────────────────────────────────────────────────
 
 export interface DesignPrinciple {
   id: string;
@@ -82,6 +145,7 @@ export interface DesignPrinciple {
   description: string;
   examples?: string[];
   tags?: string[];
+  category?: 'layout' | 'typography' | 'color' | 'motion' | 'tone' | 'craft' | 'process';
 }
 
 export interface DesignLanguageTag {
@@ -91,9 +155,30 @@ export interface DesignLanguageTag {
   description?: string;
 }
 
+export interface DesignLanguageProfile {
+  visualPrinciples: string[];
+  layoutPreferences: string[];
+  typographyPreferences: string[];
+  colorPreferences: string[];
+  motionPreferences: string[];
+  artDirectionPatterns: string[];
+  portfolioStyle: string;
+  caseStudyWritingStyle: string;
+  designRules: string[];
+  toAvoid: string[];
+  favouriteMoves: string[];
+  outputQualityStandards: string[];
+  approvedExamples: string[];
+  rejectedExamples: string[];
+  lastUpdated: string;
+}
+
+// ─── Finance ─────────────────────────────────────────────────────────────────
+
 export interface FinanceItem {
   id: string;
-  type: 'invoice' | 'expense' | 'retainer' | 'subscription';
+  label?: string;
+  type: 'invoice' | 'expense' | 'retainer' | 'subscription' | 'salary' | 'freelance';
   amount: number;
   currency: string;
   date: string;
@@ -104,6 +189,8 @@ export interface FinanceItem {
   dueDate?: string;
   category?: string;
 }
+
+// ─── Learning ─────────────────────────────────────────────────────────────────
 
 export interface LearningGoal {
   id: string;
@@ -118,7 +205,83 @@ export interface LearningGoal {
   progress: number;
   notes?: string;
   priority: 'high' | 'medium' | 'low';
+  outputCreated?: string[];
 }
+
+// ─── Documents ────────────────────────────────────────────────────────────────
+
+export type DocumentType =
+  | 'case_study'
+  | 'deck_outline'
+  | 'brief'
+  | 'proposal'
+  | 'sow'
+  | 'strategy'
+  | 'prd'
+  | 'portfolio_copy'
+  | 'outreach'
+  | 'interview_prep'
+  | 'learning_plan'
+  | 'weekly_review'
+  | 'prompt_pack'
+  | 'invoice_notes'
+  | 'brand_guidelines'
+  | 'webflow_cms'
+  | 'standup'
+  | 'draft';
+
+export type DocumentStatus = 'draft' | 'in_progress' | 'review' | 'final' | 'archived';
+
+export interface Document {
+  id: string;
+  title: string;
+  type: DocumentType;
+  content: string;
+  status: DocumentStatus;
+  relatedProject?: string;
+  relatedOpportunity?: string;
+  relatedReferences?: string[];
+  tags: string[];
+  exportFormat?: 'markdown' | 'pdf' | 'docx' | 'ppt';
+  versionHistory?: { date: string; summary: string }[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+// ─── Prompts ─────────────────────────────────────────────────────────────────
+
+export type PromptCategory =
+  | 'claude'
+  | 'chatgpt'
+  | 'replit'
+  | 'figma'
+  | 'webflow'
+  | 'image_gen'
+  | 'mockups'
+  | 'case_studies'
+  | 'decks'
+  | 'outreach'
+  | 'proposals'
+  | 'portfolio'
+  | 'moodboards'
+  | 'design_critique'
+  | 'ai_workflow';
+
+export interface Prompt {
+  id: string;
+  title: string;
+  category: PromptCategory;
+  promptText: string;
+  tool?: string;
+  relatedProject?: string;
+  tags: string[];
+  resultQuality?: 'excellent' | 'good' | 'ok' | 'poor';
+  notes?: string;
+  lastUsedAt?: string;
+  createdAt: string;
+}
+
+// ─── Agent Tasks ──────────────────────────────────────────────────────────────
 
 export type AgentType =
   | 'creative_director'
@@ -129,7 +292,7 @@ export type AgentType =
   | 'production'
   | 'memory';
 
-export type AgentTaskStatus = 'queued' | 'in_progress' | 'review' | 'completed' | 'archived';
+export type AgentTaskStatus = 'draft' | 'queued' | 'in_progress' | 'review' | 'approved' | 'revised' | 'completed' | 'archived';
 
 export interface AgentTask {
   id: string;
@@ -139,6 +302,8 @@ export interface AgentTask {
   prompt: string;
   output?: string;
   sourceIds?: string[];
+  relatedProject?: string;
+  relatedReferences?: string[];
   reviewNotes?: string;
   createdAt: string;
   updatedAt: string;
@@ -146,12 +311,63 @@ export interface AgentTask {
   priority: 'high' | 'medium' | 'low';
 }
 
+// ─── Memory ───────────────────────────────────────────────────────────────────
+
+export type MemoryType =
+  | 'user_profile'
+  | 'project'
+  | 'design_language'
+  | 'preference'
+  | 'prompt'
+  | 'opportunity'
+  | 'finance'
+  | 'learning'
+  | 'lesson'
+  | 'decision'
+  | 'workflow'
+  | 'pricing';
+
 export interface Memory {
   id: string;
-  type: 'project' | 'design_language' | 'preference' | 'prompt' | 'opportunity' | 'lesson' | 'pricing';
+  type: MemoryType;
   source: string;
   content: string;
   tags: string[];
   confidence: number;
   lastUpdated: string;
+  relatedEntityId?: string;
+}
+
+// ─── AI Output ────────────────────────────────────────────────────────────────
+
+export interface AIOutput {
+  id: string;
+  type: string;
+  input: Record<string, unknown>;
+  output: string;
+  sources: string[];
+  relatedItems: string[];
+  suggestedNextActions: string[];
+  confidence: number;
+  createdAt: string;
+  savedAsDocumentId?: string;
+  savedAsMemoryId?: string;
+}
+
+// ─── Shared ───────────────────────────────────────────────────────────────────
+
+export interface FileLink {
+  id: string;
+  name: string;
+  type: 'image' | 'pdf' | 'figma' | 'video' | 'doc' | 'other';
+  url: string;
+  relatedEntityId?: string;
+  uploadedAt: string;
+}
+
+export interface Tag {
+  id: string;
+  label: string;
+  color?: string;
+  category?: string;
 }

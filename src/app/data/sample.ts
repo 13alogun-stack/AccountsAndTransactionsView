@@ -4,10 +4,13 @@ import type {
   Reference,
   DesignPrinciple,
   DesignLanguageTag,
+  DesignLanguageProfile,
   FinanceItem,
   LearningGoal,
   AgentTask,
   Memory,
+  Document,
+  Prompt,
 } from '../types';
 
 export const SAMPLE_PROJECTS: Project[] = [
@@ -686,6 +689,461 @@ export const SAMPLE_MEMORIES: Memory[] = [
     lastUpdated: '2025-04-30',
   },
 ];
+
+export const SAMPLE_DOCUMENTS: Document[] = [
+  {
+    id: 'doc1',
+    title: 'PC Masterbrand — Case Study Draft',
+    type: 'case_study',
+    status: 'in_progress',
+    relatedProject: 'p1',
+    tags: ['case-study', 'portfolio', 'loblaw', 'pcmb'],
+    content: `# PC Masterbrand — Web Experience
+
+## Overview
+Created a modular, bilingual (EN/FR) web experience uniting PC Express, PC Health, and PC Financial under one cohesive digital ecosystem.
+
+## The Problem
+President's Choice had three digital sub-brands — PC Express, PC Health, PC Financial — each with its own design language, tech stack, and visual tone. Users navigating between them experienced a fractured, inconsistent journey. The brief: build one unified web system that honoured each brand's function while creating a recognizable PC digital identity.
+
+## My Role
+Senior Product Designer. Led visual design direction, design QA, and cross-functional coordination with content, dev, and external partners (Zulu, Disney, Marvel).
+
+## Process
+
+### Audit + Discovery
+Mapped all existing touchpoints across the three sub-brands. Identified 47 inconsistencies in type usage, colour application, and component structure.
+
+### System Design
+Built a shared component library that could flex across all three sub-brands while maintaining brand coherence at the PC masterbrand level.
+
+### Art Direction
+Established a visual hierarchy system that let product photography, campaign content, and utility UI coexist without conflict.
+
+## Outcome
+Unified 3 sub-brands under one digital ecosystem. Reduced design QA cycles by 60%. Established component standards adopted by 5 product teams.
+
+## Tools
+Figma · Webflow · Storybook
+
+---
+*Next: Add final screen showcase and metrics section*`,
+    createdAt: '2026-06-01',
+    updatedAt: '2026-06-14',
+  },
+  {
+    id: 'doc2',
+    title: 'SHN — Project Brief',
+    type: 'brief',
+    status: 'final',
+    relatedProject: 'p2',
+    tags: ['shn', 'brief', 'loblaw', 'health'],
+    content: `# SHN — Specialty Health Network · Project Brief
+
+**Client:** Loblaw Digital
+**Project:** SHN Digital Product Design
+**Role:** Product Designer
+**Start:** January 2026
+**Status:** Active
+
+## Brief
+Design the digital product experience for SHN (Specialty Health Network), a Loblaw initiative connecting patients to specialty pharmacy services.
+
+## Core User Needs
+1. Patients need to easily understand what SHN does and whether they qualify
+2. Healthcare providers need clear referral pathways
+3. Loblaw needs trust signals that differentiate SHN from general pharmacy
+
+## Design Principles for this Project
+- Clarity over cleverness — every screen should have one clear next step
+- Accessible by default — WCAG AA minimum, AAA target for key flows
+- Warm but clinical — not cold healthcare sterile, not consumer casual
+
+## Deliverables
+- Patient-facing web experience
+- Provider portal flows
+- Design system component additions
+- Handoff documentation
+
+## Current Status
+Early design phase. Exploration complete, moving into structured flows.`,
+    createdAt: '2026-01-15',
+    updatedAt: '2026-06-10',
+  },
+  {
+    id: 'doc3',
+    title: 'DX Studio — Homepage Brief',
+    type: 'brief',
+    status: 'draft',
+    tags: ['dx-studio', 'homepage', 'brand', 'brief'],
+    content: `# DX Studio — Homepage Brief
+
+## What is DX Studio
+A boutique creative studio run by Ibra Balogun. Specializes in brand systems, digital experiences, and AI-assisted creative production for growth-stage companies.
+
+## Homepage Goal
+Convert: "I've heard of DX Studio" → "I want to work with them."
+
+## Audience
+- Founders at Series A–B startups
+- Marketing leads at scale-ups looking for brand elevation
+- Design leaders scoping fractional CD partnerships
+
+## Tone
+Confident. Not loud. Specific about what we do and what we don't. No buzzwords.
+
+## Page Structure (Draft)
+1. Hero — One line. DX Studio name. What we do.
+2. Work — 3 project thumbnails. Purposefully edited.
+3. Services — 3 offerings max. Priced or range-noted.
+4. Process — 3 steps. Brief → Design → Launch.
+5. Studio note — Direct from Ibra. Not a bio. A positioning statement.
+6. Contact — One CTA. Simple.
+
+## Design Direction
+TBD — waiting on baseline/wild directions from Agent.`,
+    createdAt: '2026-05-20',
+    updatedAt: '2026-06-12',
+  },
+  {
+    id: 'doc4',
+    title: 'Northstar Capital — Website Proposal',
+    type: 'proposal',
+    status: 'review',
+    relatedOpportunity: 'o6',
+    tags: ['proposal', 'freelance', 'northstar', 'web'],
+    content: `# Website Redesign Proposal
+## Northstar Capital × DX Studio
+
+**Prepared by:** Ibraheem Balogun, DX Studio
+**Date:** June 2026
+**Project Budget:** $18,000 CAD
+
+---
+
+## Project Overview
+A full website redesign for Northstar Capital — a Toronto-based VC firm investing in climate tech and frontier software.
+
+## Scope of Work
+
+**Phase 1 — Discovery (Week 1–2)**
+- Stakeholder interviews
+- Competitive landscape audit
+- Brand direction alignment session
+- Information architecture mapping
+
+**Phase 2 — Design (Week 3–6)**
+- Homepage and inner page design (Figma)
+- Mobile-first, responsive
+- Component library
+- Copy direction and headline frameworks
+
+**Phase 3 — Build + Launch (Week 7–8)**
+- Webflow build
+- CMS configuration
+- QA and browser testing
+- Launch support
+
+## Investment
+| Phase | Hours | Rate | Total |
+|-------|-------|------|-------|
+| Discovery | 20h | $80/hr | $1,600 |
+| Design | 100h | $80/hr | $8,000 |
+| Build | 80h | $80/hr | $6,400 |
+| PM & Comms | 25h | $80/hr | $2,000 |
+| **Total** | | | **$18,000** |
+
+## Terms
+- 50% ($9,000) upfront to begin
+- 50% ($9,000) on final delivery
+- Payment: e-Transfer or wire
+- Net-15 from invoice
+
+---
+*Ready to send pending one review*`,
+    createdAt: '2026-06-13',
+    updatedAt: '2026-06-15',
+  },
+  {
+    id: 'doc5',
+    title: 'Weekly Review — June 16, 2026',
+    type: 'weekly_review',
+    status: 'draft',
+    tags: ['weekly-review', 'reflection', 'june-2026'],
+    content: `# Weekly Review — June 16, 2026
+
+## What moved this week
+- SHN: Provider portal flows in review with PM
+- Ibra OS: Launched V2 rebuild — major step forward
+- Finance: Insight Global payroll confirmed, KOHO imports done
+
+## What didn't move (and why)
+- PC Masterbrand case study: Didn't write a word. The block is still "I don't know where to start."
+- DX Studio homepage: No decisions made on direction yet.
+
+## Numbers
+- Income this month: ~$2,542 confirmed
+- Tools spending: ~$264/mo CAD equivalent
+- Pipeline: 2 active opps (Vercel, Northstar)
+
+## Next week focus
+1. Write one paragraph of the PCMB case study. One paragraph.
+2. Make a call on DX Studio direction — baseline or wild.
+3. Follow up with Vercel — screening call should be booked.
+
+## Reflection
+The OS feels more real now. The data is real, the projects are real. The next move is making the output real — actually writing case studies, actually closing opps.`,
+    createdAt: '2026-06-16',
+    updatedAt: '2026-06-16',
+  },
+];
+
+export const SAMPLE_PROMPTS: Prompt[] = [
+  {
+    id: 'pr1',
+    title: 'Extract Design Language from Project',
+    category: 'claude',
+    promptText: `Act as a senior creative director reviewing a design project. Extract a reusable design language profile with:
+
+1. Layout system and spatial logic (grid, spacing, proportions)
+2. Colour palette with usage rules (not just colours — the logic behind them)
+3. Typography system (scale, weight decisions, how type carries hierarchy)
+4. Motion principles (if any — how things move and why)
+5. Art direction rules (what makes this feel like this)
+6. 5 reusable "prompt rules" — sentences that capture the feeling of this work
+
+For each item, include: what it is, why it was chosen, and how to apply it again.
+Be specific. No design jargon without follow-up substance.
+
+Project context: [PROJECT_NAME] for [CLIENT] — [ONE_LINE_DESCRIPTION]`,
+    tool: 'Claude',
+    tags: ['design-language', 'template', 'extraction', 'creative-direction'],
+    resultQuality: 'excellent',
+    notes: 'Best used after a project is complete or in late stage. Works best when you paste in actual design decisions, not just a brief.',
+    lastUsedAt: '2026-06-06',
+    createdAt: '2026-05-15',
+  },
+  {
+    id: 'pr2',
+    title: 'Generate Case Study — Senior Designer Voice',
+    category: 'claude',
+    promptText: `Write a portfolio case study for [PROJECT_NAME].
+
+Voice: Senior designer. Confident, direct, specific. No buzzwords. No "I was responsible for." Show thinking, not just output.
+
+Structure:
+1. Hook — one sentence that makes someone want to read on
+2. Context — what was the brief, who was the client, what constraints existed
+3. My role — specific, not generic
+4. The real problem — not the brief, the actual design problem underneath
+5. Key decisions — 3 decisions, each with rationale
+6. What I made — describe the actual output in design terms
+7. Outcome — specific, not vague ("improved conversion" → "23% lift in checkout completion")
+8. What I'd do differently — one honest reflection
+
+Project notes: [PROJECT_NOTES]
+Key metrics: [METRICS]
+Tools: [TOOLS]`,
+    tool: 'Claude',
+    tags: ['case-study', 'portfolio', 'writing', 'template'],
+    resultQuality: 'excellent',
+    notes: 'Works extremely well. The "what I\'d do differently" section elevates the whole piece.',
+    lastUsedAt: '2026-06-10',
+    createdAt: '2026-05-20',
+  },
+  {
+    id: 'pr3',
+    title: 'Baseline + Wild Creative Directions',
+    category: 'claude',
+    promptText: `Generate two creative directions for [PROJECT/BRIEF].
+
+BASELINE
+Clean. Professional. Client-ready. Strong but safe.
+- Visual language
+- Typography approach
+- Colour system
+- Layout structure
+- Hero concept
+- Reference feeling (name 2 things it feels like)
+
+WILD
+Ownable. Expressive. Art-directed. Memorable.
+- Visual language
+- Typography approach
+- Colour system
+- Layout structure
+- Hero concept
+- Reference feeling (name 2 things it feels like)
+
+For each: include a one-sentence positioning statement that captures the direction.
+
+Brief: [BRIEF]
+Audience: [AUDIENCE]
+Constraints: [CONSTRAINTS]`,
+    tool: 'Claude',
+    tags: ['creative-direction', 'baseline-wild', 'directions', 'template'],
+    resultQuality: 'excellent',
+    notes: 'Always generate both. The Wild direction often contains the most interesting ideas, even if Baseline gets used.',
+    createdAt: '2026-05-25',
+  },
+  {
+    id: 'pr4',
+    title: 'Webflow Build Prompt — Portfolio Case Study',
+    category: 'webflow',
+    promptText: `Build a Webflow portfolio case study page for [PROJECT_NAME].
+
+Design direction:
+- Hero: Full-width, [COLOR] as accent, large display type
+- Font: Use a clean sans-serif for body, something with weight for display
+- Palette: [BASE_PALETTE]
+- Style: [DESIGN_LANGUAGE_TAGS]
+
+Page sections:
+1. Hero — Project title + client + year + one-line hook (full viewport)
+2. Context — 2-col: brief left / role + tools right
+3. Process — 3-step horizontal with numbered labels
+4. Visual showcase — Full-width image or mockup grid
+5. Outcome — Metric callout + 3 bullet points
+6. Next project CTA — Link to adjacent project
+
+Webflow notes:
+- Set up as CMS collection item for easy duplication
+- All images: max 2000px width, WebP format
+- Smooth scroll, no jarring transitions
+- Mobile-first layout — test at 375px first`,
+    tool: 'Webflow',
+    tags: ['webflow', 'portfolio', 'case-study', 'build', 'template'],
+    resultQuality: 'good',
+    createdAt: '2026-06-01',
+  },
+  {
+    id: 'pr5',
+    title: 'Outreach Email — Senior Design Role',
+    category: 'outreach',
+    promptText: `Write a cold outreach email for a senior design role.
+
+Tone: Direct, confident, human. Not a cover letter. Not a sales pitch. A message from a serious designer who has done their homework.
+
+Structure:
+1. Opening — specific observation about the company (not "I love what you're doing")
+2. Why this role — one reason, specific
+3. Most relevant work — 2 projects max, one sentence each
+4. Ask — one specific, low-friction ask
+
+Keep it under 150 words. Every sentence should earn its place.
+
+Role: [ROLE_TITLE] at [COMPANY]
+What I know about them: [COMPANY_NOTES]
+My most relevant projects: [PROJECT_1], [PROJECT_2]
+Contact name: [CONTACT_NAME]`,
+    tool: 'Claude',
+    tags: ['outreach', 'email', 'opportunities', 'template'],
+    resultQuality: 'good',
+    notes: 'Works best when you actually know something specific about the company. Generic inputs = generic output.',
+    createdAt: '2026-06-05',
+  },
+  {
+    id: 'pr6',
+    title: 'Replit — Portfolio Site Generator',
+    category: 'replit',
+    promptText: `Build a single-page portfolio website using React and Tailwind.
+
+Designer: Ibraheem (Ibra) Balogun — Senior Designer / Creative Director, Toronto
+Style: Premium, editorial, dark-mode-first
+
+Sections:
+1. Nav — Name left, "Available for work" status dot right
+2. Hero — Full viewport. Name, title, one-line positioning. Subtle grid or noise texture.
+3. Work — 3 project cards, hover reveals case study link. Show: name, client, year, category tag.
+4. About — 2 sentences. Not a bio. A positioning statement.
+5. Contact — Email link + LinkedIn. Simple.
+
+Design tokens:
+- Background: #0a0a0f
+- Text primary: #f5f5ef
+- Accent: #E85004 (warm orange)
+- Type: System font stack or Inter
+- Spacing: 8px grid
+
+Code it clean. One file if possible. Comment the section breaks.`,
+    tool: 'Replit',
+    tags: ['replit', 'portfolio', 'website', 'react', 'tailwind'],
+    resultQuality: 'good',
+    createdAt: '2026-06-08',
+  },
+];
+
+export const DESIGN_LANGUAGE_PROFILE: DesignLanguageProfile = {
+  visualPrinciples: [
+    'The constraint should be visible in the final design — it makes work feel earned',
+    'Every element earns its place — remove anything that doesn\'t work harder than its weight',
+    'Strong visual hierarchy before anything else — the reading order must be unambiguous',
+    'Restraint as a creative tool — say more with less',
+  ],
+  layoutPreferences: [
+    'Modular grid systems — consistent spatial logic across every surface',
+    'Generous whitespace — breathing room is a design tool, not waste',
+    'Editorial page structure — section transitions as narrative beats',
+    'Full-width hero moments alternating with narrow prose columns',
+  ],
+  typographyPreferences: [
+    'Type carries the hierarchy — size, weight, and tracking do the work',
+    'Tight tracking for display type — headings should feel composed',
+    'One type family maximum on most projects — clarity over variety',
+    'Numbers in tabular figures — data should align',
+  ],
+  colorPreferences: [
+    'Restrained palette — 2 to 3 colours max, each with a defined role',
+    'Dark bases work best — content sits on canvas, not in a bright void',
+    'One warm accent — orange (#E85004) or a brand-specific equivalent',
+    'Colour used purposefully — as signal, not decoration',
+  ],
+  motionPreferences: [
+    'Functional motion only — transitions should guide, not entertain',
+    'Count-up animations for numbers and metrics',
+    'Slide-up reveals for section entries',
+    'No parallax — too distracting',
+  ],
+  artDirectionPatterns: [
+    'Numbers as heroes — large-scale metrics carry emotional weight',
+    'Data as design — tables and charts styled as primary visual elements',
+    'Mockups with intention — device frames chosen and scaled deliberately',
+    'Earned restraint — not minimal because it\'s easy, minimal because it\'s the right answer',
+  ],
+  portfolioStyle: 'Editorial. Confident narrative. The process is explained but the craft leads. Strong hero image, specific design decisions, real metrics.',
+  caseStudyWritingStyle: 'Direct, first-person, specific. No "I was responsible for." Show thinking. "I decided X because Y — the outcome was Z." Honest about trade-offs.',
+  designRules: [
+    'Never use pure black or pure white — always a touch of warmth or coolness',
+    'Accessibility minimum: WCAG AA. Target AAA for key user flows',
+    'Components before custom — build on a system before introducing something new',
+    '4px or 8px grid. Always.',
+    'Never present work without a brief — context makes design legible',
+  ],
+  toAvoid: [
+    'Generic stock photography — ever',
+    'Random gradients with no rationale',
+    'Decorative elements that don\'t communicate',
+    'More than 3 font weights on a single page',
+    'Animations that loop or auto-play without user intent',
+    'Vague outcome statements — "improved UX" means nothing',
+  ],
+  favouriteMoves: [
+    'Large editorial numbers — letting a single metric own the screen',
+    'Colour-block section dividers — hard cut between content types',
+    'Subtle noise or grain texture over flat dark backgrounds',
+    'Type as texture — oversized letterforms used as background element',
+    'Social proof blocks with specific quotes, not paraphrased summaries',
+  ],
+  outputQualityStandards: [
+    'Every screen should be presentable as a case study frame',
+    'Designs reviewed at 100% zoom — details matter',
+    'Handoff docs reviewed by dev before calling a component complete',
+    'QA pass required on all responsive breakpoints',
+  ],
+  approvedExamples: ['Linear', 'Stripe', 'Cosmos', 'Readwise', 'Vercel', 'Cron'],
+  rejectedExamples: ['Generic SaaS blue-purple gradients', 'Toy-like AI interfaces', 'Over-illustrated dashboards'],
+  lastUpdated: '2026-06-16',
+};
 
 // Connect your bank account to replace with live figures
 export const MONTHLY_TARGET = 15000;
