@@ -60,6 +60,7 @@ export interface Project {
 
 export type OpportunityStatus =
   | 'found'
+  | 'considering'
   | 'interested'
   | 'applied'
   | 'replied'

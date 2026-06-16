@@ -1,12 +1,10 @@
 import { Link } from 'react-router';
 import {
   ArrowUpRight,
-  Zap,
   ChevronRight,
   AlertCircle,
   CheckCircle2,
   Clock,
-  Plus,
 } from 'lucide-react';
 import { useApp } from '../store/AppContext';
 import { MONTHLY_TARGET } from '../data/sample';
@@ -40,14 +38,13 @@ function getLiveDate() {
 }
 
 export default function Home() {
-  const { projects, opportunities, agentTasks, financeItems, documents } = useApp();
+  const { projects, opportunities, agentTasks, financeItems } = useApp();
 
   const activeProjects = projects.filter(p => p.status === 'active').length;
   const activeOpps = opportunities.filter(o =>
     ['applied', 'replied', 'interviewing', 'follow_up', 'proposal'].includes(o.status)
   ).length;
   const pendingAgentTasks = agentTasks.filter(t => ['review', 'in_progress'].includes(t.status)).length;
-  const draftDocs = documents.filter(d => d.status === 'in_progress' || d.status === 'draft').length;
 
   const now = new Date();
   const ym = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
