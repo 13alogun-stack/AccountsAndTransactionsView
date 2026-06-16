@@ -181,29 +181,19 @@ export default function Projects() {
                     (e.currentTarget as HTMLDivElement).style.borderColor = 'var(--os-border)';
                   }}
                 >
-                  {/* Status color top border */}
+                  {/* Color block header */}
                   <div
-                    style={{
-                      height: 2,
-                      background: STATUS_COLORS[proj.status],
-                    }}
-                  />
-                  <div style={{ padding: '16px' }}>
+                    className="project-color-header"
+                    style={{ background: `linear-gradient(135deg, ${proj.color}cc 0%, ${proj.color}66 100%)` }}
+                  >
+                    <span className="project-color-header-text">{proj.title}</span>
+                  </div>
+                  <div style={{ padding: '14px 16px 6px' }}>
+                    <p style={{ fontSize: 11.5, color: 'var(--os-text-muted)', marginBottom: 12 }}>{proj.client} · {proj.year}</p>
+                  </div>
+                  <div style={{ padding: '0 16px 16px' }}>
                     <div className="flex items-start justify-between gap-2 mb-3">
-                      <div>
-                        <p
-                          style={{
-                            fontSize: 14,
-                            fontWeight: 600,
-                            letterSpacing: '-0.02em',
-                            color: 'var(--os-text-primary)',
-                            marginBottom: 2,
-                          }}
-                        >
-                          {proj.title}
-                        </p>
-                        <p style={{ fontSize: 11.5, color: 'var(--os-text-muted)' }}>{proj.client} · {proj.year}</p>
-                      </div>
+                      <div style={{ flex: 1 }} />
                       <div className="flex flex-col items-end gap-1.5">
                         <span
                           style={{
