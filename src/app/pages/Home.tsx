@@ -1,453 +1,449 @@
 import { Link } from 'react-router';
 import {
-  ArrowRight,
+  ArrowUpRight,
   Zap,
-  TrendingUp,
-  Calendar,
-  Clock,
   ChevronRight,
   AlertCircle,
   CheckCircle2,
+  Clock,
+  Plus,
 } from 'lucide-react';
 import { useApp } from '../store/AppContext';
 import { MONTHLY_TARGET } from '../data/sample';
 
 const TODAY_PRIORITIES = [
-  { label: 'Send Northstar Capital proposal', urgency: 'high', project: 'Freelance' },
-  { label: 'Follow up with Vercel — schedule screening call', urgency: 'high', project: 'Opportunity' },
-  { label: 'Continue Carbon Fight case study', urgency: 'medium', project: 'Portfolio' },
-  { label: 'Prepare TechFlow portfolio presentation', urgency: 'high', project: 'Opportunity' },
-  { label: 'DX Studio homepage hero — start concepting', urgency: 'medium', project: 'Studio' },
+  { label: 'Write one paragraph of the PCMB case study', urgency: 'high', project: 'Portfolio' },
+  { label: 'Decide DX Studio homepage direction — baseline or wild', urgency: 'high', project: 'Studio' },
+  { label: 'Follow up with Vercel — screening call', urgency: 'high', project: 'Opportunity' },
+  { label: 'Document SHN provider portal decisions', urgency: 'medium', project: 'SHN · Loblaw' },
+  { label: 'Figure out the monthly savings target', urgency: 'medium', project: 'Finance' },
 ];
 
 const urgencyColor: Record<string, string> = {
-  high: 'var(--os-red)',
+  high: 'var(--os-orange)',
   medium: 'var(--os-yellow)',
   low: 'var(--os-text-muted)',
 };
 
+function getGreeting() {
+  const h = new Date().getHours();
+  if (h >= 5 && h < 12) return 'Good morning';
+  if (h >= 12 && h < 17) return 'Good afternoon';
+  if (h >= 17 && h < 21) return 'Good evening';
+  return 'Still up';
+}
+
+function getLiveDate() {
+  return new Date().toLocaleDateString('en-CA', {
+    weekday: 'long', day: 'numeric', month: 'long', year: 'numeric',
+  });
+}
+
 export default function Home() {
-  const { projects, opportunities, agentTasks, financeItems } = useApp();
+  const { projects, opportunities, agentTasks, financeItems, documents } = useApp();
 
   const activeProjects = projects.filter(p => p.status === 'active').length;
   const activeOpps = opportunities.filter(o =>
     ['applied', 'replied', 'interviewing', 'follow_up', 'proposal'].includes(o.status)
   ).length;
-  const pendingAgentTasks = agentTasks.filter(t => t.status === 'review').length;
+  const pendingAgentTasks = agentTasks.filter(t => ['review', 'in_progress'].includes(t.status)).length;
+  const draftDocs = documents.filter(d => d.status === 'in_progress' || d.status === 'draft').length;
 
+  const now = new Date();
+  const ym = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
   const paidThisMonth = financeItems
-    .filter(f => f.status === 'paid' && f.date.startsWith('2025-06'))
-    .reduce((sum, f) => sum + f.amount, 0);
-  const pendingIncome = financeItems
-    .filter(f => f.status === 'pending')
+    .filter(f => f.status === 'paid' && f.date.startsWith(ym))
     .reduce((sum, f) => sum + f.amount, 0);
 
   const progressPct = Math.min(100, Math.round((paidThisMonth / MONTHLY_TARGET) * 100));
 
-  const recentAgentTasks = agentTasks.filter(t => t.status !== 'archived').slice(0, 3);
+  const highPriorityCount = TODAY_PRIORITIES.filter(p => p.urgency === 'high').length;
+  const recentAgentTasks = agentTasks.filter(t => t.status !== 'archived').slice(0, 4);
 
   const topOpps = opportunities
-    .filter(o => ['interviewing', 'follow_up', 'reply'].includes(o.status) || o.fitScore >= 8)
+    .filter(o => ['interviewing', 'follow_up', 'replied', 'proposal'].includes(o.status) || o.fitScore >= 8)
     .sort((a, b) => b.fitScore - a.fitScore)
-    .slice(0, 3);
+    .slice(0, 4);
+
+  const interview = opportunities.find(o => o.status === 'interviewing');
 
   return (
-    <div style={{ minHeight: '100vh' }}>
-      {/* Header */}
-      <div className="page-header">
-        <div className="flex items-start justify-between">
-          <div>
-            <h1
-              style={{
-                fontSize: 22,
-                fontWeight: 600,
-                letterSpacing: '-0.03em',
-                color: 'var(--os-text-primary)',
-                marginBottom: 4,
-              }}
-            >
-              Good morning, Ibra.
-            </h1>
-            <p style={{ fontSize: 13, color: 'var(--os-text-secondary)' }}>
-              Saturday, 14 June 2025 &nbsp;·&nbsp; 3 things need your attention today
-            </p>
-          </div>
-          <button className="btn-gold" style={{ marginTop: 4 }}>
-            <Zap size={13} />
-            Quick Capture
-          </button>
-        </div>
+    <div className="os-page" style={{ maxWidth: 1240 }}>
+      {/* ── Editorial hero header ───────────────────────────────── */}
+      <div style={{ marginBottom: 32 }}>
+        <p
+          style={{
+            fontSize: 12,
+            fontWeight: 700,
+            letterSpacing: '0.12em',
+            textTransform: 'uppercase',
+            color: 'var(--os-orange)',
+            marginBottom: 10,
+          }}
+        >
+          {getLiveDate()}
+        </p>
+        <h1
+          style={{
+            fontSize: 'clamp(36px, 6vw, 56px)',
+            fontWeight: 800,
+            letterSpacing: '-0.045em',
+            lineHeight: 0.98,
+            color: 'var(--os-text-primary)',
+            marginBottom: 14,
+          }}
+        >
+          {getGreeting()}, Ibra.
+        </h1>
+        <p style={{ fontSize: 15, color: 'var(--os-text-secondary)', maxWidth: 520, lineHeight: 1.5 }}>
+          {highPriorityCount > 0
+            ? <>You've got <span style={{ color: 'var(--os-orange)', fontWeight: 600 }}>{highPriorityCount} high-priority moves</span> today. Pick one and start.</>
+            : 'Nothing urgent. Good time to write a case study.'}
+        </p>
       </div>
 
-      <div className="page-content" style={{ display: 'flex', flexDirection: 'column', gap: 28 }}>
-        {/* Stat Row */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 12 }}>
-          <Link to="/projects" style={{ textDecoration: 'none' }}>
-            <div
-              className="stat-card"
-              style={{
-                cursor: 'pointer',
-                transition: 'border-color 0.15s',
-                borderLeft: '2px solid #6366f1',
-                paddingLeft: 16,
-              }}
-            >
-              <p className="stat-label">Active Projects</p>
-              <p className="stat-value" style={{ fontSize: 40, lineHeight: 1.1 }}>{activeProjects}</p>
-              <div className="flex items-center justify-between mt-2">
-                <p className="stat-sub" style={{ margin: 0 }}>+1 vs last month</p>
-                <svg viewBox="0 0 60 20" style={{ width: 64, height: 20, opacity: 0.4, color: '#6366f1' }}>
-                  <polyline points="0,18 10,14 20,16 30,8 40,10 50,4 60,6" fill="none" stroke="currentColor" strokeWidth="1.5" />
-                </svg>
-              </div>
-            </div>
-          </Link>
-          <Link to="/opportunities" style={{ textDecoration: 'none' }}>
-            <div
-              className="stat-card"
-              style={{
-                cursor: 'pointer',
-                borderLeft: '2px solid var(--os-green)',
-                paddingLeft: 16,
-              }}
-            >
-              <p className="stat-label">Opportunities</p>
-              <p className="stat-value" style={{ fontSize: 40, lineHeight: 1.1 }}>{activeOpps}</p>
-              <div className="flex items-center justify-between mt-2">
-                <p className="stat-sub" style={{ margin: 0 }}>+3 vs last month</p>
-                <svg viewBox="0 0 60 20" style={{ width: 64, height: 20, opacity: 0.4, color: 'var(--os-green)' }}>
-                  <polyline points="0,18 10,15 20,12 30,10 40,7 50,5 60,3" fill="none" stroke="currentColor" strokeWidth="1.5" />
-                </svg>
-              </div>
-            </div>
-          </Link>
-          <Link to="/finance" style={{ textDecoration: 'none' }}>
-            <div
-              className="stat-card"
-              style={{
-                cursor: 'pointer',
-                borderLeft: '2px solid var(--os-gold)',
-                paddingLeft: 16,
-              }}
-            >
-              <p className="stat-label">June Income</p>
-              <p className="stat-value" style={{ color: 'var(--os-green)', fontSize: 40, lineHeight: 1.1 }}>
-                ${paidThisMonth.toLocaleString()}
-              </p>
-              <div style={{ marginTop: 6 }}>
-                <div className="os-progress">
-                  <div className="os-progress-fill" style={{ width: `${progressPct}%` }} />
-                </div>
-                <div className="flex items-center justify-between mt-2">
-                  <p className="stat-sub" style={{ margin: 0 }}>
-                    {progressPct}% of ${MONTHLY_TARGET.toLocaleString()} target
-                  </p>
-                  <svg viewBox="0 0 60 20" style={{ width: 64, height: 20, opacity: 0.4, color: 'var(--os-gold)' }}>
-                    <polyline points="0,18 10,14 20,16 30,8 40,10 50,4 60,6" fill="none" stroke="currentColor" strokeWidth="1.5" />
-                  </svg>
-                </div>
-              </div>
-            </div>
-          </Link>
-          <Link to="/agents" style={{ textDecoration: 'none' }}>
-            <div
-              className="stat-card"
-              style={{
-                cursor: 'pointer',
-                borderLeft: '2px solid #a855f7',
-                paddingLeft: 16,
-              }}
-            >
-              <p className="stat-label">Agent Queue</p>
-              <p className="stat-value" style={{ color: pendingAgentTasks > 0 ? 'var(--os-gold)' : undefined, fontSize: 40, lineHeight: 1.1 }}>
-                {pendingAgentTasks}
-              </p>
-              <div className="flex items-center justify-between mt-2">
-                <p className="stat-sub" style={{ margin: 0 }}>{pendingAgentTasks > 0 ? 'tasks need review' : 'all clear'}</p>
-                <svg viewBox="0 0 60 20" style={{ width: 64, height: 20, opacity: 0.4, color: '#a855f7' }}>
-                  <polyline points="0,12 10,10 20,14 30,8 40,6 50,9 60,5" fill="none" stroke="currentColor" strokeWidth="1.5" />
-                </svg>
-              </div>
-            </div>
-          </Link>
-        </div>
+      {/* ── Big color-block stats ───────────────────────────────── */}
+      <div className="grid-4col" style={{ marginBottom: 28 }}>
+        <Link to="/projects" style={{ textDecoration: 'none' }}>
+          <BlockStat
+            bg="linear-gradient(145deg, #E85004, #c0410a)"
+            fg="#fff"
+            label="Active Projects"
+            value={activeProjects}
+            sub="in motion"
+          />
+        </Link>
+        <Link to="/opportunities" style={{ textDecoration: 'none' }}>
+          <BlockStat
+            bg="var(--os-surface)"
+            fg="var(--os-text-primary)"
+            border
+            label="Opportunities"
+            value={activeOpps}
+            sub={activeOpps > 0 ? 'in play' : 'add your next move'}
+            accent="var(--os-green)"
+          />
+        </Link>
+        <Link to="/finance" style={{ textDecoration: 'none' }}>
+          <BlockStat
+            bg="var(--os-surface)"
+            fg="var(--os-text-primary)"
+            border
+            label={`${now.toLocaleString('en-CA', { month: 'long' })} Income`}
+            value={`$${(paidThisMonth / 1000).toFixed(1)}k`}
+            sub={`${progressPct}% of target`}
+            accent="var(--os-gold)"
+            progress={progressPct}
+          />
+        </Link>
+        <Link to="/agents" style={{ textDecoration: 'none' }}>
+          <BlockStat
+            bg="var(--os-surface)"
+            fg="var(--os-text-primary)"
+            border
+            label="Agent Queue"
+            value={pendingAgentTasks}
+            sub={pendingAgentTasks > 0 ? 'need review' : 'all clear'}
+            accent="#a855f7"
+          />
+        </Link>
+      </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
-          {/* Today's Priorities */}
-          <div className="os-card" style={{ padding: 20 }}>
-            <div className="flex items-center justify-between mb-4">
-              <h3
-                style={{
-                  fontSize: 13,
-                  fontWeight: 600,
-                  color: 'var(--os-text-primary)',
-                  letterSpacing: '-0.01em',
-                }}
-              >
-                Today's Focus
-              </h3>
-              <Calendar size={13} style={{ color: 'var(--os-text-muted)' }} />
-            </div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-              {TODAY_PRIORITIES.map((item, i) => (
-                <div
-                  key={i}
-                  className="flex items-start gap-3 p-2.5 rounded-lg"
-                  style={{ transition: 'background 0.1s', cursor: 'pointer' }}
-                  onMouseEnter={e => ((e.currentTarget as HTMLDivElement).style.background = 'rgba(255,255,255,0.03)')}
-                  onMouseLeave={e => ((e.currentTarget as HTMLDivElement).style.background = 'transparent')}
-                >
-                  <div
-                    style={{
-                      width: 5,
-                      height: 5,
-                      borderRadius: '50%',
-                      background: urgencyColor[item.urgency],
-                      marginTop: 5,
-                      flexShrink: 0,
-                    }}
-                  />
-                  <div style={{ flex: 1 }}>
-                    <p style={{ fontSize: 12.5, color: 'var(--os-text-primary)', lineHeight: 1.4 }}>
-                      {item.label}
-                    </p>
-                    <p style={{ fontSize: 10.5, color: 'var(--os-text-muted)', marginTop: 1 }}>
-                      {item.project}
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
+      {/* ── Interview hero (only if active) ─────────────────────── */}
+      {interview && (
+        <Link to="/opportunities" style={{ textDecoration: 'none' }}>
+          <div
+            className="interview-hero"
+            style={{
+              position: 'relative',
+              overflow: 'hidden',
+              background: 'linear-gradient(135deg, #1a0f08, #0e0a08)',
+              border: '1px solid rgba(232,80,4,0.3)',
+              borderRadius: 16,
+              padding: 28,
+              marginBottom: 28,
+            }}
+          >
+            <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--os-orange)', marginBottom: 8 }}>
+              ● Active Interview
+            </p>
+            <h2 style={{ fontSize: 28, fontWeight: 800, letterSpacing: '-0.03em', color: '#fff', marginBottom: 4 }}>
+              {interview.title}
+            </h2>
+            <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.6)' }}>
+              {interview.company} · Fit {interview.fitScore}/10 · {interview.nextAction}
+            </p>
           </div>
+        </Link>
+      )}
 
-          {/* Active Opportunities */}
-          <div className="os-card" style={{ padding: 20 }}>
-            <div className="flex items-center justify-between mb-4">
-              <h3
+      {/* ── Two-column body ─────────────────────────────────────── */}
+      <div className="grid-2col" style={{ marginBottom: 28 }}>
+        {/* Today's Focus — editorial list */}
+        <Panel title="Today's Focus" count={`${highPriorityCount} urgent`}>
+          <div style={{ display: 'flex', flexDirection: 'column' }}>
+            {TODAY_PRIORITIES.map((item, i) => (
+              <div
+                key={i}
                 style={{
-                  fontSize: 13,
-                  fontWeight: 600,
-                  color: 'var(--os-text-primary)',
-                  letterSpacing: '-0.01em',
+                  display: 'flex',
+                  alignItems: 'baseline',
+                  gap: 16,
+                  padding: '14px 0',
+                  borderBottom: i < TODAY_PRIORITIES.length - 1 ? '1px solid rgba(255,255,255,0.05)' : 'none',
+                  cursor: 'pointer',
                 }}
               >
-                Active Opportunities
-              </h3>
-              <Link to="/opportunities" style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 11, color: 'var(--os-text-muted)', textDecoration: 'none' }}>
-                View all <ChevronRight size={11} />
-              </Link>
-            </div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-              {topOpps.map(opp => (
-                <div
-                  key={opp.id}
-                  className="flex items-center gap-3 p-2.5 rounded-lg"
-                  style={{ transition: 'background 0.1s', cursor: 'pointer' }}
-                  onMouseEnter={e => ((e.currentTarget as HTMLDivElement).style.background = 'rgba(255,255,255,0.03)')}
-                  onMouseLeave={e => ((e.currentTarget as HTMLDivElement).style.background = 'transparent')}
+                <span
+                  style={{
+                    fontSize: 13,
+                    fontWeight: 800,
+                    color: urgencyColor[item.urgency],
+                    width: 22,
+                    flexShrink: 0,
+                    fontVariantNumeric: 'tabular-nums',
+                  }}
                 >
-                  <div
-                    style={{
-                      width: 32,
-                      height: 32,
-                      borderRadius: 8,
-                      background: 'var(--os-surface-raised)',
-                      border: '1px solid var(--os-border)',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      fontSize: 11,
-                      fontWeight: 700,
-                      color: 'var(--os-text-secondary)',
-                      flexShrink: 0,
-                    }}
-                  >
-                    {opp.company.slice(0, 2).toUpperCase()}
-                  </div>
+                  {String(i + 1).padStart(2, '0')}
+                </span>
+                <div style={{ flex: 1 }}>
+                  <p style={{ fontSize: 14, fontWeight: 500, color: 'var(--os-text-primary)', lineHeight: 1.4, letterSpacing: '-0.01em' }}>
+                    {item.label}
+                  </p>
+                  <p style={{ fontSize: 11, color: 'var(--os-text-muted)', marginTop: 3, textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                    {item.project}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </Panel>
+
+        {/* Active Opportunities */}
+        <Panel title="Pipeline" link="/opportunities">
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+            {topOpps.map(opp => (
+              <div
+                key={opp.id}
+                className="flex items-center gap-3"
+                style={{ padding: '12px 0', borderBottom: '1px solid rgba(255,255,255,0.05)' }}
+              >
+                <div
+                  style={{
+                    width: 40,
+                    height: 40,
+                    borderRadius: 10,
+                    background: 'var(--os-surface-raised)',
+                    border: '1px solid var(--os-border)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: 13,
+                    fontWeight: 800,
+                    color: 'var(--os-text-secondary)',
+                    flexShrink: 0,
+                    letterSpacing: '-0.02em',
+                  }}
+                >
+                  {opp.company.slice(0, 2).toUpperCase()}
+                </div>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <p style={{ fontSize: 13.5, fontWeight: 500, color: 'var(--os-text-primary)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                    {opp.title}
+                  </p>
+                  <p style={{ fontSize: 11, color: 'var(--os-text-muted)' }}>{opp.company} · {opp.status.replace('_', ' ')}</p>
+                </div>
+                <div
+                  style={{
+                    fontSize: 20,
+                    fontWeight: 800,
+                    letterSpacing: '-0.03em',
+                    color: opp.fitScore >= 8 ? 'var(--os-green)' : 'var(--os-yellow)',
+                    flexShrink: 0,
+                    fontVariantNumeric: 'tabular-nums',
+                  }}
+                >
+                  {opp.fitScore}
+                  <span style={{ fontSize: 11, color: 'var(--os-text-muted)', fontWeight: 500 }}>/10</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </Panel>
+      </div>
+
+      {/* ── Projects + Agents ───────────────────────────────────── */}
+      <div className="grid-2col" style={{ marginBottom: 28 }}>
+        <Panel title="Active Projects" link="/projects">
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+            {projects.filter(p => p.status === 'active').map(proj => (
+              <Link key={proj.id} to={`/projects/${proj.id}`} style={{ textDecoration: 'none' }}>
+                <div className="flex items-center gap-3" style={{ padding: '12px 0', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+                  <div style={{ width: 4, height: 36, borderRadius: 2, background: proj.color, flexShrink: 0 }} />
                   <div style={{ flex: 1, minWidth: 0 }}>
-                    <p style={{ fontSize: 12.5, color: 'var(--os-text-primary)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                      {opp.title}
+                    <p style={{ fontSize: 13.5, fontWeight: 500, color: 'var(--os-text-primary)' }}>{proj.title}</p>
+                    <p style={{ fontSize: 11, color: 'var(--os-text-muted)', marginTop: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: 240 }}>
+                      {proj.nextAction || proj.client}
                     </p>
-                    <p style={{ fontSize: 11, color: 'var(--os-text-muted)' }}>{opp.company}</p>
                   </div>
                   <div style={{ textAlign: 'right', flexShrink: 0 }}>
-                    <p
-                      style={{
-                        fontSize: 11,
-                        fontWeight: 600,
-                        color: opp.fitScore >= 8 ? 'var(--os-green)' : 'var(--os-yellow)',
-                      }}
-                    >
-                      {opp.fitScore}/10
-                    </p>
-                    <p style={{ fontSize: 10, color: 'var(--os-text-muted)', marginTop: 1 }}>
-                      {opp.status.replace('_', ' ')}
-                    </p>
+                    <span style={{ fontSize: 18, fontWeight: 800, letterSpacing: '-0.03em', color: 'var(--os-text-primary)', fontVariantNumeric: 'tabular-nums' }}>
+                      {proj.portfolioReadiness}
+                      <span style={{ fontSize: 10, color: 'var(--os-text-muted)' }}>%</span>
+                    </span>
                   </div>
                 </div>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
-          {/* Active Projects */}
-          <div className="os-card" style={{ padding: 20 }}>
-            <div className="flex items-center justify-between mb-4">
-              <h3
-                style={{
-                  fontSize: 13,
-                  fontWeight: 600,
-                  color: 'var(--os-text-primary)',
-                  letterSpacing: '-0.01em',
-                }}
-              >
-                Active Projects
-              </h3>
-              <Link to="/projects" style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 11, color: 'var(--os-text-muted)', textDecoration: 'none' }}>
-                View all <ChevronRight size={11} />
               </Link>
-            </div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-              {projects.filter(p => p.status === 'active').map(proj => (
-                <Link
-                  key={proj.id}
-                  to={`/projects/${proj.id}`}
-                  style={{ textDecoration: 'none' }}
-                >
-                  <div
-                    className="flex items-center gap-3 p-2.5 rounded-lg"
-                    style={{ transition: 'background 0.1s' }}
-                    onMouseEnter={e => ((e.currentTarget as HTMLDivElement).style.background = 'rgba(255,255,255,0.03)')}
-                    onMouseLeave={e => ((e.currentTarget as HTMLDivElement).style.background = 'transparent')}
-                  >
-                    <div style={{ width: 6, height: 6, borderRadius: '50%', background: proj.color, flexShrink: 0 }} />
+            ))}
+          </div>
+        </Panel>
+
+        <Panel title="Agent Tasks" link="/agents">
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+            {recentAgentTasks.map(task => {
+              const statusColors: Record<string, string> = {
+                queued: 'var(--os-text-muted)',
+                in_progress: 'var(--os-blue)',
+                review: 'var(--os-orange)',
+                completed: 'var(--os-green)',
+              };
+              const StatusIcon = task.status === 'completed' ? CheckCircle2 : task.status === 'review' ? AlertCircle : Clock;
+              return (
+                <Link key={task.id} to="/agents" style={{ textDecoration: 'none' }}>
+                  <div className="flex items-start gap-3" style={{ padding: '12px 0', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+                    <StatusIcon size={15} style={{ color: statusColors[task.status] || 'var(--os-text-muted)', marginTop: 2, flexShrink: 0 }} />
                     <div style={{ flex: 1, minWidth: 0 }}>
-                      <p style={{ fontSize: 12.5, color: 'var(--os-text-primary)' }}>{proj.title}</p>
-                      <p style={{ fontSize: 11, color: 'var(--os-text-muted)', marginTop: 1 }}>{proj.nextAction || proj.client}</p>
-                    </div>
-                    <div style={{ flexShrink: 0 }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-                        <div className="os-progress" style={{ width: 48 }}>
-                          <div className="os-progress-fill" style={{ width: `${proj.portfolioReadiness}%` }} />
-                        </div>
-                        <span style={{ fontSize: 10, color: 'var(--os-text-muted)', width: 28, textAlign: 'right' }}>
-                          {proj.portfolioReadiness}%
-                        </span>
-                      </div>
+                      <p style={{ fontSize: 13.5, fontWeight: 500, color: 'var(--os-text-primary)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                        {task.title}
+                      </p>
+                      <p style={{ fontSize: 11, color: 'var(--os-text-muted)', marginTop: 1, textTransform: 'capitalize' }}>
+                        {task.agentType.replace('_', ' ')} · {task.status.replace('_', ' ')}
+                      </p>
                     </div>
                   </div>
                 </Link>
-              ))}
-            </div>
+              );
+            })}
           </div>
+        </Panel>
+      </div>
 
-          {/* Agent Tasks */}
-          <div className="os-card" style={{ padding: 20 }}>
-            <div className="flex items-center justify-between mb-4">
-              <h3
-                style={{
-                  fontSize: 13,
-                  fontWeight: 600,
-                  color: 'var(--os-text-primary)',
-                  letterSpacing: '-0.01em',
-                }}
-              >
-                Agent Tasks
-              </h3>
-              <Link to="/agents" style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 11, color: 'var(--os-text-muted)', textDecoration: 'none' }}>
-                View all <ChevronRight size={11} />
-              </Link>
-            </div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-              {recentAgentTasks.map(task => {
-                const statusColors: Record<string, string> = {
-                  queued: 'var(--os-text-muted)',
-                  in_progress: 'var(--os-blue)',
-                  review: 'var(--os-gold)',
-                  completed: 'var(--os-green)',
-                };
-                const StatusIcon = task.status === 'completed' ? CheckCircle2 : task.status === 'review' ? AlertCircle : Clock;
-                return (
-                  <Link key={task.id} to="/agents" style={{ textDecoration: 'none' }}>
-                    <div
-                      className="flex items-start gap-3 p-2.5 rounded-lg"
-                      style={{ transition: 'background 0.1s' }}
-                      onMouseEnter={e => ((e.currentTarget as HTMLDivElement).style.background = 'rgba(255,255,255,0.03)')}
-                      onMouseLeave={e => ((e.currentTarget as HTMLDivElement).style.background = 'transparent')}
-                    >
-                      <StatusIcon
-                        size={14}
-                        style={{ color: statusColors[task.status], marginTop: 1, flexShrink: 0 }}
-                      />
-                      <div style={{ flex: 1, minWidth: 0 }}>
-                        <p style={{ fontSize: 12.5, color: 'var(--os-text-primary)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                          {task.title}
-                        </p>
-                        <p style={{ fontSize: 10.5, color: 'var(--os-text-muted)', marginTop: 1, textTransform: 'capitalize' }}>
-                          {task.agentType.replace('_', ' ')} · {task.status.replace('_', ' ')}
-                        </p>
-                      </div>
-                    </div>
-                  </Link>
-                );
-              })}
-            </div>
-            <div style={{ marginTop: 12, paddingTop: 12, borderTop: '1px solid var(--os-border)' }}>
-              <Link to="/agents">
-                <button className="btn-ghost w-full" style={{ justifyContent: 'center' }}>
-                  <Zap size={12} />
-                  New Agent Task
-                </button>
-              </Link>
-            </div>
-          </div>
-        </div>
-
-        {/* Financial snapshot */}
+      {/* ── Finance band — full-bleed editorial ─────────────────── */}
+      <Link to="/finance" style={{ textDecoration: 'none' }}>
         <div
-          className="os-card"
           style={{
-            padding: '18px 20px',
+            background: 'linear-gradient(145deg, #081a0f, #060f0a)',
+            border: '1px solid rgba(45,206,137,0.25)',
+            borderRadius: 16,
+            padding: 28,
             display: 'flex',
             alignItems: 'center',
-            gap: 32,
+            justifyContent: 'space-between',
+            flexWrap: 'wrap',
+            gap: 24,
           }}
         >
           <div>
-            <p className="stat-label">June Target</p>
-            <p style={{ fontSize: 20, fontWeight: 600, letterSpacing: '-0.02em', color: 'var(--os-text-primary)' }}>
-              ${MONTHLY_TARGET.toLocaleString()}
+            <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--os-green)', marginBottom: 10 }}>
+              {now.toLocaleString('en-CA', { month: 'long', year: 'numeric' })} · Income
             </p>
-          </div>
-          <div style={{ flex: 1 }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6 }}>
-              <span style={{ fontSize: 11, color: 'var(--os-text-muted)' }}>Progress</span>
-              <span style={{ fontSize: 11, color: 'var(--os-text-secondary)' }}>{progressPct}%</span>
-            </div>
-            <div className="os-progress" style={{ height: 4 }}>
-              <div className="os-progress-fill" style={{ width: `${progressPct}%` }} />
-            </div>
-          </div>
-          <div>
-            <p className="stat-label">Confirmed</p>
-            <p style={{ fontSize: 20, fontWeight: 600, letterSpacing: '-0.02em', color: 'var(--os-green)' }}>
+            <p className="hero-number" style={{ color: '#fff' }}>
               ${paidThisMonth.toLocaleString()}
             </p>
-          </div>
-          <div>
-            <p className="stat-label">Pending</p>
-            <p style={{ fontSize: 20, fontWeight: 600, letterSpacing: '-0.02em', color: 'var(--os-yellow)' }}>
-              ${pendingIncome.toLocaleString()}
+            <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.5)', marginTop: 8 }}>
+              {progressPct}% of ${MONTHLY_TARGET.toLocaleString()} monthly target
             </p>
           </div>
-          <Link to="/finance">
-            <button className="btn-ghost">
-              View Finance <ArrowRight size={12} />
-            </button>
-          </Link>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, color: 'var(--os-green)', fontSize: 14, fontWeight: 600 }}>
+            View Finance <ArrowUpRight size={18} />
+          </div>
         </div>
+      </Link>
+    </div>
+  );
+}
+
+// ── Big color-block stat ───────────────────────────────────────
+function BlockStat({
+  bg, fg, label, value, sub, accent, border, progress,
+}: {
+  bg: string;
+  fg: string;
+  label: string;
+  value: number | string;
+  sub: string;
+  accent?: string;
+  border?: boolean;
+  progress?: number;
+}) {
+  return (
+    <div
+      style={{
+        background: bg,
+        border: border ? '1px solid var(--os-border)' : 'none',
+        borderRadius: 16,
+        padding: 22,
+        minHeight: 150,
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+        cursor: 'pointer',
+        position: 'relative',
+        overflow: 'hidden',
+      }}
+    >
+      <div className="flex items-start justify-between">
+        <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.07em', textTransform: 'uppercase', color: accent ?? 'rgba(255,255,255,0.65)' }}>
+          {label}
+        </p>
+        <ArrowUpRight size={15} style={{ color: accent ?? 'rgba(255,255,255,0.5)', opacity: 0.6 }} />
       </div>
+      <div>
+        <p
+          style={{
+            fontSize: 52,
+            fontWeight: 800,
+            letterSpacing: '-0.05em',
+            lineHeight: 0.9,
+            color: fg,
+            fontVariantNumeric: 'tabular-nums',
+          }}
+        >
+          {value}
+        </p>
+        {progress !== undefined && (
+          <div style={{ height: 3, background: 'rgba(255,255,255,0.12)', borderRadius: 999, marginTop: 10, overflow: 'hidden' }}>
+            <div style={{ height: '100%', width: `${progress}%`, background: accent ?? '#fff', borderRadius: 999 }} />
+          </div>
+        )}
+        <p style={{ fontSize: 12, color: accent ? 'var(--os-text-muted)' : 'rgba(255,255,255,0.55)', marginTop: progress !== undefined ? 8 : 6 }}>
+          {sub}
+        </p>
+      </div>
+    </div>
+  );
+}
+
+// ── Panel wrapper ──────────────────────────────────────────────
+function Panel({ title, link, count, children }: { title: string; link?: string; count?: string; children: React.ReactNode }) {
+  return (
+    <div className="os-card" style={{ padding: 22 }}>
+      <div className="flex items-center justify-between" style={{ marginBottom: 8 }}>
+        <h3 style={{ fontSize: 16, fontWeight: 700, letterSpacing: '-0.02em', color: 'var(--os-text-primary)' }}>
+          {title}
+        </h3>
+        {count && (
+          <span style={{ fontSize: 11, fontWeight: 600, color: 'var(--os-orange)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+            {count}
+          </span>
+        )}
+        {link && (
+          <Link to={link} style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 12, color: 'var(--os-text-muted)', textDecoration: 'none' }}>
+            All <ChevronRight size={12} />
+          </Link>
+        )}
+      </div>
+      {children}
     </div>
   );
 }

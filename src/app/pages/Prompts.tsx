@@ -107,10 +107,15 @@ export default function Prompts() {
     <div className="os-page">
       {/* Header */}
       <div style={{ marginBottom: 28 }}>
-        <div className="flex items-center justify-between mb-2">
+        <div className="flex items-end justify-between mb-2">
           <div>
-            <h1 className="os-page-title">Prompt Library</h1>
-            <p className="os-page-subtitle">{prompts.length} prompts · {prompts.filter(p => p.resultQuality === 'excellent').length} excellent</p>
+            <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--os-orange)', marginBottom: 8 }}>
+              Reusable
+            </p>
+            <h1 style={{ fontSize: 'clamp(32px, 5vw, 44px)', fontWeight: 800, letterSpacing: '-0.04em', lineHeight: 1, color: 'var(--os-text-primary)' }}>
+              Prompt Library
+            </h1>
+            <p className="os-page-subtitle" style={{ marginTop: 8 }}>{prompts.length} prompts · {prompts.filter(p => p.resultQuality === 'excellent').length} excellent</p>
           </div>
           <button className="os-btn-primary" onClick={openNew}>
             <Plus size={14} /> New Prompt

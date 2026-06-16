@@ -104,10 +104,15 @@ export default function Documents() {
     <div className="os-page">
       {/* Header */}
       <div style={{ marginBottom: 28 }}>
-        <div className="flex items-center justify-between mb-2">
+        <div className="flex items-end justify-between mb-2">
           <div>
-            <h1 className="os-page-title">Documents</h1>
-            <p className="os-page-subtitle">{documents.length} docs · {documents.filter(d => d.status === 'in_progress').length} in progress</p>
+            <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--os-orange)', marginBottom: 8 }}>
+              Output
+            </p>
+            <h1 style={{ fontSize: 'clamp(32px, 5vw, 44px)', fontWeight: 800, letterSpacing: '-0.04em', lineHeight: 1, color: 'var(--os-text-primary)' }}>
+              Documents
+            </h1>
+            <p className="os-page-subtitle" style={{ marginTop: 8 }}>{documents.length} docs · {documents.filter(d => d.status === 'in_progress').length} in progress</p>
           </div>
           <button className="os-btn-primary" onClick={openNew}>
             <Plus size={14} /> New Document

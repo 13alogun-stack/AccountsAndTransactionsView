@@ -11,17 +11,7 @@ import {
   Zap,
 } from 'lucide-react';
 import { useApp } from '../store/AppContext';
-
-const AGENT_ACTIONS = [
-  'Turn this project into a case study',
-  'Create a deck from this project',
-  'Extract the design language',
-  'Generate a portfolio thumbnail concept',
-  'Write a LinkedIn post about this',
-  'Suggest what is missing for portfolio',
-  'Create baseline and wild directions',
-  'Compare to another project',
-];
+import { AIActionPanel } from '../components/AIActionPanel';
 
 const STATUS_COLORS: Record<string, string> = {
   active: 'var(--os-green)',
@@ -292,44 +282,9 @@ export default function ProjectDetail() {
             ))}
           </div>
 
-          {/* Agent Actions */}
+          {/* AI Actions — live mocked generation */}
           <div className="os-card" style={{ padding: 16 }}>
-            <p style={{ fontSize: 11, fontWeight: 600, color: 'var(--os-text-muted)', letterSpacing: '0.05em', textTransform: 'uppercase', marginBottom: 10 }}>
-              Agent Actions
-            </p>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-              {AGENT_ACTIONS.map(action => (
-                <button
-                  key={action}
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    padding: '8px 10px',
-                    borderRadius: 7,
-                    border: 'none',
-                    background: 'transparent',
-                    cursor: 'pointer',
-                    color: 'var(--os-text-secondary)',
-                    fontSize: 12,
-                    fontFamily: 'inherit',
-                    textAlign: 'left',
-                    transition: 'background 0.1s, color 0.1s',
-                  }}
-                  onMouseEnter={e => {
-                    (e.currentTarget as HTMLButtonElement).style.background = 'var(--os-gold-muted)';
-                    (e.currentTarget as HTMLButtonElement).style.color = 'var(--os-gold)';
-                  }}
-                  onMouseLeave={e => {
-                    (e.currentTarget as HTMLButtonElement).style.background = 'transparent';
-                    (e.currentTarget as HTMLButtonElement).style.color = 'var(--os-text-secondary)';
-                  }}
-                >
-                  <span>{action}</span>
-                  <ChevronRight size={12} />
-                </button>
-              ))}
-            </div>
+            <AIActionPanel project={project} />
           </div>
         </div>
       </div>

@@ -89,10 +89,15 @@ export default function Memories() {
     <div className="os-page">
       {/* Header */}
       <div style={{ marginBottom: 28 }}>
-        <div className="flex items-center justify-between mb-2">
+        <div className="flex items-end justify-between mb-2">
           <div>
-            <h1 className="os-page-title">Memory</h1>
-            <p className="os-page-subtitle">{memories.length} stored memories · your persistent context layer</p>
+            <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--os-orange)', marginBottom: 8 }}>
+              Context layer
+            </p>
+            <h1 style={{ fontSize: 'clamp(32px, 5vw, 44px)', fontWeight: 800, letterSpacing: '-0.04em', lineHeight: 1, color: 'var(--os-text-primary)' }}>
+              Memory
+            </h1>
+            <p className="os-page-subtitle" style={{ marginTop: 8 }}>{memories.length} stored memories · what the OS remembers about you</p>
           </div>
           <button className="os-btn-primary" onClick={openNew}>
             <Plus size={14} /> Add Memory
