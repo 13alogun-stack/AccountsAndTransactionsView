@@ -1,7 +1,8 @@
 import { useState } from 'react';
-import { Brain, Plus, Search, X, Check, Pencil, Trash2 } from 'lucide-react';
+import { Brain, Plus, Search, X, Check, Pencil, Trash2, Upload, Sparkles } from 'lucide-react';
 import { useApp } from '../store/AppContext';
 import type { Memory, MemoryType } from '../types';
+import { parseMemories, type ParsedMemory } from '../lib/memoryParser';
 
 const TYPE_LABELS: Record<MemoryType, string> = {
   user_profile: 'Profile',
@@ -47,6 +48,7 @@ export default function Memories() {
     memory: Partial<Memory> | null;
     isNew: boolean;
   }>({ open: false, memory: null, isNew: false });
+  const [importOpen, setImportOpen] = useState(false);
 
   const filtered = memories.filter(m => {
     const matchSearch = !search ||
@@ -99,9 +101,14 @@ export default function Memories() {
             </h1>
             <p className="os-page-subtitle" style={{ marginTop: 8 }}>{memories.length} stored memories · what the OS remembers about you</p>
           </div>
-          <button className="os-btn-primary" onClick={openNew}>
-            <Plus size={14} /> Add Memory
-          </button>
+          <div className="flex items-center gap-2">
+            <button className="os-btn-secondary" onClick={() => setImportOpen(true)}>
+              <Upload size={14} /> Import
+            </button>
+            <button className="os-btn-primary" onClick={openNew}>
+              <Plus size={14} /> Add Memory
+            </button>
+          </div>
         </div>
 
         <div className="flex items-center gap-2 flex-wrap mt-4">
@@ -331,6 +338,219 @@ export default function Memories() {
           </div>
         </div>
       )}
+
+      {/* Import modal */}
+      {importOpen && (
+        <ImportMemories
+          onClose={() => setImportOpen(false)}
+          onImport={mems => {
+            mems.forEach(m => addMemory(m));
+            setImportOpen(false);
+          }}
+        />
+      )}
+    </div>
+  );
+}
+
+// ─── Import modal ─────────────────────────────────────────────────────────────
+const IMPORT_TYPE_LABELS: Record<MemoryType, string> = TYPE_LABELS;
+const IMPORT_TYPE_COLORS: Record<MemoryType, string> = TYPE_COLORS;
+
+function ImportMemories({
+  onClose,
+  onImport,
+}: {
+  onClose: () => void;
+  onImport: (mems: Omit<Memory, 'id' | 'lastUpdated'>[]) => void;
+}) {
+  const [step, setStep] = useState<'paste' | 'review'>('paste');
+  const [raw, setRaw] = useState('');
+  const [sourceLabel, setSourceLabel] = useState('ChatGPT history');
+  const [parsed, setParsed] = useState<(ParsedMemory & { keep: boolean })[]>([]);
+
+  const doParse = () => {
+    const results = parseMemories(raw, sourceLabel).map(m => ({ ...m, keep: true }));
+    setParsed(results);
+    setStep('review');
+  };
+
+  const keepCount = parsed.filter(p => p.keep).length;
+
+  const confirm = () => {
+    const toImport = parsed
+      .filter(p => p.keep)
+      .map(p => ({
+        type: p.type,
+        source: p.source,
+        content: p.content,
+        tags: p.tags,
+        confidence: p.confidence,
+      }));
+    onImport(toImport);
+  };
+
+  return (
+    <div className="os-modal-overlay" onClick={onClose}>
+      <div
+        className="os-modal"
+        onClick={e => e.stopPropagation()}
+        style={{ maxWidth: 720, width: '90vw' }}
+      >
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-2">
+            <Sparkles size={16} style={{ color: 'var(--os-orange)' }} />
+            <h2 style={{ fontSize: 17, fontWeight: 600, letterSpacing: '-0.02em', color: 'var(--os-text-primary)' }}>
+              {step === 'paste' ? 'Import Memories' : `Review ${parsed.length} parsed memories`}
+            </h2>
+          </div>
+          <button className="os-icon-btn" onClick={onClose}>
+            <X size={16} />
+          </button>
+        </div>
+
+        {step === 'paste' ? (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+            <p style={{ fontSize: 12.5, color: 'var(--os-text-secondary)', lineHeight: 1.6 }}>
+              Paste a block of text — extracted decisions, lessons, pricing logic, design rules, or a summary
+              of your ChatGPT/Claude history. Each bullet, numbered item, or paragraph becomes a memory.
+              The OS auto-detects the type, tags, and confidence — you review before saving.
+            </p>
+
+            <div
+              style={{
+                background: 'var(--os-surface-raised)',
+                border: '1px solid var(--os-border)',
+                borderRadius: 8,
+                padding: '10px 12px',
+              }}
+            >
+              <p style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--os-orange)', marginBottom: 6 }}>
+                Tip — for big ChatGPT exports
+              </p>
+              <p style={{ fontSize: 11.5, color: 'var(--os-text-muted)', lineHeight: 1.55 }}>
+                Don't paste the raw 2GB export. Ask ChatGPT/Claude: <em>"Summarize my key decisions,
+                pricing logic, design rules, and workflow preferences as a bulleted list."</em> Then paste
+                that summary here.
+              </p>
+            </div>
+
+            <input
+              className="os-input"
+              placeholder="Source label (e.g. ChatGPT history, Notion brain dump)"
+              value={sourceLabel}
+              onChange={e => setSourceLabel(e.target.value)}
+            />
+
+            <textarea
+              className="os-textarea"
+              placeholder={'- I always price discovery separately from design\n- Decided to use Webflow over WordPress for client sites\n- Lesson: never start visual design before content is locked\n\n## Design rules\n- Big type, lots of whitespace, one accent colour'}
+              value={raw}
+              onChange={e => setRaw(e.target.value)}
+              rows={12}
+              style={{ fontFamily: 'inherit', lineHeight: 1.6 }}
+            />
+
+            <div className="flex items-center justify-between">
+              <span style={{ fontSize: 11, color: 'var(--os-text-muted)' }}>
+                {raw.trim() ? `${raw.trim().split('\n').filter(Boolean).length} lines` : 'Nothing pasted yet'}
+              </span>
+              <div className="flex gap-2">
+                <button className="os-btn-secondary" onClick={onClose}>Cancel</button>
+                <button className="os-btn-primary" onClick={doParse} disabled={!raw.trim()}>
+                  <Sparkles size={13} /> Parse {raw.trim() ? `${raw.trim().split(/\n[-*•]|\n\d+[.)]|\n\s*\n/).length}` : ''}
+                </button>
+              </div>
+            </div>
+          </div>
+        ) : (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+            <p style={{ fontSize: 12, color: 'var(--os-text-muted)' }}>
+              Uncheck anything you don't want. Tweak the type with the dropdown. {keepCount} of {parsed.length} selected.
+            </p>
+
+            <div style={{ maxHeight: '50vh', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: 6, paddingRight: 4 }}>
+              {parsed.length === 0 && (
+                <p style={{ fontSize: 13, color: 'var(--os-text-muted)', textAlign: 'center', padding: '24px 0' }}>
+                  Nothing parsed. Go back and check your formatting.
+                </p>
+              )}
+              {parsed.map((m, i) => (
+                <div
+                  key={i}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'flex-start',
+                    gap: 10,
+                    padding: '10px 12px',
+                    background: m.keep ? 'var(--os-surface-raised)' : 'transparent',
+                    border: `1px solid ${m.keep ? 'var(--os-border)' : 'rgba(255,255,255,0.04)'}`,
+                    borderRadius: 8,
+                    opacity: m.keep ? 1 : 0.5,
+                  }}
+                >
+                  <button
+                    onClick={() => setParsed(p => p.map((x, j) => j === i ? { ...x, keep: !x.keep } : x))}
+                    style={{
+                      width: 18,
+                      height: 18,
+                      borderRadius: 5,
+                      flexShrink: 0,
+                      marginTop: 2,
+                      border: `1.5px solid ${m.keep ? 'var(--os-orange)' : 'var(--os-text-muted)'}`,
+                      background: m.keep ? 'var(--os-orange)' : 'transparent',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      cursor: 'pointer',
+                    }}
+                  >
+                    {m.keep && <Check size={12} color="#fff" />}
+                  </button>
+
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <p style={{ fontSize: 12.5, color: 'var(--os-text-primary)', lineHeight: 1.5, marginBottom: 6 }}>
+                      {m.content}
+                    </p>
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <select
+                        value={m.type}
+                        onChange={e => setParsed(p => p.map((x, j) => j === i ? { ...x, type: e.target.value as MemoryType } : x))}
+                        className="os-select"
+                        style={{
+                          fontSize: 10,
+                          padding: '2px 6px',
+                          color: IMPORT_TYPE_COLORS[m.type],
+                          borderColor: IMPORT_TYPE_COLORS[m.type] + '40',
+                        }}
+                      >
+                        {(Object.keys(IMPORT_TYPE_LABELS) as MemoryType[]).map(t => (
+                          <option key={t} value={t}>{IMPORT_TYPE_LABELS[t]}</option>
+                        ))}
+                      </select>
+                      <span style={{ fontSize: 10, color: 'var(--os-text-muted)' }}>
+                        {m.confidence}% conf
+                      </span>
+                      {m.tags.map(t => (
+                        <span key={t} className="os-tag" style={{ fontSize: 9 }}>{t}</span>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="flex items-center justify-between mt-2">
+              <button className="os-btn-secondary" onClick={() => setStep('paste')}>
+                ← Back to paste
+              </button>
+              <button className="os-btn-primary" onClick={confirm} disabled={keepCount === 0}>
+                <Check size={13} /> Import {keepCount} {keepCount === 1 ? 'memory' : 'memories'}
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
