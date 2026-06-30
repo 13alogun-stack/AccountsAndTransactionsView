@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router';
-import { Palette, Image, DollarSign, BookOpen, Search, FileText, Zap, Brain } from 'lucide-react';
+import { Palette, Image, DollarSign, BookOpen, Search, FileText, Zap, Brain, HeartPulse } from 'lucide-react';
 import { useApp } from '../store/AppContext';
 
 const MORE_NAV = [
@@ -10,6 +10,7 @@ const MORE_NAV = [
   { path: '/documents', label: 'Documents', icon: FileText, description: 'Case studies, briefs, proposals' },
   { path: '/prompts', label: 'Prompts', icon: Zap, description: 'Reusable AI prompt library' },
   { path: '/memories', label: 'Memory', icon: Brain, description: 'Lessons, decisions & context' },
+  { path: '/therapy', label: 'Therapy', icon: HeartPulse, description: 'Sessions, frameworks & action items · private' },
 ];
 
 interface Props {

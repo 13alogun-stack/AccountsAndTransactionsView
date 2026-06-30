@@ -13,6 +13,7 @@ import {
   FileText,
   Zap,
   Brain,
+  HeartPulse,
 } from 'lucide-react';
 import { useApp } from '../store/AppContext';
 
@@ -27,6 +28,7 @@ const NAV_ITEMS = [
   { path: '/documents', label: 'Documents', icon: FileText },
   { path: '/prompts', label: 'Prompts', icon: Zap },
   { path: '/memories', label: 'Memory', icon: Brain },
+  { path: '/therapy', label: 'Therapy', icon: HeartPulse },
   { path: '/agents', label: 'Agents', icon: Bot },
 ];
 
