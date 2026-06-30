@@ -388,6 +388,16 @@ export interface TherapySelfRating {
   value: number; // 0–10
 }
 
+export interface TherapyExercise {
+  id: string;
+  title: string;
+  why: string;
+  how: string;
+  effort?: 'low' | 'medium' | 'high';
+  recommended?: boolean;
+  done?: boolean;
+}
+
 export interface TherapySession {
   id: string;
   date: string;
@@ -405,6 +415,7 @@ export interface TherapyData {
   sessions: TherapySession[];
   frameworks: TherapyFramework[];
   actionItems: TherapyActionItem[];
+  exercises: TherapyExercise[];
 }
 
 // ─── Shared ───────────────────────────────────────────────────────────────────

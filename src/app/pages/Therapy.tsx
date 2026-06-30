@@ -1,16 +1,16 @@
 import { useState, useEffect } from 'react';
 import {
   HeartPulse, Plus, Upload, Download, X, Check, Pencil, Trash2,
-  Calendar, ChevronDown, ChevronUp, CircleDot, Brain,
+  Calendar, ChevronDown, ChevronUp, CircleDot, Brain, Target, Star,
 } from 'lucide-react';
 import type {
   TherapyData, TherapySession, TherapyFramework, TherapyActionItem,
-  TherapySessionStatus,
+  TherapyExercise, TherapySessionStatus,
 } from '../types';
 
 const STORAGE_KEY = 'ibra-os-therapy';
 
-const EMPTY: TherapyData = { sessions: [], frameworks: [], actionItems: [] };
+const EMPTY: TherapyData = { sessions: [], frameworks: [], actionItems: [], exercises: [] };
 
 function loadData(): TherapyData {
   try {
@@ -21,6 +21,7 @@ function loadData(): TherapyData {
       sessions: parsed.sessions ?? [],
       frameworks: parsed.frameworks ?? [],
       actionItems: parsed.actionItems ?? [],
+      exercises: parsed.exercises ?? [],
     };
   } catch {
     return EMPTY;
@@ -60,7 +61,8 @@ export default function Therapy() {
   const openItems = data.actionItems.filter(a => !a.done);
   const doneItems = data.actionItems.filter(a => a.done);
 
-  const isEmpty = data.sessions.length === 0 && data.frameworks.length === 0 && data.actionItems.length === 0;
+  const isEmpty = data.sessions.length === 0 && data.frameworks.length === 0
+    && data.actionItems.length === 0 && data.exercises.length === 0;
 
   // ── Action item toggle ──────────────────────────────────────────────────────
   const toggleItem = (id: string) =>
@@ -76,6 +78,12 @@ export default function Therapy() {
 
   const deleteSession = (id: string) =>
     setData(d => ({ ...d, sessions: d.sessions.filter(s => s.id !== id) }));
+
+  const toggleExercise = (id: string) =>
+    setData(d => ({ ...d, exercises: d.exercises.map(e => e.id === id ? { ...e, done: !e.done } : e) }));
+
+  const deleteExercise = (id: string) =>
+    setData(d => ({ ...d, exercises: d.exercises.filter(e => e.id !== id) }));
 
   // ── Save session from editor ────────────────────────────────────────────────
   const saveSession = () => {
@@ -113,6 +121,7 @@ export default function Therapy() {
         sessions: parsed.sessions ?? [],
         frameworks: parsed.frameworks ?? [],
         actionItems: parsed.actionItems ?? [],
+        exercises: parsed.exercises ?? [],
       };
       if (mode === 'replace') {
         setData(incoming);
@@ -121,10 +130,12 @@ export default function Therapy() {
           const sIds = new Set(d.sessions.map(s => s.id));
           const fIds = new Set(d.frameworks.map(f => f.id));
           const aIds = new Set(d.actionItems.map(a => a.id));
+          const eIds = new Set(d.exercises.map(e => e.id));
           return {
             sessions: [...incoming.sessions.filter(s => !sIds.has(s.id)), ...d.sessions],
             frameworks: [...incoming.frameworks.filter(f => !fIds.has(f.id)), ...d.frameworks],
             actionItems: [...incoming.actionItems.filter(a => !aIds.has(a.id)), ...d.actionItems],
+            exercises: [...incoming.exercises.filter(e => !eIds.has(e.id)), ...d.exercises],
           };
         });
       }
@@ -353,9 +364,83 @@ export default function Therapy() {
                         ))}
                       </div>
                     )}
-                    {f.notes && <p style={{ fontSize: 12, color: 'var(--os-text-muted)', marginTop: 10, lineHeight: 1.55 }}>{f.notes}</p>}
+                    {f.notes && <p style={{ fontSize: 12, color: 'var(--os-text-muted)', marginTop: 10, lineHeight: 1.55, whiteSpace: 'pre-line' }}>{f.notes}</p>}
                   </div>
                 ))}
+              </>
+            )}
+
+            {/* ── Exercises / practices ───────────────────────────────── */}
+            {data.exercises.length > 0 && (
+              <>
+                <div className="flex items-center justify-between" style={{ marginTop: 12 }}>
+                  <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--os-text-muted)' }}>
+                    Exercises & practices
+                  </p>
+                  <span style={{ fontSize: 11, color: 'var(--os-text-muted)' }}>
+                    {data.exercises.filter(e => e.done).length}/{data.exercises.length} done
+                  </span>
+                </div>
+                {data.exercises.map(ex => {
+                  const effortColor = ex.effort === 'low' ? 'var(--os-green)' : ex.effort === 'high' ? 'var(--os-red)' : 'var(--os-yellow)';
+                  return (
+                    <div
+                      key={ex.id}
+                      className="os-card"
+                      style={{
+                        padding: 18,
+                        borderColor: ex.recommended ? 'rgba(232,80,4,0.3)' : undefined,
+                        opacity: ex.done ? 0.6 : 1,
+                      }}
+                    >
+                      <div className="flex items-start gap-3">
+                        <button
+                          onClick={() => toggleExercise(ex.id)}
+                          title={ex.done ? 'Mark not done' : 'Mark done'}
+                          style={{
+                            width: 20, height: 20, borderRadius: 6, flexShrink: 0, marginTop: 1,
+                            border: `1.5px solid ${ex.done ? 'var(--os-green)' : 'var(--os-text-muted)'}`,
+                            background: ex.done ? 'var(--os-green)' : 'transparent',
+                            display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer',
+                          }}
+                        >
+                          {ex.done && <Check size={13} color="#0a0a0f" />}
+                        </button>
+                        <div style={{ flex: 1, minWidth: 0 }}>
+                          <div className="flex items-center gap-2 flex-wrap" style={{ marginBottom: 4 }}>
+                            <Target size={13} style={{ color: 'var(--os-orange)', flexShrink: 0 }} />
+                            <h3 style={{
+                              fontSize: 14, fontWeight: 600, letterSpacing: '-0.01em',
+                              color: 'var(--os-text-primary)',
+                              textDecoration: ex.done ? 'line-through' : 'none',
+                            }}>
+                              {ex.title}
+                            </h3>
+                            {ex.recommended && (
+                              <span className="flex items-center gap-1" style={{ fontSize: 9, fontWeight: 700, letterSpacing: '0.04em', textTransform: 'uppercase', color: 'var(--os-orange)', background: 'rgba(232,80,4,0.12)', padding: '2px 6px', borderRadius: 4 }}>
+                                <Star size={9} /> Start here
+                              </span>
+                            )}
+                            {ex.effort && (
+                              <span style={{ fontSize: 9, fontWeight: 700, letterSpacing: '0.04em', textTransform: 'uppercase', color: effortColor }}>
+                                {ex.effort} effort
+                              </span>
+                            )}
+                          </div>
+                          <p style={{ fontSize: 12.5, lineHeight: 1.6, color: 'var(--os-text-secondary)', marginBottom: 8 }}>
+                            <span style={{ color: 'var(--os-text-muted)', fontWeight: 600 }}>Why · </span>{ex.why}
+                          </p>
+                          <p style={{ fontSize: 12.5, lineHeight: 1.6, color: 'var(--os-text-primary)' }}>
+                            <span style={{ color: 'var(--os-text-muted)', fontWeight: 600 }}>How · </span>{ex.how}
+                          </p>
+                        </div>
+                        <button className="os-icon-btn" style={{ opacity: 0.4, flexShrink: 0, padding: 2 }} onClick={() => deleteExercise(ex.id)}>
+                          <X size={13} />
+                        </button>
+                      </div>
+                    </div>
+                  );
+                })}
               </>
             )}
           </div>
