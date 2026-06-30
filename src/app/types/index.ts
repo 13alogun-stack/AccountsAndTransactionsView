@@ -355,6 +355,58 @@ export interface AIOutput {
   savedAsMemoryId?: string;
 }
 
+// ─── Therapy / Health ─────────────────────────────────────────────────────────
+// NOTE: All therapy data is personal and lives ONLY in browser localStorage
+// (key: 'ibra-os-therapy'). It is never seeded into committed sample data and
+// never deployed publicly. Same handling as the KOHO finance import.
+
+export type TherapySessionStatus = 'scheduled' | 'completed' | 'cancelled';
+
+export interface TherapyActionItem {
+  id: string;
+  text: string;
+  done: boolean;
+  sessionId?: string;
+}
+
+export interface TherapyFrameworkPole {
+  healthyVirtue: string;
+  excess: string;
+}
+
+export interface TherapyFramework {
+  id: string;
+  name: string;
+  summary: string;
+  poles?: TherapyFrameworkPole[];
+  notes?: string;
+  sessionId?: string;
+}
+
+export interface TherapySelfRating {
+  label: string;
+  value: number; // 0–10
+}
+
+export interface TherapySession {
+  id: string;
+  date: string;
+  therapist: string;
+  title: string;
+  status: TherapySessionStatus;
+  themes: string[];
+  insights: string[];
+  homework: string[];
+  reflection?: string;
+  selfRatings?: TherapySelfRating[];
+}
+
+export interface TherapyData {
+  sessions: TherapySession[];
+  frameworks: TherapyFramework[];
+  actionItems: TherapyActionItem[];
+}
+
 // ─── Shared ───────────────────────────────────────────────────────────────────
 
 export interface FileLink {
