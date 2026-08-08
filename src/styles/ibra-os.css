@@ -981,4 +981,39 @@ body {
   .hero-number { font-size: 48px; }
   .os-modal { max-width: 100%; margin: 0; border-radius: 12px; }
   .os-modal-overlay { padding: 12px; align-items: flex-end; }
+
+  /* ── Generic mobile grid recomposition ─────────────────────────
+     Inline grid styles lose to these !important overrides. */
+  .m-stack { grid-template-columns: 1fr !important; }
+  .m-2col { grid-template-columns: repeat(2, 1fr) !important; }
+
+  /* ── Home bento → hand-recomposed single-column stack ───────── */
+  .home-root { padding: 12px 16px 0 !important; }
+  .home-bento {
+    grid-template-columns: 1fr !important;
+    grid-template-rows: none !important;
+  }
+  .home-bento > * {
+    grid-column: auto !important;
+    grid-row: auto !important;
+  }
+  /* Mobile order: identity → focus → finance → score/status → rest */
+  .hb-ibra { order: 1; padding: 20px !important; }
+  .hb-ibra h1 { font-size: 56px !important; }
+  .hb-ibra > div:last-child { padding-top: 16px !important; }
+  .hb-focus { order: 2; }
+  .hb-finance { order: 3; }
+  .hb-score { order: 4; }
+  .hb-pipeline { order: 5; }
+  .hb-projects { order: 6; }
+  .hb-agents { order: 7; }
+  .hb-note { order: 8; }
+  /* Score circle + system status stay side-by-side (both compact) */
+  .home-score-row { grid-template-columns: 1fr 1fr !important; }
+  /* Status bar wraps instead of overflowing */
+  .home-statusbar { flex-wrap: wrap; row-gap: 4px; }
+  .home-statusbar > div:last-child { margin-left: 0 !important; }
+
+  /* ── Therapy: sidebar drops below sessions, un-stick it ─────── */
+  .therapy-side { position: static !important; }
 }

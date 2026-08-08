@@ -54,6 +54,7 @@ export default function Home() {
 
   return (
     <div
+      className="home-root"
       style={{
         display: 'flex',
         flexDirection: 'column',
@@ -83,6 +84,7 @@ export default function Home() {
 
       {/* ── Main bento grid ───────────────────────────────────────── */}
       <div
+        className="home-bento"
         style={{
           display: 'grid',
           gridTemplateColumns: '220px 1fr 1fr',
@@ -93,6 +95,7 @@ export default function Home() {
       >
         {/* ── IBRA wordmark panel ─────────────────────────────── */}
         <div
+          className="hb-ibra"
           style={{
             gridColumn: '1',
             gridRow: '1 / 3',
@@ -164,6 +167,7 @@ export default function Home() {
 
         {/* ── Portfolio Score + Focus ─────────────────────────── */}
         <div
+          className="hb-score home-score-row"
           style={{
             gridColumn: '2',
             gridRow: '1',
@@ -239,7 +243,7 @@ export default function Home() {
         </div>
 
         {/* ── Finance snapshot ────────────────────────────────── */}
-        <Link to="/finance" style={{ textDecoration: 'none', gridColumn: '3', gridRow: '1' }}>
+        <Link to="/finance" className="hb-finance" style={{ textDecoration: 'none', gridColumn: '3', gridRow: '1' }}>
           <div
             style={{
               height: '100%',
@@ -284,6 +288,7 @@ export default function Home() {
 
         {/* ── TODAY / FOCUS ────────────────────────────────────── */}
         <div
+          className="hb-focus"
           style={{
             gridColumn: '2',
             gridRow: '2',
@@ -370,6 +375,7 @@ export default function Home() {
 
         {/* ── Pipeline ─────────────────────────────────────────── */}
         <div
+          className="hb-pipeline"
           style={{
             gridColumn: '3',
             gridRow: '2',
@@ -449,6 +455,7 @@ export default function Home() {
 
         {/* ── Active Projects ──────────────────────────────────── */}
         <div
+          className="hb-projects"
           style={{
             gridColumn: '1',
             gridRow: '3',
@@ -500,6 +507,7 @@ export default function Home() {
 
         {/* ── Design note / quote ──────────────────────────────── */}
         <div
+          className="hb-note"
           style={{
             gridColumn: '2',
             gridRow: '3',
@@ -532,6 +540,7 @@ export default function Home() {
 
         {/* ── Agent queue ──────────────────────────────────────── */}
         <div
+          className="hb-agents"
           style={{
             gridColumn: '3',
             gridRow: '3',
@@ -582,6 +591,7 @@ export default function Home() {
 
       {/* ── Bottom status bar ─────────────────────────────────── */}
       <div
+        className="home-statusbar"
         style={{
           display: 'flex',
           alignItems: 'center',

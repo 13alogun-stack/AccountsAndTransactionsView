@@ -185,7 +185,7 @@ export default function Finance() {
 
       <div className="page-content" style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
         {/* Stat cards */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 12 }}>
+        <div className="m-2col" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 12 }}>
           <div className="stat-card">
             <p className="stat-label">Confirmed</p>
             <p className="stat-value" style={{ color: 'var(--os-green)' }}>${paid.toLocaleString()}</p>
@@ -295,7 +295,7 @@ export default function Finance() {
           <h3 style={{ fontSize: 13, fontWeight: 600, color: 'var(--os-text-primary)', letterSpacing: '-0.01em', marginBottom: 14 }}>
             Rate Guidance
           </h3>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12 }}>
+          <div className="m-stack" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12 }}>
             <div
               style={{
                 padding: '14px 16px',

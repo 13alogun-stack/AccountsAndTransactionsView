@@ -109,7 +109,7 @@ export default function ProjectDetail() {
         </div>
       </div>
 
-      <div className="page-content" style={{ display: 'grid', gridTemplateColumns: '1fr 280px', gap: 20 }}>
+      <div className="page-content m-stack" style={{ display: 'grid', gridTemplateColumns: '1fr 280px', gap: 20 }}>
         {/* Main column */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
           {/* Summary */}
