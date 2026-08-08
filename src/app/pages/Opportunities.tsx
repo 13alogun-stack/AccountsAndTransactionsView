@@ -191,7 +191,7 @@ export default function Opportunities() {
                           padding: '12px',
                           background: selected === opp.id
                             ? 'linear-gradient(135deg, #1a1a24 0%, #20202e 100%)'
-                            : 'linear-gradient(135deg, #111118 0%, #1a1a24 100%)',
+                            : 'linear-gradient(135deg, #101010 0%, #1a1a1a 100%)',
                           border: `1px solid ${selected === opp.id ? 'rgba(201,168,68,0.3)' : 'var(--os-border)'}`,
                           borderRadius: 10,
                           cursor: 'pointer',
