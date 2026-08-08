@@ -229,7 +229,7 @@ export default function Finance() {
               <XAxis dataKey="month" tick={{ fill: '#6b6b8a', fontSize: 11 }} axisLine={false} tickLine={false} />
               <YAxis tick={{ fill: '#6b6b8a', fontSize: 10 }} axisLine={false} tickLine={false} tickFormatter={v => `$${(v / 1000).toFixed(0)}k`} />
               <Tooltip
-                contentStyle={{ background: '#111118', border: '1px solid #2a2a3a', borderRadius: 8, fontSize: 12 }}
+                contentStyle={{ background: '#101010', border: '1px solid #2a2a2a', borderRadius: 8, fontSize: 12 }}
                 labelStyle={{ color: '#e8e8f0', fontWeight: 600, marginBottom: 4 }}
                 itemStyle={{ color: '#e8e8f0' }}
                 formatter={(value: number) => [`$${value.toLocaleString()}`, undefined]}

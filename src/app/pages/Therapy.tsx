@@ -477,7 +477,7 @@ export default function Therapy() {
                             display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer',
                           }}
                         >
-                          {ex.done && <Check size={13} color="#0a0a0f" />}
+                          {ex.done && <Check size={13} color="#000" />}
                         </button>
                         <div style={{ flex: 1, minWidth: 0 }}>
                           <div className="flex items-center gap-2 flex-wrap" style={{ marginBottom: 4 }}>
@@ -602,7 +602,7 @@ function ActionRow({ item, onToggle, onDelete }: { item: TherapyActionItem; onTo
           display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer',
         }}
       >
-        {item.done && <Check size={11} color="#0a0a0f" />}
+        {item.done && <Check size={11} color="#000" />}
       </button>
       <span
         style={{

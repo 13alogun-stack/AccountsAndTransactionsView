@@ -190,7 +190,7 @@ export default function MobileMenu({ onClose }: Props) {
               height: 36,
               borderRadius: '50%',
               background: 'var(--os-gold)',
-              color: '#0a0a0f',
+              color: '#000',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',

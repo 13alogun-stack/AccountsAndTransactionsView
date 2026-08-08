@@ -203,7 +203,7 @@ export default function Sidebar() {
         >
           <div
             className="w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0"
-            style={{ background: 'var(--os-gold)', color: '#0a0a0f', fontSize: 11, fontWeight: 700 }}
+            style={{ background: 'var(--os-gold)', color: '#000', fontSize: 11, fontWeight: 700 }}
           >
             IB
           </div>

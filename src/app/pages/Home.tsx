@@ -8,14 +8,14 @@ const DESIGN_NOTE = '"Good design isn\'t about the number of options — it\'s a
 
 const STATUS_COLORS: Record<string, string> = {
   active: '#2dce89',
-  completed: '#50506a',
+  completed: '#5c5c5c',
   paused: '#f4b942',
   idea: '#6366f1',
   needs_assets: '#f4b942',
   needs_writing: '#a855f7',
   portfolio_ready: '#2dce89',
   published: '#2dce89',
-  archived: '#50506a',
+  archived: '#5c5c5c',
 };
 
 export default function Home() {

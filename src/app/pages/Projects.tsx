@@ -172,7 +172,7 @@ export default function Projects() {
                     overflow: 'hidden',
                     cursor: 'pointer',
                     transition: 'border-color 0.15s, transform 0.15s',
-                    background: 'linear-gradient(135deg, #111118 0%, #1a1a24 100%)',
+                    background: 'linear-gradient(135deg, #101010 0%, #1a1a1a 100%)',
                   }}
                   onMouseEnter={e => {
                     (e.currentTarget as HTMLDivElement).style.borderColor = 'rgba(255,255,255,0.14)';
