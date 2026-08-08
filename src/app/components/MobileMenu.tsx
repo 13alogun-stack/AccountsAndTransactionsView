@@ -1,8 +1,10 @@
+import { useState } from 'react';
 import { Link, useLocation } from 'react-router';
-import { Palette, Image, DollarSign, BookOpen, Search, FileText, Zap, Brain, HeartPulse } from 'lucide-react';
+import { Palette, Image, DollarSign, BookOpen, Search, FileText, Zap, Brain, HeartPulse, Inbox, Clipboard, Check } from 'lucide-react';
 import { useApp } from '../store/AppContext';
 
 const MORE_NAV = [
+  { path: '/dump', label: 'Dump', icon: Inbox, description: 'Brain dump → tasks & memories' },
   { path: '/design-language', label: 'Design Language', icon: Palette, description: 'Visual language & principles' },
   { path: '/moodboards', label: 'Moodboards', icon: Image, description: 'References & inspiration' },
   { path: '/finance', label: 'Finance', icon: DollarSign, description: 'Income, rates & invoices' },
@@ -19,7 +21,15 @@ interface Props {
 
 export default function MobileMenu({ onClose }: Props) {
   const location = useLocation();
-  const { setCommandBarOpen } = useApp();
+  const { setCommandBarOpen, buildContextBrief } = useApp();
+  const [copied, setCopied] = useState(false);
+
+  const copyBrief = () => {
+    navigator.clipboard.writeText(buildContextBrief()).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    });
+  };
 
   return (
     <div
@@ -135,6 +145,31 @@ export default function MobileMenu({ onClose }: Props) {
             );
           })}
         </div>
+
+        {/* Copy brief for Claude */}
+        <button
+          onClick={copyBrief}
+          style={{
+            marginTop: 12,
+            width: '100%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: 8,
+            padding: '12px 14px',
+            background: copied ? 'rgba(45,206,137,0.1)' : 'var(--os-surface-raised)',
+            border: `1px solid ${copied ? 'rgba(45,206,137,0.3)' : 'var(--os-border)'}`,
+            borderRadius: 12,
+            cursor: 'pointer',
+            fontFamily: 'inherit',
+            fontSize: 13,
+            fontWeight: 500,
+            color: copied ? 'var(--os-green)' : 'var(--os-text-secondary)',
+          }}
+        >
+          {copied ? <Check size={14} /> : <Clipboard size={14} />}
+          {copied ? 'Copied — paste into Claude' : 'Copy brief for Claude'}
+        </button>
 
         {/* Profile */}
         <div

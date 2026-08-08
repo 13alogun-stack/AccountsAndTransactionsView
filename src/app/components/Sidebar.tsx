@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Link, useLocation } from 'react-router';
 import {
   Home,
@@ -14,11 +15,15 @@ import {
   Zap,
   Brain,
   HeartPulse,
+  Inbox,
+  Clipboard,
+  Check,
 } from 'lucide-react';
 import { useApp } from '../store/AppContext';
 
 const NAV_ITEMS = [
   { path: '/', label: 'Home', icon: Home },
+  { path: '/dump', label: 'Dump', icon: Inbox },
   { path: '/projects', label: 'Projects', icon: FolderOpen },
   { path: '/opportunities', label: 'Opportunities', icon: Briefcase },
   { path: '/design-language', label: 'Design Language', icon: Palette },
@@ -34,7 +39,15 @@ const NAV_ITEMS = [
 
 export default function Sidebar() {
   const location = useLocation();
-  const { opportunities, agentTasks, documents, setCommandBarOpen } = useApp();
+  const { opportunities, agentTasks, documents, dumps, setCommandBarOpen, buildContextBrief } = useApp();
+  const [copied, setCopied] = useState(false);
+
+  const copyBrief = () => {
+    navigator.clipboard.writeText(buildContextBrief()).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    });
+  };
 
   const activeOpps = opportunities.filter(o =>
     ['applied', 'replied', 'interviewing', 'follow_up', 'proposal'].includes(o.status)
@@ -43,6 +56,7 @@ export default function Sidebar() {
   const pendingTasks = agentTasks.filter(t => ['queued', 'in_progress', 'review'].includes(t.status)).length;
 
   const draftDocs = documents.filter(d => d.status === 'in_progress').length;
+  const inboxCount = dumps.filter(d => d.status === 'inbox').length;
 
   return (
     <aside className="os-sidebar">
@@ -125,6 +139,8 @@ export default function Sidebar() {
               ? pendingTasks > 0 ? pendingTasks : undefined
               : path === '/documents'
               ? draftDocs > 0 ? draftDocs : undefined
+              : path === '/dump'
+              ? inboxCount > 0 ? inboxCount : undefined
               : undefined;
 
           return (
@@ -151,6 +167,31 @@ export default function Sidebar() {
       </nav>
 
       <div className="os-divider mx-3" />
+
+      {/* Copy brief — paste into Claude/ChatGPT for free "talk to it" */}
+      <div className="px-3 pt-3">
+        <button
+          onClick={copyBrief}
+          style={{
+            width: '100%',
+            display: 'flex',
+            alignItems: 'center',
+            gap: 8,
+            padding: '8px 10px',
+            background: copied ? 'rgba(45,206,137,0.1)' : 'var(--os-surface-raised)',
+            border: `1px solid ${copied ? 'rgba(45,206,137,0.3)' : 'var(--os-border)'}`,
+            borderRadius: 8,
+            cursor: 'pointer',
+            fontFamily: 'inherit',
+            fontSize: 12,
+            color: copied ? 'var(--os-green)' : 'var(--os-text-secondary)',
+            transition: 'all 0.15s',
+          }}
+        >
+          {copied ? <Check size={13} /> : <Clipboard size={13} />}
+          {copied ? 'Copied — paste into Claude' : 'Copy brief for Claude'}
+        </button>
+      </div>
 
       {/* Profile */}
       <div className="px-3 py-4">
