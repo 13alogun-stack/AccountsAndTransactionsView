@@ -386,7 +386,7 @@ export default function Agents() {
                   boxSizing: 'border-box',
                 }}
               />
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 200px', gap: 10 }}>
+              <div className="m-stack" style={{ display: 'grid', gridTemplateColumns: '1fr 200px', gap: 10 }}>
                 <textarea
                   value={newPrompt}
                   onChange={e => setNewPrompt(e.target.value)}
