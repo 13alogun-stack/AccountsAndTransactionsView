@@ -14,6 +14,7 @@ import Documents from './pages/Documents';
 import Prompts from './pages/Prompts';
 import Memories from './pages/Memories';
 import Therapy from './pages/Therapy';
+import Dump from './pages/Dump';
 
 const basename = import.meta.env.BASE_URL.replace(/\/$/, '') || '/';
 
@@ -36,6 +37,7 @@ export default function App() {
             <Route path="/prompts" element={<Prompts />} />
             <Route path="/memories" element={<Memories />} />
             <Route path="/therapy" element={<Therapy />} />
+            <Route path="/dump" element={<Dump />} />
           </Routes>
         </Layout>
       </BrowserRouter>

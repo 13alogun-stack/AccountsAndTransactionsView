@@ -1,15 +1,8 @@
+import { useState } from 'react';
 import { Link } from 'react-router';
-import { ArrowUpRight, ChevronRight, AlertCircle, CheckCircle2, Clock } from 'lucide-react';
+import { ArrowUpRight, ChevronRight, AlertCircle, CheckCircle2, Clock, Check, Plus } from 'lucide-react';
 import { useApp } from '../store/AppContext';
 import { MONTHLY_TARGET } from '../data/sample';
-
-const TODAY_PRIORITIES = [
-  { label: 'Write one paragraph of the PCMB case study', urgency: 'high', project: 'Portfolio' },
-  { label: 'Decide DX Studio homepage direction — baseline or wild', urgency: 'high', project: 'Studio' },
-  { label: 'Follow up with Vercel — screening call', urgency: 'high', project: 'Opportunity' },
-  { label: 'Document SHN provider portal decisions', urgency: 'medium', project: 'SHN · Loblaw' },
-  { label: 'Figure out the monthly savings target', urgency: 'low', project: 'Finance' },
-];
 
 const DESIGN_NOTE = '"Good design isn\'t about the number of options — it\'s about reducing them to the essential one."';
 
@@ -26,7 +19,8 @@ const STATUS_COLORS: Record<string, string> = {
 };
 
 export default function Home() {
-  const { projects, opportunities, agentTasks, financeItems } = useApp();
+  const { projects, opportunities, agentTasks, financeItems, priorities, addPriority, togglePriority } = useApp();
+  const [quickAdd, setQuickAdd] = useState('');
 
   const now = new Date();
   const ym = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
@@ -47,7 +41,15 @@ export default function Home() {
     .slice(0, 4);
 
   const recentTasks = agentTasks.filter(t => t.status !== 'archived').slice(0, 3);
-  const highCount = TODAY_PRIORITIES.filter(p => p.urgency === 'high').length;
+  const openPriorities = priorities.filter(p => !p.done).slice(0, 7);
+  const doneToday = priorities.filter(p => p.done).length;
+  const highCount = openPriorities.filter(p => p.urgency === 'high').length;
+
+  const submitQuickAdd = () => {
+    if (!quickAdd.trim()) return;
+    addPriority(quickAdd);
+    setQuickAdd('');
+  };
 
   const dayStr = now.toLocaleDateString('en-CA', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
   const timeStr = now.toLocaleTimeString('en-CA', { hour: '2-digit', minute: '2-digit' });
@@ -314,19 +316,24 @@ export default function Home() {
                 color: 'var(--os-orange)',
               }}
             >
-              {highCount} HIGH
+              {highCount} HIGH{doneToday > 0 ? ` · ${doneToday} DONE` : ''}
             </span>
           </div>
           <div style={{ display: 'flex', flexDirection: 'column' }}>
-            {TODAY_PRIORITIES.map((item, i) => (
+            {openPriorities.length === 0 && (
+              <p style={{ fontSize: 12, color: 'var(--os-text-muted)', padding: '14px 0' }}>
+                Nothing set for today. Add one below or empty your head in Dump.
+              </p>
+            )}
+            {openPriorities.map((item, i) => (
               <div
-                key={i}
+                key={item.id}
                 style={{
                   display: 'flex',
                   alignItems: 'baseline',
                   gap: 12,
                   padding: '10px 0',
-                  borderBottom: i < TODAY_PRIORITIES.length - 1 ? '1px solid rgba(255,255,255,0.04)' : 'none',
+                  borderBottom: '1px solid rgba(255,255,255,0.04)',
                 }}
               >
                 <span
@@ -348,9 +355,11 @@ export default function Home() {
                   <p style={{ fontSize: 13, fontWeight: 500, color: 'var(--os-text-primary)', lineHeight: 1.35, letterSpacing: '-0.01em' }}>
                     {item.label}
                   </p>
-                  <p style={{ fontSize: 10, color: 'var(--os-text-muted)', marginTop: 2, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                    {item.project}
-                  </p>
+                  {item.project && (
+                    <p style={{ fontSize: 10, color: 'var(--os-text-muted)', marginTop: 2, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                      {item.project}
+                    </p>
+                  )}
                 </div>
                 {item.urgency === 'high' && (
                   <span
@@ -368,8 +377,54 @@ export default function Home() {
                     HIGH
                   </span>
                 )}
+                <button
+                  onClick={() => togglePriority(item.id)}
+                  title="Mark done"
+                  style={{
+                    width: 18,
+                    height: 18,
+                    borderRadius: 5,
+                    flexShrink: 0,
+                    alignSelf: 'center',
+                    border: '1.5px solid var(--os-text-muted)',
+                    background: 'transparent',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: 'transparent',
+                  }}
+                  onMouseEnter={e => (e.currentTarget.style.color = 'var(--os-green)')}
+                  onMouseLeave={e => (e.currentTarget.style.color = 'transparent')}
+                >
+                  <Check size={12} />
+                </button>
               </div>
             ))}
+            {/* Quick add */}
+            <div style={{ display: 'flex', gap: 6, paddingTop: 10 }}>
+              <input
+                value={quickAdd}
+                onChange={e => setQuickAdd(e.target.value)}
+                onKeyDown={e => { if (e.key === 'Enter') submitQuickAdd(); }}
+                placeholder="Add a priority…"
+                style={{
+                  flex: 1,
+                  background: 'transparent',
+                  border: 'none',
+                  outline: 'none',
+                  fontSize: 13,
+                  color: 'var(--os-text-primary)',
+                  padding: '4px 0',
+                }}
+              />
+              <button
+                onClick={submitQuickAdd}
+                style={{ background: 'none', border: 'none', color: 'var(--os-orange)', cursor: 'pointer', padding: 4 }}
+              >
+                <Plus size={15} />
+              </button>
+            </div>
           </div>
         </div>
 

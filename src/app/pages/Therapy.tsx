@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import {
   HeartPulse, Plus, Upload, Download, X, Check, Pencil, Trash2,
-  Calendar, ChevronDown, ChevronUp, CircleDot, Brain, Target, Star,
+  Calendar, ChevronDown, ChevronUp, CircleDot, Brain, Target, Star, Link2,
 } from 'lucide-react';
 import type {
   TherapyData, TherapySession, TherapyFramework, TherapyActionItem,
@@ -46,6 +46,44 @@ function genId(prefix: string) {
   return `${prefix}${Date.now()}${Math.floor(performance.now())}`;
 }
 
+// ── Transfer link encoding ────────────────────────────────────────────────────
+// The pack rides in the URL *fragment* (#...), which browsers never send to a
+// server — so the data stays device-to-device even though the site is public.
+function encodePack(data: TherapyData): string {
+  const json = JSON.stringify(data);
+  return btoa(unescape(encodeURIComponent(json)))
+    .replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+}
+
+function decodePack(b64: string): TherapyData | null {
+  try {
+    let s = b64.replace(/-/g, '+').replace(/_/g, '/');
+    while (s.length % 4) s += '=';
+    const p = JSON.parse(decodeURIComponent(escape(atob(s))));
+    return {
+      sessions: p.sessions ?? [],
+      frameworks: p.frameworks ?? [],
+      actionItems: p.actionItems ?? [],
+      exercises: p.exercises ?? [],
+    };
+  } catch {
+    return null;
+  }
+}
+
+function mergePacks(current: TherapyData, incoming: TherapyData): TherapyData {
+  const sIds = new Set(current.sessions.map(s => s.id));
+  const fIds = new Set(current.frameworks.map(f => f.id));
+  const aIds = new Set(current.actionItems.map(a => a.id));
+  const eIds = new Set(current.exercises.map(e => e.id));
+  return {
+    sessions: [...incoming.sessions.filter(s => !sIds.has(s.id)), ...current.sessions],
+    frameworks: [...incoming.frameworks.filter(f => !fIds.has(f.id)), ...current.frameworks],
+    actionItems: [...incoming.actionItems.filter(a => !aIds.has(a.id)), ...current.actionItems],
+    exercises: [...incoming.exercises.filter(e => !eIds.has(e.id)), ...current.exercises],
+  };
+}
+
 export default function Therapy() {
   const [data, setData] = useState<TherapyData>(loadData);
   const [expanded, setExpanded] = useState<string | null>(null);
@@ -53,9 +91,39 @@ export default function Therapy() {
   const [editor, setEditor] = useState<{ open: boolean; session: Partial<TherapySession> | null; isNew: boolean }>({
     open: false, session: null, isNew: false,
   });
+  const [toast, setToast] = useState<string | null>(null);
+
+  const showToast = (msg: string) => {
+    setToast(msg);
+    setTimeout(() => setToast(null), 3000);
+  };
 
   // Persist on every change
   useEffect(() => { saveData(data); }, [data]);
+
+  // ── Transfer-link import (runs once on mount) ───────────────────────────────
+  useEffect(() => {
+    const m = window.location.hash.match(/#import=(.+)/);
+    if (!m) return;
+    const incoming = decodePack(m[1]);
+    window.history.replaceState(null, '', window.location.pathname + window.location.search);
+    if (!incoming) {
+      showToast('Transfer link could not be read.');
+      return;
+    }
+    setData(d => mergePacks(d, incoming));
+    const n = incoming.sessions.length + incoming.frameworks.length + incoming.exercises.length + incoming.actionItems.length;
+    showToast(`Transferred in — ${n} items now on this device.`);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const copyTransferLink = () => {
+    const url = `${window.location.origin}${window.location.pathname}#import=${encodePack(data)}`;
+    navigator.clipboard.writeText(url).then(
+      () => showToast('Transfer link copied — open it on your other device.'),
+      () => showToast('Could not copy. Try again.'),
+    );
+  };
 
   const sessions = [...data.sessions].sort((a, b) => b.date.localeCompare(a.date));
   const openItems = data.actionItems.filter(a => !a.done);
@@ -171,14 +239,19 @@ export default function Therapy() {
               {data.sessions.length} session{data.sessions.length === 1 ? '' : 's'} · {openItems.length} open action{openItems.length === 1 ? '' : 's'} · stored only on this device
             </p>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 flex-wrap">
             <button className="os-btn-secondary" onClick={() => setImportOpen(true)}>
               <Upload size={14} /> Import
             </button>
             {!isEmpty && (
-              <button className="os-btn-secondary" onClick={doExport}>
-                <Download size={14} /> Export
-              </button>
+              <>
+                <button className="os-btn-secondary" onClick={doExport}>
+                  <Download size={14} /> Export
+                </button>
+                <button className="os-btn-secondary" onClick={copyTransferLink} title="Copy a link that carries your data to another device">
+                  <Link2 size={14} /> Transfer
+                </button>
+              </>
             )}
             <button
               className="os-btn-primary"
@@ -494,6 +567,13 @@ export default function Therapy() {
 
       {/* Import modal */}
       {importOpen && <ImportModal onClose={() => setImportOpen(false)} onImport={doImport} hasData={!isEmpty} />}
+
+      {/* Toast */}
+      {toast && (
+        <div style={{ position: 'fixed', bottom: 90, left: '50%', transform: 'translateX(-50%)', maxWidth: '90vw', background: 'var(--os-surface-overlay)', border: '1px solid var(--os-border-strong)', borderRadius: 10, padding: '10px 16px', fontSize: 13, color: 'var(--os-text-primary)', zIndex: 300, textAlign: 'center' }}>
+          {toast}
+        </div>
+      )}
     </div>
   );
 }

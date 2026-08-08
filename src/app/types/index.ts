@@ -355,6 +355,25 @@ export interface AIOutput {
   savedAsMemoryId?: string;
 }
 
+// ─── Dump / Capture ───────────────────────────────────────────────────────────
+
+export interface DumpItem {
+  id: string;
+  text: string;
+  createdAt: string;
+  status: 'inbox' | 'triaged' | 'done';
+  triagedTo?: 'priority' | 'memory' | 'task';
+}
+
+export interface Priority {
+  id: string;
+  label: string;
+  urgency: 'high' | 'medium' | 'low';
+  project?: string;
+  done: boolean;
+  createdAt: string;
+}
+
 // ─── Therapy / Health ─────────────────────────────────────────────────────────
 // NOTE: All therapy data is personal and lives ONLY in browser localStorage
 // (key: 'ibra-os-therapy'). It is never seeded into committed sample data and
