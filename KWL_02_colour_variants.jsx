@@ -32,7 +32,7 @@
     // CONFIG
     // ===================================================================
 
-    var DRY_RUN = true;        // <-- true = report only. Set false to build.
+    var DRY_RUN = false;       // BUILD MODE. Set back to true for a report-only pass.
 
     var GAP          = 72;     // points between generated artboards
     var COLUMNS      = 5;      // variants per row; they wrap into a grid below the art
