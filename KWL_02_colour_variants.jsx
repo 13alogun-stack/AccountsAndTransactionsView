@@ -35,8 +35,14 @@
     var DRY_RUN = true;        // <-- true = report only. Set false to build.
 
     var GAP          = 72;     // points between generated artboards
+    var COLUMNS      = 5;      // variants per row; they wrap into a grid below the art
     var COPY_REF     = false;  // also copy "Reference - Hidden" items to variants
     var HEADLINE_PCT = 0.60;   // text >= 60% of the artboard's largest type = headline
+
+    // Illustrator's canvas is roughly 227 x 227 inches. Laying 20 variants out
+    // in one row would need ~132in of width on top of whatever the existing 45
+    // artboards already occupy, which overruns it - hence the grid.
+    var CANVAS_LIMIT_PT = 227 * 72;
 
     // Source artboards, 1-based, as numbered in Illustrator's Artboards panel.
     // Defaults come from the content audit of this file:
@@ -333,13 +339,19 @@
         doc.layers[li].visible = true;
     }
 
-    // Rightmost edge of everything that already exists.
-    var maxRight = -1e9;
+    // Place the variant grid BELOW the existing artwork, left-aligned with it.
+    // Going down rather than right keeps the block inside the canvas.
+    var minLeft = 1e9, minBottom = 1e9;
     for (var a = 0; a < doc.artboards.length; a++) {
         var r = doc.artboards[a].artboardRect;
-        if (r[2] > maxRight) maxRight = r[2];
+        if (r[0] < minLeft)   minLeft   = r[0];
+        if (r[3] < minBottom) minBottom = r[3];
     }
-    var cursorX = maxRight + GAP;
+    var gridOriginX = minLeft;
+    var cursorX  = gridOriginX;
+    var rowTop   = minBottom - GAP;
+    var rowMaxH  = 0;
+    var col      = 0;
 
     var log = [], created = 0, recoloured = 0, warnings = [];
     var swatchesAdded = DRY_RUN ? 0 : registerSwatches();
@@ -357,14 +369,37 @@
         var srcAb   = doc.artboards[srcIndex - 1];
         var srcRect = srcAb.artboardRect;
         var w = srcRect[2] - srcRect[0];
+        var h = srcRect[1] - srcRect[3];
+
+        // Wrap to a new row before placing, using the completed row's height.
+        if (col >= COLUMNS) {
+            rowTop  = rowTop - rowMaxH - GAP;
+            cursorX = gridOriginX;
+            rowMaxH = 0;
+            col     = 0;
+        }
+
+        var newLeft = cursorX, newTop = rowTop;
+        var dx = newLeft - srcRect[0];
+        var dy = newTop  - srcRect[1];
+        var newRect = [newLeft, newTop, newLeft + w, newTop - h];
+
+        // Advance the cursor now, so DRY_RUN reports the same layout the real
+        // run will produce.
+        cursorX += w + GAP;
+        col++;
+        if (h > rowMaxH) rowMaxH = h;
+
+        if (Math.abs(newRect[3]) > CANVAS_LIMIT_PT || Math.abs(newRect[2]) > CANVAS_LIMIT_PT) {
+            warnings.push("Artboard would fall outside Illustrator's canvas: " +
+                          recipe.label + " Option " + recipe.opt + " " + side +
+                          ". Reduce COLUMNS or move the source art closer to the origin.");
+        }
 
         // The side's own recipe carries its ratio label, so the name always
         // describes the colours actually applied.
         var mix = (side === "FRONT") ? recipe.front : recipe.back;
         var newName = recipe.label + " - Option " + recipe.opt + " - " + mix.ratio + " - " + side;
-
-        var dx = cursorX - srcRect[0];
-        var newRect = [cursorX, srcRect[1], cursorX + w, srcRect[3]];
 
         // ---- gather source artwork -------------------------------------
         var groups = [
@@ -400,7 +435,7 @@
         var cNotes = checkContrast(mix, newName);
         for (var cn = 0; cn < cNotes.length; cn++) warnings.push(cNotes[cn]);
 
-        if (DRY_RUN) { cursorX += w + GAP; return; }
+        if (DRY_RUN) return;
 
         // ---- duplicate --------------------------------------------------
         var newAb = doc.artboards.add(newRect);
@@ -411,7 +446,7 @@
         for (var p = 0; p < picked.length; p++) {
             try {
                 var dup = picked[p].item.duplicate();
-                dup.translate(dx, 0);              // horizontal only: layout is preserved exactly
+                dup.translate(dx, dy);   // whole artboard shifts as a block: layout preserved exactly
                 copies.push({ item: dup, role: picked[p].role });
             } catch (e) {
                 warnings.push(newName + ": could not duplicate an object (" + e + ")");
@@ -447,8 +482,6 @@
             }
             // "art", "guide", "ref": untouched by design.
         }
-
-        cursorX += w + GAP;
     }
 
     for (var i = 0; i < RECIPES.length; i++) {
