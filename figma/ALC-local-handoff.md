@@ -129,5 +129,14 @@ K+ furniture still in the frame, for you to decide:
 - `Module · Top Genre · K+` instance `1948:34059`
 - the Clara device image `1948:34056`, which sits under the lifestyle photo and isn't visible
 
+## 7 · ALC · Opt 2 · ORANGE (built in cloud)
+- A clone of `ALC · Opt 2` → **`1955:36425`** at x=4800, y=1000 in the ORANGE row. Its label is `1955:36592`; set it to `ALC · Opt 2 · ORANGE`.
+- To make room, everything at x≥4800 moved right 750 and the section widened 750. Height 6475.
+- Colours changed to the ORANGE palette. The mapping comes from the existing red/ORANGE pairs: `#BF0000→#CB4F11`, `#EBCDCD→#F6DCD0`, `#D99C9B→#EAB9A0`, plus `#FCF2F2/#F2CBCC→#F6DCD0` and `#650808→#6B2400`.
+- **Hero imagery:** red Opt 2's hero slot shows a rendered image of `Art crop · Bookshelf · Red Light` (`1801:97501`); ORANGE Opt 2 shows `Bookshelf · Orange Dark` (`1801:97545`). Same slot size (550×508). Both are stand-ins until the ALC hero animation goes in.
+- **Hero readability:** the headline and intro sit on top of the device in the art. Once the text is recoloured, check contrast and, if needed, shift the image crop in the fill settings. Don't change the layout.
+- Text: use the same node map as section 6. ORANGE node ids are the red ids + 2473 in most cases (e.g. `1948:33961` → `1955:36434`), but check each one. Text fills that are blue should become `#CB4F11` here, not red.
+- The other imagery (book covers, lifestyle photo, Plot Chaser illustration) doesn't depend on colourway, so it's shared with red, the same as in the existing ORANGE frames. The yellow `Kplus Arrows` are still K+ furniture.
+
 ## Heights before any of this
 Opt 1 4586 · Opt 3 3632 · Alt 1 3098 · Alt 2 5435 · ORANGE: 4165 / 3318 / 2672 / 5005
