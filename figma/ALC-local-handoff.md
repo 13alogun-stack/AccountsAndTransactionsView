@@ -96,5 +96,38 @@ Then build `ALC · Overview in context` as a duplicate of the ALC set with the a
 
 **Heads-up on the K+ Overview board:** its frame *names* changed while I was reading it (someone may be editing). Its names now match `01 · REVIEW`, but its label text still says "Opt 3" above the mosaic (x=1715). Mirror `01 · REVIEW`, not Overview.
 
+## 6 · ALC · Opt 2 — built in cloud, text to finish in desktop
+Cloned from K+ Opt 2 `1759:76213` (original untouched) → **`1948:33952`** at x=850, y=1000; placeholder label `1948:34119` (currently reads `Opt 2`, set it to `ALC · Opt 2`). Everything at x≥850 in the section moved right 750 and the section widened 750, so the red row now reads Opt 1 · Opt 2 · (02) · (03) · (04). Height 6475.
+
+Done in cloud:
+- Blue changed to ALC red on 22 fills: Blue 100 → `#BF0000`, mid blue → `#D99C9B`, Blue 20 → `#EBCDCD`, lightest → `#FCF2F2`. The topper gradient is now red.
+- Square corners.
+- Sign-off plus-pattern video removed from the clone (it's now flat red).
+- Hero photo slot set to Red 20. The ALC hero animation goes here in the motion pass.
+
+Text (Georgia/Trebuchet: desktop only):
+
+| Node | Now (K+) | Set to |
+|---|---|---|
+| `I1948:33957;114:52436` | YOUR 2026 KOBO PLUS READING LIFE | `YOUR 2026 READING LIFE` |
+| `1948:33961` | Your full year,␣␣one page… | `Your full year, one page at a time` |
+| `1948:33962` | …Kobo Plus readers… 1,800,000 | `In 2026, our readers around the world finished 2,400,000 books` |
+| `1948:33966` | In 2026, our␣␣Kobo Plus readers… | `In 2026, our readers around the world finished` |
+| `1948:33968` | 1,800,000 | `2,400,000` |
+| `I1948:33972;117:52331` | Your Kobo Plus year at a glance | `The year at a glance` |
+| `1948:33982` / `33987` / `34000` / `34005` | 32 / 186 / 12 / 74 | `40` / `242` / `15` / `91` |
+| `1948:34018` | The most read Kobo Plus book in Canada: | `The most read book in Canada:` |
+| `I1948:34036;117:52331`, `1948:34040`, `1948:34043` | beyond Kobo Plus / 8 / 3 | K+-only slot, no ALC deck row. Set to `[TBC]` like the other frames, or use it for `Your year in audiobooks` |
+| `1948:34064`, `1948:34094` | `[dynamic] ` | hide |
+| `1948:34072` | June␣␣17 | `June 17` |
+| `1948:34115` | Thank you for making Kobo your home… | `Thank you for reading with us` (pending Annette) |
+
+Recolour these text fills from blue to `#BF0000` (text can't be recoloured from the cloud either): `1948:33961, 33962, 33968, 33969, 33987, 34005, 34040, 34043, 34049, 34093, 34098`.
+
+K+ furniture still in the frame, for you to decide:
+- `Kplus Arrows` images `1948:34029` / `34083`: yellow arrows by the Canada cover and Plot Chaser
+- `Module · Top Genre · K+` instance `1948:34059`
+- the Clara device image `1948:34056`, which sits under the lifestyle photo and isn't visible
+
 ## Heights before any of this
 Opt 1 4586 · Opt 3 3632 · Alt 1 3098 · Alt 2 5435 · ORANGE: 4165 / 3318 / 2672 / 5005
