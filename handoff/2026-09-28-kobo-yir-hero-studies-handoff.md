@@ -26,6 +26,8 @@ Status marks used below: ✅ done · ↩️ to do · ❓ Ibra's call.
 - Cards: CA `2646:31953` · AU `2646:32361` (Southern Cross stars scaled ×1.35 in place) · NZ `2646:32770` · US `2649:33143` (star `2649:33553`) · IE `2649:33558` (shamrock `2649:33968`) · UK `2649:33976` (no symbol, band collapsed).
 - Row header with the dev note `2649:34389`. Stale captions hidden with the prefix. #105 and everything below shifted down 163 px to keep the 120 px gap. Nothing deleted.
 - Star and shamrock were drawn as vectors in the cloud; the motion session's SVG paths are not needed.
+- ✅ Decision 5 (local session, Ibra had no preference): a market with no symbol collapses the 48 px band, so the card is shorter. Dev rule "no symbol → hide the slot". The UK card already works this way and its caption says so; record the rule in the row's dev note once text is editable on the desktop.
+- Still open with Ibra/Kobo on #109 (from the local session): hide the superseded inline options (A/B rows) when prepping the review · Yellow 80 vs white symbol · market list (Ireland? US?) · US copy "the US" vs "the United States" (Jacques) · brand/legal sign-off on national symbols · FR-CA and other locales ("au Canada") · which M06 layout(s) carry the symbol slot.
 
 ### ✅ Hero explorations page `2666:28918` ("YIR – Hero Explorations")
 - Section `2666:28919`: H1–H6 (the six briefed image-window variations), H7–H9 (Yellow 80 field, white field with 3 windows, Decoded copy), letterform mask test (exported clean at 2×), footers F1–F3, storyboard. Prototype section `2667:29095` has the Smart Animate flow "Hero · windows open".
