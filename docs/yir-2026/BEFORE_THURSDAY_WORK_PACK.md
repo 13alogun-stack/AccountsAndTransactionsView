@@ -27,7 +27,7 @@ Legend: **LIVE TEXT** = merge-field text in the email body font. **LIVE COVER** 
 | All | Covers | LIVE COVER | No animation on or behind. Drop shadow TBC by Aiden. |
 | Hero (conveyor belt) | Imagery | STATIC IMG | Generic imagery, not a wall of covers. Animation OK (no live cover under it). |
 | Opt 2 | Arrow near Suzanne Collins cover | STATIC IMG (animated) | Must sit beside the cover, not on or behind it. |
-| Opt 3 Best Books | List covers | LIVE COVER or STATIC IMG per country | Generic list. If shadow can't be live, one image per country. |
+| Opt 3 Best Books | List covers | LIVE COVER or STATIC IMG per country | Generic list. Live covers = individual links, no shadow. One image per country = shadow, but only one link to the Best of the Year page. |
 | Opt 4 bento | "32 BOOKS" stat | LIVE TEXT on solid blue block | Block sits next to the photo, not over it. |
 | Opt 4 bento | Photo tile | STATIC IMG | No text on it. |
 | Bookmark corner | Rounded corner | STATIC IMG slice | Live section beside it, full-width row below. |
@@ -43,6 +43,7 @@ When marking in Figma, name live layers with the merge field so dev can read the
 - After: month and genre are LIVE TEXT in the email body font. The handwritten font stays only on the static words around them.
 - Layout note: reserve width for the longest month in every language, so the live text never wraps differently from the comp. **Proposal:** test with "September" and "Septembre" and the longest genre label.
 - Same for any other slot currently in HW that changes per reader (author name, counts).
+- Marker highlight: if it covers the whole word, keep it as a solid block behind the live text (Aiden). A partial highlight has to go.
 
 ### Swap B: Opt 2 arrow moves off the cover
 - Before: animated arrow sits on the Suzanne Collins cover.
@@ -91,6 +92,9 @@ Rules baked into the sketch: no live text over images, no animation on or behind
 1. Aiden: can live-pulled covers carry a drop shadow? If not: shadow off, or Best Books as one image per country.
 2. Which counts are actually in the data request (books, audiobooks, hours)? The sketch assumes all three.
 3. ALC copy: where is it, and is it final?
+4. Aiden: is border-radius reliable in email? If yes, the bookmark corner needs no slicing.
+5. Tiff: extend the This or That landing pages past year end so the persona click lands somewhere.
+6. Best Books: individual links (live covers, no shadow) or one landing-page link (image per geo, shadow)?
 
 ## Not reachable from this session
 - The original notes file (`from_ibra_0926/monday/STAKEHOLDER_REVIEW_NOTES_0928.md`) is not in this repo or Drive. The summary above is what I have.
@@ -148,3 +152,4 @@ Source: the 2025-approved ALC email cloned as "R0 · 2026 Refresh · ALC · STAG
 - Opt 4 topper strips and Opt 2 hero band are placeholders (see §5).
 - Yellow accents (topper band, doodle arrows, odometer band, Opt 4 "Most read" block) stayed yellow because they point at Kobo Yellow primitives. The ALC token mode says accent = Orange/100. 2025 ALC had no yellow at all. Decide: yellow, orange, or red.
 - Facebook icon blue is the brand icon; leave it.
+- Keep every animation under 300 KB. Motion lower in the email may have cycled before the reader gets there; the hero is the safe slot.

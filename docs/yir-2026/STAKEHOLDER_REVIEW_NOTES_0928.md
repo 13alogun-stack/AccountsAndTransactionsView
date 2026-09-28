@@ -37,3 +37,19 @@ Copied into the repo from the meeting action notes so the work pack is self-cont
    - the Opt 2 arrow moved off the cover
    - Opt 4 stats on solid blue
 4. Sketch the three Opt 4 bento versions.
+
+## Transcript check (added after re-reading the recording)
+
+Points the summary above flattened or missed. Nothing contradicts it.
+
+- **Best Books link rule.** If the shadow forces one image per geo, that image can only link to the Best of the Year landing page. Individually clickable books need live covers, which Aiden says is doable without the shadow. So the choice is: live covers + individual links + no shadow, or one image per geo + shadow + one landing-page link.
+- **Option 1 depends on the Best Books creative**, which is not requested yet and launches early December. That is the other reason Keely leans generic (Opt 3).
+- **Full highlight can be a block.** Aiden: if the marker highlight covers the whole word, it can be a solid background colour on a block behind live text. Only a partial highlight has to be an image.
+- **Rounded bookmark corner:** Aiden is checking how reliable border-radius is in email. If reliable, no slicing. If not, slice in three (rounded band as an image, live section beside it, full row below).
+- **Doodles in Opt 3** get the same rule as the Opt 2 arrow: adapt so they never touch live content.
+- **This or That:** only two personas, already localized. The persona image can carry its text baked in, copy stays live. The contest landing pages expire at year end; Tiff can extend them so the click lands somewhere.
+- **"1,800,000 books"** is a number that changes with the data, so treat it as a variable, not fixed copy.
+- **Animations:** everything is under the 300 KB limit. GIFs lower in the email may have finished looping by the time the reader scrolls to them, so the hero is the safe place for motion. Anything animating that ships as an image gets another look.
+- **Objectives from Tammy's preamble:** a clear summary of the reader's year, parity with what the market does with animation and bright stats, clarity without clutter, intentional motion. Mix and match with adaptations, not precious about it.
+- **ALC volume:** the vast majority of the base gets the non-K+ version, so ALC is the bigger send.
+- **Next touchpoints:** Keely and Tiff go through the brief's data points Tuesday. Keely and Aiden cover dynamic elements. Aiden answers the shadow question right away.
