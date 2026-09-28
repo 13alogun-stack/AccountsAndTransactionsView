@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Opt 4 Bento Versions</title>
+<meta name="description" content="Wireframe of the reader-only, listener-only and combined versions of the YIR 2026 Opt 4 bento, with every slot typed as live or static.">
+<style>
+  :root {
+    --bg: #f4f4f2; --surface: #ffffff; --ink: #161616; --muted: #6b6b6b; --line: #d9d9d4;
+    --blue: #2a5bd7; --on-blue: #ffffff; --live: #c2410c; --live-bg: #fff4ec;
+    --static: #4b5563; --static-bg: #eef0f3; --hw: #7c3aed; --hw-bg: #f3eefe; --cover: #0f766e; --cover-bg: #e9f7f5;
+  }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+    --bg: #111213; --surface: #1b1c1e; --ink: #f2f2f0; --muted: #a3a3a0; --line: #34363a;
+    --blue: #3b6fe8; --live: #fb923c; --live-bg: #3a2416; --static: #c4c8cf; --static-bg: #26292e;
+    --hw: #c4b5fd; --hw-bg: #2b2342; --cover: #5eead4; --cover-bg: #123a36;
+  } }
+  :root[data-theme="dark"] {
+    --bg: #111213; --surface: #1b1c1e; --ink: #f2f2f0; --muted: #a3a3a0; --line: #34363a;
+    --blue: #3b6fe8; --live: #fb923c; --live-bg: #3a2416; --static: #c4c8cf; --static-bg: #26292e;
+    --hw: #c4b5fd; --hw-bg: #2b2342; --cover: #5eead4; --cover-bg: #123a36;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; padding: 24px 16px 48px; }
+  h1 { font-size: 22px; margin: 0 0 6px; }
+  .sub { color: var(--muted); margin: 0 0 16px; max-width: 70ch; }
+  .legend { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 24px; }
+  .badge { display: inline-block; font-size: 10.5px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; padding: 2px 6px; border-radius: 4px; }
+  .b-live { color: var(--live); background: var(--live-bg); }
+  .b-static { color: var(--static); background: var(--static-bg); }
+  .b-hw { color: var(--hw); background: var(--hw-bg); }
+  .b-cover { color: var(--cover); background: var(--cover-bg); }
+  .b-blue { color: var(--on-blue); background: var(--blue); }
+  .versions { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+  .version { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 14px; }
+  .version h2 { font-size: 15px; margin: 0 0 2px; }
+  .version .who { color: var(--muted); font-size: 13px; margin: 0 0 12px; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .tile { position: relative; border-radius: 10px; min-height: 108px; padding: 10px; border: 1px solid var(--line); background: var(--surface); display: flex; flex-direction: column; justify-content: flex-end; gap: 4px; }
+  .tile .badge { position: absolute; top: 8px; left: 8px; }
+  .span2 { grid-column: span 2; }
+  .photo { background: repeating-linear-gradient(135deg, var(--static-bg) 0 8px, var(--surface) 8px 16px); color: var(--muted); font-size: 12px; }
+  .solid { background: var(--blue); color: var(--on-blue); border-color: transparent; }
+  .solid .badge { background: rgba(255,255,255,.18); color: var(--on-blue); }
+  .num { font-size: 34px; font-weight: 800; line-height: 1; }
+  .lbl { font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+  .live { outline: 2px dashed var(--live); outline-offset: 2px; border-radius: 4px; padding: 0 2px; display: inline-block; }
+  .hw { font-family: "Comic Sans MS", "Segoe Script", cursive; color: var(--hw); font-size: 13px; }
+  .value { font-size: 22px; font-weight: 700; }
+  .author { flex-direction: row; align-items: flex-end; justify-content: space-between; }
+  .cover { width: 54px; height: 80px; border-radius: 4px; border: 2px dashed var(--cover); background: var(--cover-bg); display: grid; place-items: center; font-size: 9px; color: var(--cover); text-align: center; padding: 4px; }
+  .note { color: var(--muted); font-size: 13px; margin: 12px 0 0; }
+  .rules { margin: 28px 0 0; padding: 14px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); }
+  .rules h3 { margin: 0 0 8px; font-size: 14px; }
+  .rules ul { margin: 0; padding-left: 18px; color: var(--muted); }
+</style>
+</head>
+<body>
+  <h1>Opt 4 bento: three versions</h1>
+  <p class="sub">Wireframe only. Same tile grammar in all three so the reskin and the live slots map 1:1. Numbers are placeholders.</p>
+  <div class="legend">
+    <span class="badge b-live">Live text</span>
+    <span class="badge b-cover">Live cover</span>
+    <span class="badge b-static">Static image</span>
+    <span class="badge b-hw">HW · static words only</span>
+    <span class="badge b-blue">Solid blue block</span>
+  </div>
+
+  <div class="versions">
+    <section class="version">
+      <h2>A · Reader-only</h2>
+      <p class="who">Read ebooks, no audiobooks.</p>
+      <div class="grid">
+        <div class="tile photo"><span class="badge b-static">Static image</span>Generic imagery. No text on it.</div>
+        <div class="tile solid"><span class="badge">Solid blue</span><div class="num live">32</div><div class="lbl">Books</div></div>
+        <div class="tile"><span class="badge b-live">Live text</span><div class="hw">your month was</div><div class="value live">October</div></div>
+        <div class="tile"><span class="badge b-live">Live text</span><div class="hw">you couldn't put down</div><div class="value live">Romance</div></div>
+        <div class="tile span2 author"><span class="badge b-live">Live text</span><div><div class="hw">top author</div><div class="value live">Suzanne Collins</div></div><div class="cover">Live cover<br>no animation on or behind</div></div>
+      </div>
+      <p class="note">Count moves off the photo into the blue block (Swap C). Month and genre are live, labels stay handwritten (Swap A).</p>
+    </section>
+
+    <section class="version">
+      <h2>B · Listener-only</h2>
+      <p class="who">Audiobooks only.</p>
+      <div class="grid">
+        <div class="tile photo"><span class="badge b-static">Static image</span>Generic imagery. No text on it.</div>
+        <div class="tile solid"><span class="badge">Solid blue</span><div class="num live">18</div><div class="lbl">Audiobooks</div></div>
+        <div class="tile solid"><span class="badge">Solid blue</span><div class="num live">142</div><div class="lbl">Hours listened</div></div>
+        <div class="tile"><span class="badge b-live">Live text</span><div class="hw">your month was</div><div class="value live">October</div></div>
+        <div class="tile"><span class="badge b-live">Live text</span><div class="hw">you couldn't stop hearing</div><div class="value live">Romance</div></div>
+        <div class="tile author"><span class="badge b-live">Live text</span><div><div class="hw">top author</div><div class="value live">S. Collins</div></div><div class="cover">Live cover</div></div>
+      </div>
+      <p class="note">Books tile becomes audiobooks. Hours listened added as a second solid block. Confirm hours is in the data request.</p>
+    </section>
+
+    <section class="version">
+      <h2>C · Combined</h2>
+      <p class="who">Read and listened.</p>
+      <div class="grid">
+        <div class="tile photo"><span class="badge b-static">Static image</span>Generic imagery. No text on it.</div>
+        <div class="tile solid"><span class="badge">Solid blue</span><div class="num live">32</div><div class="lbl">Books</div><div class="num live" style="font-size:22px">18</div><div class="lbl">Audiobooks</div></div>
+        <div class="tile solid"><span class="badge">Solid blue</span><div class="num live">142</div><div class="lbl">Hours listened</div></div>
+        <div class="tile"><span class="badge b-live">Live text</span><div class="hw">your month was</div><div class="value live">October</div></div>
+        <div class="tile"><span class="badge b-live">Live text</span><div class="hw">you couldn't put down</div><div class="value live">Romance</div></div>
+        <div class="tile author"><span class="badge b-live">Live text</span><div><div class="hw">top author</div><div class="value live">S. Collins</div></div><div class="cover">Live cover</div></div>
+      </div>
+      <p class="note">Both counts share one solid block so the row stays the same height as the photo. Everything else matches A and B.</p>
+    </section>
+  </div>
+
+  <div class="rules">
+    <h3>Rules baked in (from Aiden, 28 Sep)</h3>
+    <ul>
+      <li>Live text never sits on an image. Every count lives on a solid block.</li>
+      <li>Nothing animates on or behind a live cover.</li>
+      <li>Handwritten font only on words that never change. Month, genre, author and counts are live.</li>
+      <li>Photo tiles use generic imagery, not covers, so the hero never reads as "books you read".</li>
+      <li>ALC version: same tiles, blue block becomes Rakuten red.</li>
+    </ul>
+  </div>
+</body>
+</html>
