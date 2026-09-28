@@ -113,7 +113,7 @@ Everything below is on copies or additive, except the annotations on the K+ FINA
 - Dev Mode annotations, category Development, on the four K+ FINAL components (2768:73129–73132) and the four ALC frames. Labels: `LIVE TEXT · {{books_count}}`, `{{hours_reading}}`, `{{audiobooks_count}}`, `{{hours_listening}}`, `{{books_beyond_kplus}}`, `{{audiobooks_beyond_kplus}}`, `{{top_month}}`, `{{top_genre}}`, `{{top_day}}`, `{{top_author}}`, `{{persona}}`, `{{country}}`, `{{country_top_title}}`, `{{country_top_author}}`, `{{global_books_finished}}` (confirm); `LIVE COVER · nothing animates on or behind it · shadow TBC`; `CATALOGUE COVER · generic per country, not personal`.
 
 **Held swaps (item 3)** — section "★ SWAPS · ready to apply · HOLD until Tue EOD feedback" on the K+ FINAL page, node 2803:48369 at (-79171, -75800).
-- Swap B: clone of Opt 2 M03 (2803:48374). Arrow moved from (358,277) to (241,128) at 85% size, so it sits between the 186 numeral and the Last Read cover, pointing at the cover without touching it.
+- Swap B: clone of Opt 2 M03 (2803:48374). Arrow moved from (358,277) to (251,236) at 76% size, so it sits right of the HOURS READING label, pointing at the Last Read cover without touching it.
 - Swap C: clone of the Opt 4 bento (2803:48436). Books tile keeps its Blue 20 fill, image moved into a 150px static rectangle on the right (2803:48463). Text untouched.
 - Swap A: desktop task (see §6). The month/genre text nodes are the ones annotated `{{top_month}}` and `{{top_genre}}`.
 
