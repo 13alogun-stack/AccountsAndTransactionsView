@@ -1,6 +1,8 @@
 # Task 3 (scoped by best judgement) — DX Studio re-level proposal
 
-Prepend: `00-shared-context.md`. Date: 2026-10-16. Propose only. Nothing in this file may mention the privately floated conversion or its extra duties; the scripts below have been written to that rule.
+Prepend: `00-shared-context.md`. Date: 2026-10-16, corrected 2026-10-22. Propose only. Nothing in this file may mention the privately floated conversion or its extra duties; the scripts below have been written to that rule.
+
+> **Update, 22 Oct 2026:** Brittany says a contract rate increase is unlikely before Loblaw's annual review cycle, because the rate rose about $5 roughly six months ago and the team carries a funding gap. The contract (ends 31 Dec) will be renewed either way. Use the options below for the renewal and any future offer, not as an immediate ask.
 
 ---
 
@@ -10,7 +12,7 @@ Prepend: `00-shared-context.md`. Date: 2026-10-16. Propose only. Nothing in this
 |---|---|---|---|
 | Framing | Re-level (new scope, new rate), with a plain rate review as the floor fallback | A rate review on the same seat cannot move 91% | Assumed |
 | Counterparty | Loblaw manager decides the scope and the bill-rate ceiling; Insight Global sets the pay rate inside it | Standard staffing structure; unverified for this contract | Assumed |
-| Contract facts | Hourly, renewable term, two-week notice, conversion fee likely; no rate review yet | Typical; none confirmed | **Gap** |
+| Contract facts | Hourly; contract ends 31 Dec 2026 and will be renewed for 2027; rate rose about $5 around April 2026 | Brittany, 22 Oct 1:1 | Partly confirmed |
 | Original scope | "Product Designer: bilingual design systems and web experiences for PC and SDM" | Only written description found (site experience list) | Assumed |
 | Own / direct / execute / share | Drafted from evidence in §2 with confidence flags | No answer received | Assumed |
 | On-record praise | None usable | No answer received | **Gap** |
@@ -20,7 +22,7 @@ Prepend: `00-shared-context.md`. Date: 2026-10-16. Propose only. Nothing in this
 
 ## 1. Position in five lines
 
-1. The seat was contracted as a product designer on PC and SDM systems. It now also carries the DX Studio website, a sizzle reel, collateral, recurring CMS implementation, motion requests, QA and dev support, and component-refresh pitching on Loblaw properties. Same rate since January 2025.
+1. The seat was contracted as a product designer on PC and SDM systems. It now also carries the DX Studio website, a sizzle reel, collateral, recurring CMS implementation, motion requests, QA and dev support, and component-refresh pitching on Loblaw properties. The rate rose once, by about $5, around April 2026 (Brittany's recollection, 22 Oct); the scope has kept growing since.
 2. Insight Global's own Toronto listing for a Senior Product Designer contract sits at $41–51/hr. Ibra's $46 is mid-band for the agency's title. A re-level inside that title tops out near $51.
 3. Comparable Toronto contract seats through other channels post $48–76 (Motion Recruitment) and $79–91 (Robert Half). The $80–100 belief is partly supported, but not through this agency or this title.
 4. Loblaw Digital's own Senior Product Designer evidence is CA$100–132K base, about $142K total. The $180–200K floor is 35–60% above that band. At Loblaw it implies a title above Senior, for which no band was found.
