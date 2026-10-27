@@ -153,3 +153,9 @@ Source: the 2025-approved ALC email cloned as "R0 · 2026 Refresh · ALC · STAG
 - Yellow accents (topper band, doodle arrows, odometer band, Opt 4 "Most read" block) stayed yellow because they point at Kobo Yellow primitives. The ALC token mode says accent = Orange/100. 2025 ALC had no yellow at all. Decide: yellow, orange, or red.
 - Facebook icon blue is the brand icon; leave it.
 - Keep every animation under 300 KB. Motion lower in the email may have cycled before the reader gets there; the hero is the safe slot.
+
+**Update 27 Oct (from the animations session).** Final email animation package is on Ibra's Mac: `~/Downloads/Claude/Kobo_YIR_2026_Animations_Final_2026-10-27.zip` (manifest.csv and README.md inside). Nine play-once GIFs, all 4.43 s or shorter and under 300 KB.
+- K+: odometer band, hero, plus ticker. The plus ticker now drifts for most of its 4.43 s (one full six-word cycle) instead of waiting 2.1 s and moving two words.
+- ALC: odometer divider, hero, glance arrow plus a dark version, audiobooks carousel 550x189 plus a dark version (white Libra Colour on #121212).
+- Contest GIFs were removed with the contest block (#150/#151).
+This closes the ALC hero GIF line above. Icons and the Opt 4 topper strips are not in the package.
